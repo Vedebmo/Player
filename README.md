@@ -14,7 +14,7 @@ Big companies have control about what is allowed and what isn't, but we as commu
 
 ## Future Features
 
-Thinking about the use of this player, there's a list of features to be added:
+In base of the use of this player, there's a list of features to be added:
 
  - Users allowed to upload their own songs
  - Wave mode
