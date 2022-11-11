@@ -1,11 +1,18 @@
 <script setup>
-//import { RouterLink, RouterView } from 'vue-router'
-//<RouterView />
+// import { RouterLink, RouterView } from 'vue-router'
+import {RouterView } from 'vue-router'
 </script>
 
 <template>
-  <header>
-    <h1>Hi</h1>
-  </header>
+  
+  <RouterView />
   
 </template>
+
+<style>
+  body{
+    background: #201C29;
+    margin: 0;
+    padding: 0;
+  }
+</style>
