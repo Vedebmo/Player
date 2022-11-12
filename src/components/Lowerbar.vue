@@ -14,8 +14,8 @@
         justify-content: center;
         color: white;
         width: 50%;
-        height: 5vh;
-        margin: auto;
+        height: 7%;
+        margin: auto auto 2.5vh auto;
         background-color: rgba(0, 0, 0, 0.20);
         border-radius: 36px;
     }
@@ -24,6 +24,17 @@
         font-size: 1.4em;
         margin: auto;
     }
+    
+    @media screen and (min-width: 768px) {
+        .bar{
+            width: 80%;
+            margin-bottom: 3em;
+        }
+
+        .bar .icon-cog{
+            display: none;
+        }
+    }
 
 </style>
 
@@ -31,4 +42,5 @@
     export default{
         name: "LowerBar"
     }
+
 </script>
