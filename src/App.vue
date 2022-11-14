@@ -3,15 +3,21 @@
 import {RouterView } from 'vue-router'
 </script>
 
+<script>
+  export default{
+    created(){
+      document.title = "PlayMax"
+    }
+  }
+</script>
+
 <template>
-  
   <RouterView />
   
 </template>
 
 <style>
   body{
-    height: 100vh;
     background: #201C29;
     margin: 0;
     padding: 0;

@@ -1,6 +1,7 @@
 <template>
   <header>
-    <div class="playing">
+    <Sidebar v-if="store.showSettings" style="background:none;margin: 0; height: 92vh;"></Sidebar>
+    <div class="playing" v-if="!store.showSettings">
       <!--Image-->
       
       <div class="img-container">
@@ -45,7 +46,9 @@
 <style scoped>
 
   .playing{
-    height: 100vh;
+    height: 92vh;
+    display: flex;
+    flex-direction: column;
   }
 .img-container{
       margin-top: 7%;
@@ -96,6 +99,10 @@
     margin-top: 1em;
   }
 
+  span:hover{
+    cursor: pointer;
+  }
+  
   .icon-dice{
     position: relative;
     left: calc(100% - 1.5em);
@@ -112,9 +119,10 @@
     }
 
     .playing{
-      display: flex;
-      flex-direction: column;
-      flex-grow: 4;
+      height: auto;
+      justify-content: space-between;
+      flex-grow: 12;
+      margin: 0 2%;
     }
 
     .img-container{
@@ -138,11 +146,10 @@
 </script>
 
 <script setup>
+  import {Store} from "../store.js"
+  const store = Store()
 
-import {Store} from "../store.js"
-const store = Store()
+  store.changeTablet()
 
-store.changeTablet()
-
-window.addEventListener('resize',store.changeTablet)
+  window.addEventListener('resize',store.changeTablet)
 </script>

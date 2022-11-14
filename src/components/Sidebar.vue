@@ -1,28 +1,34 @@
 <template>
     <div class="sideBar">
-        <input type="text" placeholder="Search 🔍">
-        <div class="options">
-            <div>
-                <span class="icon-user"></span>
-                <a href="#">Account</a>
-            </div>
-            <hr>
-            <div>
-                <span class="icon-playlist_play"></span>
-                <a href="#">Manage Songs</a>
-            </div>
-            <hr>
-            <div>
-                <span class="icon-googlepodcasts"></span>
-                <a href="#">Wave Mode</a>
-            </div>
-            <hr>
-            <div>
-                <span class="icon-language2"></span>
-                <a href="#">English ></a>
-            </div>
+        <div class="cancel" v-if="!store.tablet">
+            <input type="text" placeholder="Search 🔍">
+            <span class="icon-cancel-circle" @click="store.launchSettings"></span>
         </div>
-        <Lowerbar></Lowerbar>
+        <div class="show">
+            <input type="text" placeholder="Search 🔍" v-if="store.tablet">
+        </div>
+        <div class="options">
+            <div class="optionDivs">
+                <span class="icon-user"></span>
+                <p>Account</p>
+            </div>
+            <hr>
+            <div class="optionDivs">
+                <span class="icon-playlist_play"></span>
+                <p>Manage Songs</p>
+            </div>
+            <hr>
+            <div class="optionDivs">
+                <span class="icon-googlepodcasts"></span>
+                <p>Wave Mode</p>
+            </div>
+            <hr>
+            <div class="optionDivs">
+                <span class="icon-language2"></span>
+                <p>English ></p>
+            </div>
+            <Lowerbar v-if="store.tablet"></Lowerbar>
+        </div>
     </div>
 </template>
 
@@ -34,48 +40,80 @@
     background: rgba(0, 0, 0, 0.15);
     display: flex;
     flex-direction: column;
-    flex-grow: 2;
+    flex-grow: 1;
     height: 100vh;
 }
 
 input{
-    width: 90%;
+    width: 80%;
     text-align: center;
     font-size: 1.2em;
-    margin-top: 7%;
     height: fit-content;
 }
 
 .options{
     width: 100%;
-    height: 70%;
-    margin-top: 2em;
+    height: -webkit-fill-available;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
 }
-.options div{
+.optionDivs{
     display: flex;
     place-items: center;
     text-align: center;
+    padding: 2%;
     max-width: 70%;
 }
 
+.optionDivs:hover{
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 7px;
+}
+
 span{
-    font-size: 3.5em;
+    font-size: 2.5em;
     color: #D2B8D3;
     margin-right: 15px;
+}
+
+.cancel{
+    margin-top: 7%;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.cancel input{
+    width: 70%;
+}
+
+.show{
+    margin-top: 7%;
+    display: flex;
+    justify-content: center;
+}
+
+.icon-cancel-circle{
+    color: white;
+    font-size: 1.2em;
+}
+
+.icon-playlist_play{
+    font-size: 3.5em;
 }
 
 .icon-googlepodcasts:before{
     color: #D2B8D3;
 }
 
-a{
+p{
     text-decoration: none;
     color: white;
-    font-size: 2rem;
+    font-size: 1rem;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
@@ -97,4 +135,9 @@ hr{
             Lowerbar
         }
     }
+</script>
+
+<script setup>
+    import {Store} from "../store.js"
+    const store = Store()
 </script>

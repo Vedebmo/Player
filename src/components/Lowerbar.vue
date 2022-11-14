@@ -1,7 +1,7 @@
 <template>
     <div class="bar">
         <span class="icon-shuffle"></span>
-        <span class="icon-cog"></span>
+        <span class="icon-cog" @click="store.launchSettings"></span>
         <span class="icon-game-controller"></span>
         <span class="icon-loop"></span>
     </div>
@@ -24,11 +24,14 @@
         font-size: 1.4em;
         margin: auto;
     }
+    .bar span:hover{
+        cursor: pointer;
+    }
     
     @media screen and (min-width: 768px) {
         .bar{
             width: 80%;
-            margin-bottom: 3em;
+            margin: 0;
         }
 
         .bar .icon-cog{
@@ -42,5 +45,9 @@
     export default{
         name: "LowerBar"
     }
+</script>
 
+<script setup>
+    import {Store} from "../store.js"
+    const store = Store()
 </script>
