@@ -3,14 +3,6 @@
 import {RouterView } from 'vue-router'
 </script>
 
-<script>
-  export default{
-    created(){
-      document.title = "PlayMax"
-    }
-  }
-</script>
-
 <template>
   <RouterView />
   
