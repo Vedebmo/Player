@@ -6,7 +6,8 @@
       
       <div class="img-container">
         <span v-if="store.tablet" class="icon-dice"></span>
-        <img src="@/assets/orgullo.png" alt="Image not found">
+        <!-- <img src="@/assets/orgullo.png" alt="Image not found"> -->
+        <img :src="store.image" alt="Image not found">
       </div>
   
       <!--Titles-->
@@ -30,8 +31,10 @@
         </div>
       </div>
   
-      <!--Bars-->
+      <!--Song-->
+      <audio :src="store.song"></audio>
       
+      <!--Bars-->
       <ProgressBar></ProgressBar>
       <Lowerbar v-if="!store.tablet"></Lowerbar>
     </div>
@@ -50,7 +53,7 @@
     display: flex;
     flex-direction: column;
   }
-.img-container{
+  .img-container{
       margin-top: 7%;
   }
 
@@ -147,6 +150,7 @@
 
 <script setup>
   import {Store} from "../store.js"
+
   const store = Store()
 
   store.changeTablet()

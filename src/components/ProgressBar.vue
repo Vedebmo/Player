@@ -1,6 +1,6 @@
 <template>
-    <hr>
-
+    <!-- <hr> -->
+    <input type="range">
     <!--Player-->
     <div class="player">
         <div class="left">
@@ -16,18 +16,52 @@
 </template>
 
 <style scoped>
-    hr{
+
+    input[type="range"] {    
+        /* margin-top: .7em; */
+        margin: .8em auto;
+        appearance: none;
+        /* margin-right: 15px; */
+        width: 80%;
+        height: 4px;
+        background: #66757F;
+        border-radius: 5px;
+        background-image: linear-gradient(#D2B8D3, #D2B8D3);
+        background-size: 50% 100%;
+        background-repeat: no-repeat;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+        appearance: none;
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        background: #D2B8D3;
+        cursor: pointer;
+        /* cursor: ew-resize; */
+        box-shadow: 0 0 2px 0 #66757F;
+        transition: background .3s ease-in-out;
+    }
+
+    input[type=range]::-webkit-slider-runnable-track  {
+        appearance: none;
+        box-shadow: none;
+        border: none;
+        background: transparent;
+    }
+
+    /* hr{
         margin-top: .7em;
         border: 1px solid #66757F;
         width: 80%;
-    }
+    } */
     
     .player{
         width: 80%;
         display: flex;
         justify-content: center;
         /* height: calc(50vmax - 65vmin); */
-        margin: auto;
+        margin: 2vh auto;
     }
     .left, .right, .center{
         width: 2em;
