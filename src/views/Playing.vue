@@ -32,7 +32,7 @@
       </div>
   
       <!--Song-->
-      <audio :src="store.song"></audio>
+      <audio :src="store.song" id="song"></audio>
       
       <!--Bars-->
       <ProgressBar></ProgressBar>

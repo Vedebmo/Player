@@ -102,6 +102,10 @@ span{
     font-size: 1.2em;
 }
 
+.icon-cancel-circle:hover{
+    cursor: pointer;
+}
+
 .icon-playlist_play{
     font-size: 3.5em;
 }

@@ -1,14 +1,16 @@
 <template>
     <!-- <hr> -->
-    <input type="range">
+    <input type="range" id="range" @input="store.movingSong" value="10">
     <!--Player-->
     <div class="player">
         <div class="left">
             <span class="icon-previous2"></span>
         </div>
-        <div class="center icon-pause2X">
-            <div class="triangle"></div>
+
+        <div class="center" @click="store.play">
+            <div :class="store.icon"></div>
         </div>
+
         <div class="right">
             <span class="icon-next2"></span>
         </div>
@@ -27,7 +29,7 @@
         background: #66757F;
         border-radius: 5px;
         background-image: linear-gradient(#D2B8D3, #D2B8D3);
-        background-size: 50% 100%;
+        background-size: 10% 100%;
         background-repeat: no-repeat;
     }
 
@@ -123,4 +125,9 @@
     export default{
         name: "ProgressBar"
     }
+</script>
+
+<script setup>
+    import {Store} from "../store.js"
+    const store = Store()
 </script>

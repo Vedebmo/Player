@@ -28,7 +28,9 @@ export const Store = defineStore('Store', {
         tablet: false,
         showSettings: false,
         image,
-        song
+        song,
+        icon: "triangle",
+        songTime: 0
     }),
 
     actions:{
@@ -37,6 +39,17 @@ export const Store = defineStore('Store', {
         },
         launchSettings(){
             this.showSettings = !this.showSettings
+        },
+        play(){
+            const song = document.getElementById("song")
+            this.icon == "icon-pause2" ? (this.icon = "triangle", song.pause() ) : (this.icon = "icon-pause2", song.play())
+        },
+        movingSong(){
+            const range = document.getElementById("range")
+            const song = document.getElementById("song")
+            const porcentage = range.value / 100
+            this.songTime = song.duration * porcentage
+            song.currentTime = this.songTime
         }
     }
 })
