@@ -27,7 +27,7 @@
           <span class="icon-volume-medium"></span>
         </div>
         <div class="right">
-          <h5>1:20 / 3:44</h5>
+          <h5>{{store.songCurrent}} / {{store.songDuration}}</h5>
         </div>
       </div>
   
