@@ -6,15 +6,14 @@
       
       <div class="img-container">
         <span v-if="store.tablet" class="icon-dice"></span>
-        <!-- <img src="@/assets/orgullo.png" alt="Image not found"> -->
-        <img :src="store.image" alt="Image not found">
+        <img :src="store.songsImages[store.songIndex]" id="img" alt="Image not found">
       </div>
   
       <!--Titles-->
   
       <div class="titles">
-        <h1><b>Orgullo</b></h1>
-        <h5><small>C Monti</small></h5>
+        <h1><b>{{store.songsNames[store.songIndex]}}</b></h1>
+        <h5><small>{{store.artists[store.songIndex]}}</small></h5>
       </div>
   
       <!--Options-->
@@ -32,7 +31,7 @@
       </div>
   
       <!--Song-->
-      <audio :src="store.song" id="song"></audio>
+      <audio :src="store.songsReferences[store.songIndex]" id="song"></audio>
       
       <!--Bars-->
       <ProgressBar></ProgressBar>
