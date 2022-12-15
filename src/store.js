@@ -113,6 +113,12 @@ export const Store = defineStore('Store', {
                         range.addEventListener("mouseup", ()=>{
                             this.rangeUp = true
                         })
+                        range.addEventListener("touchstart", ()=>{
+                            this.rangeUp = true
+                        })
+                        range.addEventListener("touchend", ()=>{
+                            this.rangeUp = true
+                        })
                     }
                     const duration = song.duration / 60
                     const currentTime = song.currentTime / 60

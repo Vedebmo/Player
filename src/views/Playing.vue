@@ -58,7 +58,8 @@
 
   img{
     width: 100%;
-    max-height: 55vh;
+    /* max-height: 55vh; */
+    height: 55vh;
   }
 
   h1, h5{
