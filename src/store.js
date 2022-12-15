@@ -29,6 +29,7 @@ export const Store = defineStore('Store', {
         tablet: false,
         changing: false,
         showSettings: false,
+        rangeUp: true,
         songsImages,
         maxIndex: 0,
         songIndex: 0,
@@ -54,7 +55,7 @@ export const Store = defineStore('Store', {
         },
         play(){
             const song = document.getElementById("song")
-            if(!isNaN(song.duration)){
+            if(!isNaN(song.duration) && song.duration != song.currentTime){
                 let test = setInterval(()=>{
                     const range = document.getElementById("range")
                     range.value = (song.currentTime / song.duration) * 100
@@ -69,13 +70,18 @@ export const Store = defineStore('Store', {
         movingSong(){
             const song = document.getElementById("song")
             const range = document.getElementById("range")
-            if(!isNaN(song.duration)){
-                this.checkSong()
-                const porcentage = range.value / 100
-                this.songTime = song.duration * porcentage
-                song.currentTime = this.songTime
-                this.checkSong()
-                this.rangeSize = `${range.value}% 100%`
+            if(this.rangeUp){
+                if(!isNaN(song.duration)){
+                    this.checkSong()
+                    const porcentage = range.value / 100
+                    this.songTime = song.duration * porcentage
+                    song.currentTime = this.songTime
+                    this.checkSong()
+                    this.rangeSize = `${range.value}% 100%`
+                }
+                else{
+                    range.value = 0
+                }
             }
             else{
                 range.value = 0
@@ -98,8 +104,15 @@ export const Store = defineStore('Store', {
                 }
                 else{
                     if(this.changing){
+                        this.rangeUp = false
                         song.play()
                         this.changing = false
+                        range.addEventListener("mousedown", ()=>{
+                            this.rangeUp = true
+                        })
+                        range.addEventListener("mouseup", ()=>{
+                            this.rangeUp = true
+                        })
                     }
                     const duration = song.duration / 60
                     const currentTime = song.currentTime / 60
