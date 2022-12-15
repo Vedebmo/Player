@@ -50,9 +50,11 @@ export const Store = defineStore('Store', {
                 this.checkSong()
             },1)
         },
+
         launchSettings(){
             this.showSettings = !this.showSettings
         },
+
         play(){
             const song = document.getElementById("song")
             if(!isNaN(song.duration) && song.duration != song.currentTime){
@@ -67,6 +69,7 @@ export const Store = defineStore('Store', {
                 this.icon == "icon-pause2" ? (this.icon = "triangle", song.pause() ) : (this.icon = "icon-pause2", song.play())
             }
         },
+
         movingSong(){
             const song = document.getElementById("song")
             const range = document.getElementById("range")
@@ -87,6 +90,7 @@ export const Store = defineStore('Store', {
                 range.value = 0
             }
         },
+
         checkSong(){
             if(this.songsReferences[this.songIndex] == undefined || 
                 this.songsImages[this.songIndex] == undefined || 
@@ -105,7 +109,7 @@ export const Store = defineStore('Store', {
                 else{
                     if(this.changing){
                         this.rangeUp = false
-                        song.play()
+                        this.icon == "icon-pause2" ? song.play() : ""
                         this.changing = false
                         range.addEventListener("mousedown", ()=>{
                             this.rangeUp = true
@@ -173,23 +177,39 @@ export const Store = defineStore('Store', {
             const range = document.getElementById("range")
             const song = document.getElementById("song")
             if(range.value == 100 && this.icon == "icon-pause2"){
-                if(this.maxIndex != this.songIndex){
-                    range.value = 0
-                    this.songIndex++
-                    this.songTime = 0
-                    this.rangeSize = "0% 100%"
-                    this.songCurrent = "00:00"
-                    this.songDuration = "00:00"
-                    setTimeout(() => {
-                        this.checkSong()
-                        this.changing = true
-                    }, 1);
-                }
-                else{
-                    this.icon = "triangle"
-                    song.pause()
-                }
+                this.songIndex < this.maxIndex ? this.next() : (this.icon = "triangle", song.pause())
             }
         },
+
+        next(){
+            if(this.songIndex < this.maxIndex){
+                this.songIndex++
+                this.reset()
+            }
+        },
+
+        previous(){
+            if(this.songIndex > 0){
+                this.songIndex--
+                this.reset()
+            }
+        },
+
+        reset(){
+            range.value = 0
+            this.songTime = 0
+            this.rangeSize = "0% 100%"
+            this.songCurrent = "00:00"
+            this.songDuration = "00:00"
+            setTimeout(() => {
+                this.checkSong()
+                this.changing = true
+            }, 1);
+        },
+
+        shuffle(){
+            let random = Math.round(Math.random() * this.maxIndex)
+            random == this.songIndex ? this.shuffle() : (this.songIndex = random, this.reset())
+        }
     }
 })

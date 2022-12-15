@@ -5,7 +5,7 @@
       <!--Image-->
       
       <div class="img-container">
-        <span v-if="store.tablet" class="icon-dice"></span>
+        <span v-if="store.tablet" @click="store.shuffle" class="icon-dice"></span>
         <img :src="store.songsImages[store.songIndex]" id="img" alt="Image not found">
       </div>
   
