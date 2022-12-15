@@ -6,7 +6,7 @@
 
 Listening to music has always been an important part of all of us, when we want to relax, when we need to study or even when we are playing videogames. But what happens when we are somewhere waiting and we can't just stay in there doing nothing?
 
-Usually people just take their phones and play a videogame while listening music. What if?... What if there was an app where you can "play" a videogame and "play" your music at once?
+Usually people just take their phones and play a videogame while listening to music. What if?... What if there was an app where you can "play" a videogame and "play" your music at once?
 
 ## Open Source 💻
 
