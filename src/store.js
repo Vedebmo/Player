@@ -53,7 +53,7 @@ export const Store = defineStore('Store', {
 
     actions:{
         changeTablet(){
-            window.innerWidth >= 768 ? this.tablet = true : this.tablet = false
+            window.innerWidth >= 768 ? (this.tablet = true, this.showSettings = false) : this.tablet = false
             setTimeout(()=>{
                 this.checkSong()
             },1)
