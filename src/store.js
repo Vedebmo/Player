@@ -26,6 +26,14 @@ let artists = []
 
 export const Store = defineStore('Store', {
     state: () => ({
+        previousIndex: "",
+        songIndexA: 0,
+        songIndexB: 1,
+        goingShuffle: false,
+        absolute: "absolute",
+        absolute2: "absolute2",
+        fade: 0,
+        fade2: 1,
         tablet: false,
         changing: false,
         showSettings: false,
@@ -58,12 +66,12 @@ export const Store = defineStore('Store', {
         play(){
             const song = document.getElementById("song")
             if(!isNaN(song.duration) && song.duration != song.currentTime){
-                let test = setInterval(()=>{
+                let checkPlaying = setInterval(()=>{
                     const range = document.getElementById("range")
                     range.value = (song.currentTime / song.duration) * 100
                     this.rangeSize = `${range.value}% 100%`
                     this.checkSong()
-                    this.icon == "triangle" ? clearInterval(test) : ""
+                    this.icon == "triangle" ? clearInterval(checkPlaying) : ""
                 },1)
 
                 this.icon == "icon-pause2" ? (this.icon = "triangle", song.pause() ) : (this.icon = "icon-pause2", song.play())
@@ -196,11 +204,7 @@ export const Store = defineStore('Store', {
         },
 
         reset(){
-            range.value = 0
-            this.songTime = 0
-            this.rangeSize = "0% 100%"
-            this.songCurrent = "00:00"
-            this.songDuration = "00:00"
+            this.fading()
             setTimeout(() => {
                 this.checkSong()
                 this.changing = true
@@ -208,8 +212,71 @@ export const Store = defineStore('Store', {
         },
 
         shuffle(){
+            this.previousIndex = this.songIndex
             let random = Math.round(Math.random() * this.maxIndex)
-            random == this.songIndex ? this.shuffle() : (this.songIndex = random, this.reset())
+            random == this.songIndex ? this.shuffle() : (this.songIndex = random, this.goingShuffle = true, this.reset())
+        },
+
+        fading(){
+            const img = document.getElementById("img")
+            const img2 = document.getElementById("img2")
+            if(this.goingShuffle){
+                if(this.fade2){
+                    this.songIndexB = this.songIndex
+                    this.fade2 = 0
+                    this.fade = 1
+                    setTimeout(() => {
+                        img.classList = "absolute2"
+                        img2.classList = "absolute"
+                    },10)
+                }
+                else{
+                    this.songIndexA = this.songIndex
+                    this.fade2 = 1
+                    this.fade = 0
+                    setTimeout(() => {
+                        img.classList = "absolute"
+                        img2.classList = "absolute2"
+                    },10)
+                }
+            }
+            else{
+                if(this.fade2){
+                    this.songIndexB = this.songIndex
+                    this.fade2 = 0
+                    this.fade = 1
+                    setTimeout(() => {
+                        img.classList = "absolute2"
+                        img2.classList = "absolute"
+                    },10)
+                }
+                else{
+                    this.songIndexA = this.songIndex
+                    this.fade2 = 1
+                    this.fade = 0
+                    setTimeout(() => {
+                        img.classList = "absolute"
+                        img2.classList = "absolute2"
+                    },10)
+                }
+            }
+
+            if(this.tablet){
+                const imgWidth = img.width
+                let imgHalf = imgWidth / 2
+                const img2Width = img2.width
+                let img2Half = img2Width / 2
+                let checkWidth = setInterval(()=>{
+                    if(img.width == Math.ceil(imgHalf) || img2.width == Math.ceil(img2Width*2) || img2.width == Math.ceil(img2Half) || img.width == Math.ceil(imgWidth*2)){
+                        dice.style.display = "initial"
+                        clearInterval(checkWidth)
+                    }
+                },1)
+            }
+            try{
+                const dice = document.getElementById("dice")
+                dice.style.display = "none"
+            }catch{}
         }
     }
 })

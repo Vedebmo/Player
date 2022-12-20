@@ -2,13 +2,15 @@
   <header>
     <Sidebar v-if="store.showSettings" style="background:none;margin: 0; height: 92vh;"></Sidebar>
     <div class="playing" v-if="!store.showSettings">
+      
       <!--Image-->
       
       <div class="img-container">
-        <span v-if="store.tablet" @click="store.shuffle" class="icon-dice"></span>
-        <img :src="store.songsImages[store.songIndex]" id="img" alt="Image not found">
+        <span v-if="store.tablet" @click="store.shuffle" id="dice" class="icon-dice"></span>
+        <img :src="store.songsImages[store.songIndexA]" id="img" alt="Image not found" :style="{opacity: store.fade2}" class="absolute">
+        <img :src="store.songsImages[store.songIndexB]" id="img2" alt="Image not found" class="absolute2" :style="{opacity: store.fade}">
       </div>
-  
+
       <!--Titles-->
   
       <div class="titles">
@@ -47,6 +49,9 @@
 
 <style scoped>
 
+  .none{
+    display: none;
+  }
   .playing{
     height: 92vh;
     display: flex;
@@ -58,8 +63,19 @@
 
   img{
     width: 100%;
+    z-index: 0;
+    transition: opacity 0.5s;
     /* max-height: 55vh; */
     height: 55vh;
+  }
+
+  .absolute{
+      position: initial;
+    }
+
+  .absolute2{
+    position: absolute;
+    width: 0%;
   }
 
   h1, h5{
@@ -108,6 +124,7 @@
   
   .icon-dice{
     position: relative;
+    z-index: 1;
     left: calc(100% - 1.5em);
     top: 1em;
     background: white;
