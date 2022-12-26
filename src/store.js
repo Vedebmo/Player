@@ -23,10 +23,15 @@ let songsNames = []
 let songsReferences = []
 let songsImages = []
 let artists = []
+let history = [0]
+let next = false
+let previous = false
+let random = 0
+let shuffleIcon = false
 
 export const Store = defineStore('Store', {
     state: () => ({
-        previousIndex: "",
+        historyIndex: 0,
         songIndexA: 0,
         songIndexB: 1,
         goingShuffle: false,
@@ -190,6 +195,11 @@ export const Store = defineStore('Store', {
         },
 
         next(){
+            if(this.goingShuffle){
+                next = true
+                this.shuffle()
+                return 0
+            }
             if(this.songIndex < this.maxIndex){
                 this.songIndex++
                 this.reset()
@@ -197,6 +207,11 @@ export const Store = defineStore('Store', {
         },
 
         previous(){
+            if(this.goingShuffle){
+                previous = true
+                this.shuffle()
+                return 0
+            }
             if(this.songIndex > 0){
                 this.songIndex--
                 this.reset()
@@ -204,7 +219,7 @@ export const Store = defineStore('Store', {
         },
 
         reset(){
-            this.fading()
+            this.checkShuffleHistory()
             setTimeout(() => {
                 this.checkSong()
                 this.changing = true
@@ -212,53 +227,32 @@ export const Store = defineStore('Store', {
         },
 
         shuffle(){
-            this.previousIndex = this.songIndex
-            let random = Math.round(Math.random() * this.maxIndex)
-            random == this.songIndex ? this.shuffle() : (this.songIndex = random, this.goingShuffle = true, this.reset())
+            random = Math.round(Math.random() * this.maxIndex)
+            // random == this.songIndex ? this.shuffle() : (this.songIndex = random, this.goingShuffle = true, this.reset())
+            random == this.songIndex ? this.shuffle() : (this.goingShuffle = true, this.reset())
         },
 
         fading(){
             const img = document.getElementById("img")
             const img2 = document.getElementById("img2")
-            if(this.goingShuffle){
-                if(this.fade2){
-                    this.songIndexB = this.songIndex
-                    this.fade2 = 0
-                    this.fade = 1
-                    setTimeout(() => {
-                        img.classList = "absolute2"
-                        img2.classList = "absolute"
-                    },10)
-                }
-                else{
-                    this.songIndexA = this.songIndex
-                    this.fade2 = 1
-                    this.fade = 0
-                    setTimeout(() => {
-                        img.classList = "absolute"
-                        img2.classList = "absolute2"
-                    },10)
-                }
+
+            if(this.fade2){
+                this.songIndexB = this.songIndex
+                this.fade2 = 0
+                this.fade = 1
+                setTimeout(() => {
+                    img.classList = "absolute2"
+                    img2.classList = "absolute"
+                },10)
             }
             else{
-                if(this.fade2){
-                    this.songIndexB = this.songIndex
-                    this.fade2 = 0
-                    this.fade = 1
-                    setTimeout(() => {
-                        img.classList = "absolute2"
-                        img2.classList = "absolute"
-                    },10)
-                }
-                else{
-                    this.songIndexA = this.songIndex
-                    this.fade2 = 1
-                    this.fade = 0
-                    setTimeout(() => {
-                        img.classList = "absolute"
-                        img2.classList = "absolute2"
-                    },10)
-                }
+                this.songIndexA = this.songIndex
+                this.fade2 = 1
+                this.fade = 0
+                setTimeout(() => {
+                    img.classList = "absolute"
+                    img2.classList = "absolute2"
+                },10)
             }
 
             if(this.tablet){
@@ -277,6 +271,60 @@ export const Store = defineStore('Store', {
                 const dice = document.getElementById("dice")
                 dice.style.display = "none"
             }catch{}
+        },
+
+        rollDice(){
+            shuffleIcon = !shuffleIcon
+            this.shuffle()
+        },
+
+        launchShuffle(){
+            this.historyIndex = 0
+            history = [0]
+            this.goingShuffle = !this.goingShuffle
+            const iconShuffle = document.getElementById("iconShuffle")
+            this.goingShuffle ? iconShuffle.style = `background: rgba(0, 0, 0, 0.4);` : iconShuffle.style = ``
+        },
+
+        checkShuffleHistory(){
+            if(this.goingShuffle){
+                let historyMax = history.length - 1
+                if(shuffleIcon){
+                    this.historyIndex = historyMax
+                    shuffleIcon = !shuffleIcon
+                    next = true
+                }
+                const iconShuffle = document.getElementById("iconShuffle")
+                iconShuffle.style.background == "" ? this.goingShuffle = false : ""
+
+                if(this.historyIndex >= 0){
+                    if(previous){
+                        if(this.historyIndex > 0 && this.historyIndex <= historyMax){
+                            this.historyIndex--
+                            this.songIndex = history[this.historyIndex]
+                            this.fading()
+                        }
+                    }
+                    if(next){
+                        if(this.historyIndex != historyMax){
+                            this.historyIndex++
+                            this.songIndex = history[this.historyIndex]
+                            this.fading()
+                        }
+                        else{
+                            this.songIndex = random
+                            this.fading()
+                            history.push(this.songIndex)
+                            this.historyIndex++
+                        }
+                    }
+                    previous = false
+                    next = false
+                }
+            }
+            else{
+                this.fading()
+            }
         }
     }
 })

@@ -1,6 +1,6 @@
 <template>
     <div class="bar">
-        <span class="icon-shuffle"></span>
+        <span class="icon-shuffle" id="iconShuffle" @click="store.launchShuffle"></span>
         <span class="icon-cog" @click="store.launchSettings"></span>
         <span class="icon-game-controller"></span>
         <span class="icon-loop"></span>
@@ -22,10 +22,19 @@
 
     .bar span{
         font-size: 1.4em;
-        margin: auto;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-grow: 1;
+        transition: background .5s;
     }
     .bar span:hover{
         cursor: pointer;
+    }
+
+    .icon-shuffle{
+        border-radius: 36px 0px 0px 36px
     }
     
     @media screen and (min-width: 768px) {

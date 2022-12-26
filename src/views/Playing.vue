@@ -6,7 +6,7 @@
       <!--Image-->
       
       <div class="img-container">
-        <span v-if="store.tablet" @click="store.shuffle" id="dice" class="icon-dice"></span>
+        <span v-if="store.tablet" @click="store.rollDice" id="dice" class="icon-dice"></span>
         <img :src="store.songsImages[store.songIndexA]" id="img" alt="Image not found" :style="{opacity: store.fade2}" class="absolute">
         <img :src="store.songsImages[store.songIndexB]" id="img2" alt="Image not found" class="absolute2" :style="{opacity: store.fade}">
       </div>
