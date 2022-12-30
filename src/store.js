@@ -193,9 +193,7 @@ export const Store = defineStore('Store', {
             const song = document.getElementById("song")
             if(range.value == 100 && this.icon == "icon-pause2"){
                 if(this.loop){
-                    console.log("Loop")
-                    song.currentTime = 0
-                    song.play()
+                    this.reset()
                     return 0
                 }
 
