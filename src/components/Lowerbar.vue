@@ -3,7 +3,7 @@
         <span class="icon-shuffle" id="iconShuffle" @click="store.launchShuffle"></span>
         <span class="icon-cog" @click="store.launchSettings"></span>
         <span class="icon-game-controller"></span>
-        <span class="icon-loop"></span>
+        <span class="icon-loop" id="iconLoop" @click="store.launchLoop"></span>
     </div>
 </template>
 
@@ -35,6 +35,9 @@
 
     .icon-shuffle{
         border-radius: 36px 0px 0px 36px
+    }
+    .icon-loop{
+        border-radius: 0px 36px 36px 0px
     }
     
     @media screen and (min-width: 768px) {

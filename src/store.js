@@ -28,9 +28,11 @@ let next = false
 let previous = false
 let random = 0
 let shuffleIcon = false
+let historyMax
 
 export const Store = defineStore('Store', {
     state: () => ({
+        loop: false,
         historyIndex: 0,
         songIndexA: 0,
         songIndexB: 1,
@@ -70,7 +72,7 @@ export const Store = defineStore('Store', {
 
         play(){
             const song = document.getElementById("song")
-            if(!isNaN(song.duration) && song.duration != song.currentTime){
+            if(!isNaN(song.duration) && song.duration+1 != song.currentTime){
                 let checkPlaying = setInterval(()=>{
                     const range = document.getElementById("range")
                     range.value = (song.currentTime / song.duration) * 100
@@ -190,7 +192,19 @@ export const Store = defineStore('Store', {
             const range = document.getElementById("range")
             const song = document.getElementById("song")
             if(range.value == 100 && this.icon == "icon-pause2"){
-                this.songIndex < this.maxIndex ? this.next() : (this.icon = "triangle", song.pause())
+                if(this.loop){
+                    console.log("Loop")
+                    song.currentTime = 0
+                    song.play()
+                    return 0
+                }
+
+                if(this.goingShuffle){
+                    this.next()
+                }
+                else{
+                    this.songIndex < this.maxIndex ? this.next() : (this.icon = "triangle", song.pause())
+                }
             }
         },
 
@@ -219,6 +233,9 @@ export const Store = defineStore('Store', {
         },
 
         reset(){
+            const range = document.getElementById("range")
+            range.value = 0
+            this.rangeSize = `${range.value}% 100%`
             this.checkShuffleHistory()
             setTimeout(() => {
                 this.checkSong()
@@ -228,7 +245,6 @@ export const Store = defineStore('Store', {
 
         shuffle(){
             random = Math.round(Math.random() * this.maxIndex)
-            // random == this.songIndex ? this.shuffle() : (this.songIndex = random, this.goingShuffle = true, this.reset())
             random == this.songIndex ? this.shuffle() : (this.goingShuffle = true, this.reset())
         },
 
@@ -288,7 +304,7 @@ export const Store = defineStore('Store', {
 
         checkShuffleHistory(){
             if(this.goingShuffle){
-                let historyMax = history.length - 1
+                historyMax = history.length - 1
                 if(shuffleIcon){
                     this.historyIndex = historyMax
                     shuffleIcon = !shuffleIcon
@@ -325,6 +341,14 @@ export const Store = defineStore('Store', {
             else{
                 this.fading()
             }
+        },
+
+        launchLoop(){
+            this.loop = !this.loop
+            const iconLoop = document.getElementById("iconLoop")
+            this.loop ? iconLoop.style = `background: rgba(0, 0, 0, 0.4);` : iconLoop.style = ``
+
+            console.log(this.loop)
         }
     }
 })
