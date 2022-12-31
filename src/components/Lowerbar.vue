@@ -12,10 +12,13 @@
     .bar{
         display: flex;
         justify-content: center;
+        position: relative;
+        top: 1.5vh;
         color: white;
         width: 50%;
-        height: 7%;
-        margin: auto auto 2.5vh auto;
+        height: 100%;
+        margin: 0 auto;
+        align-self: center;
         background-color: rgba(0, 0, 0, 0.20);
         border-radius: 36px;
     }
@@ -44,6 +47,7 @@
         .bar{
             width: 80%;
             margin: 0;
+            height: 7%;
         }
 
         .bar .icon-cog{

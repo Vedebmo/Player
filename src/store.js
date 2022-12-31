@@ -32,6 +32,8 @@ let historyMax
 
 export const Store = defineStore('Store', {
     state: () => ({
+        volume: 1,
+        willChangeVolume: false,
         loop: false,
         historyIndex: 0,
         songIndexA: 0,
@@ -54,6 +56,7 @@ export const Store = defineStore('Store', {
         icon: "triangle",
         songTime: 0,
         rangeSize: "0% 100%",
+        volumeSize: "100% 100%",
         songCurrent: "00:00",
         songDuration: "00:00"
     }),
@@ -345,8 +348,31 @@ export const Store = defineStore('Store', {
             this.loop = !this.loop
             const iconLoop = document.getElementById("iconLoop")
             this.loop ? iconLoop.style = `background: rgba(0, 0, 0, 0.4);` : iconLoop.style = ``
+        },
 
-            console.log(this.loop)
+        changeVolume(){
+            const volumeIcon = document.getElementById("volume")
+            const volumeRange = document.getElementById("volumeRange")
+            this.volumeSize = `${volumeRange.value * 100}% 100%`
+            const song = document.getElementById("song")
+            let volume = volumeRange.value
+            song.volume = volume
+            
+            if(volume == 0){
+                volumeIcon.classList = "icon-volume-mute2"
+            }
+            else if(volume > 0 && volume <= 0.25){
+                volumeIcon.classList = "icon-volume-mute"
+            }
+            else if(volume > 0.25 && volume <= 0.4){
+                volumeIcon.classList = "icon-volume-low"
+            }
+            else if(volume > 0.4 && volume < 1){
+                volumeIcon.classList = "icon-volume-medium"
+            }
+            else if(volume == 1){
+                volumeIcon.classList = "icon-volume-high"
+            }
         }
     }
 })

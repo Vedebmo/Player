@@ -25,7 +25,8 @@
           <span class="icon-download"></span>
           <span class="icon-plus"></span>
           <span class="icon-heart"></span>
-          <span class="icon-volume-medium"></span>
+          <span class="icon-volume-high" id="volume" @mouseenter="store.willChangeVolume = true"  @touchstart="store.willChangeVolume = true"></span>
+          <input v-if="store.willChangeVolume" type="range" id="volumeRange" v-model="store.volume" min="0" max="1" step="0.05" :style="{ backgroundSize: store.volumeSize}" @input="store.changeVolume" @mouseleave="store.willChangeVolume = false" @touchend="store.willChangeVolume = false">
         </div>
         <div class="right">
           <h5>{{store.songCurrent}} / {{store.songDuration}}</h5>
@@ -36,6 +37,7 @@
       <audio :src="store.songsReferences[store.songIndex]" id="song"></audio>
       
       <!--Bars-->
+      <br v-if="store.willChangeVolume">
       <ProgressBar></ProgressBar>
       <Lowerbar v-if="!store.tablet"></Lowerbar>
     </div>
@@ -48,17 +50,17 @@
 <style src="@/assets/icomoon/style.css"></style>
 
 <style scoped>
-
   .none{
     display: none;
   }
+
   .playing{
-    height: 92vh;
     display: flex;
     flex-direction: column;
   }
+
   .img-container{
-      margin-top: 7%;
+    margin-top: 3%;
   }
 
   img{
@@ -66,12 +68,12 @@
     z-index: 0;
     transition: opacity 0.5s;
     /* max-height: 55vh; */
-    height: 55vh;
+    height: 50vh;
   }
 
   .absolute{
-      position: initial;
-    }
+    position: initial;
+  }
 
   .absolute2{
     position: absolute;
@@ -131,6 +133,39 @@
     padding: .5em;
     border: solid 3px black;
     border-radius: 50%;
+  }
+
+  input[type="range"] {
+    margin-left: -.5rem;
+    appearance: none;
+    width: 80%;
+    height: 4px;
+    background: #66757F;
+    border-radius: 5px;
+    background-image: linear-gradient(white, white);
+    background-repeat: no-repeat;
+  }
+
+  input[type="range"]:hover{
+    cursor: pointer;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    box-shadow: 0 0 2px 0 #66757F;
+    transition: background .3s ease-in-out;
+  }
+
+  input[type=range]::-webkit-slider-runnable-track  {
+    appearance: none;
+    box-shadow: none;
+    border: none;
+    background: transparent;
   }
 
   @media screen and (min-width: 768px){

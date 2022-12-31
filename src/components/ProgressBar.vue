@@ -65,7 +65,7 @@
         text-align: center;
         display: grid;
         place-items: center;
-        font-size: 2.5em;
+        font-size: 5vh;
         margin: auto;
     }
     
@@ -74,7 +74,7 @@
         text-align: center;
         background: #D2B8D3;
         border-radius: 68px;
-        font-size: 2.5em;
+        font-size: 5vh;
     }
 
     .left span:hover, .right span:hover, .center:hover{

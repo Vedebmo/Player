@@ -13,5 +13,6 @@ import {RouterView } from 'vue-router'
     background: #201C29;
     margin: 0;
     padding: 0;
+    overflow: hidden;
   }
 </style>
