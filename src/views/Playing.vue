@@ -1,10 +1,15 @@
 <template>
   <header>
+
+    <!--Song-->
+
+    <audio :src="store.songsReferences[store.songIndex]" id="song"></audio>
+
     <Sidebar v-if="store.showSettings" style="background:none;margin: 0; height: 92vh;"></Sidebar>
     <div class="playing" v-if="!store.showSettings">
-      
+
       <!--Image-->
-      
+
       <div class="img-container">
         <span v-if="store.tablet" @click="store.rollDice" id="dice" class="icon-dice"></span>
         <img :src="store.songsImages[store.songIndexA]" id="img" alt="Image not found" :style="{opacity: store.fade2}" class="absolute">
@@ -12,14 +17,14 @@
       </div>
 
       <!--Titles-->
-  
+
       <div class="titles">
         <h1><b>{{store.songsNames[store.songIndex]}}</b></h1>
         <h5><small>{{store.artists[store.songIndex]}}</small></h5>
       </div>
   
       <!--Options-->
-  
+
       <div class="options">
         <div class="left">
           <span class="icon-download"></span>
@@ -32,11 +37,9 @@
           <h5>{{store.songCurrent}} / {{store.songDuration}}</h5>
         </div>
       </div>
-  
-      <!--Song-->
-      <audio :src="store.songsReferences[store.songIndex]" id="song"></audio>
-      
+
       <!--Bars-->
+
       <br v-if="store.willChangeVolume">
       <ProgressBar></ProgressBar>
       <Lowerbar v-if="!store.tablet"></Lowerbar>
@@ -67,7 +70,6 @@
     width: 100%;
     z-index: 0;
     transition: opacity 0.5s;
-    /* max-height: 55vh; */
     height: 50vh;
   }
 

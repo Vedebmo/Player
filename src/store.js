@@ -70,13 +70,32 @@ export const Store = defineStore('Store', {
         },
 
         launchSettings(){
+            const song = document.getElementById("song")
             this.showSettings = !this.showSettings
+            if(this.showSettings){
+                song.pause()
+                this.icon = "triangle"
+            }
+            else{
+                let findRange = setInterval(()=>{
+                    const range = document.getElementById("range")
+                    if(range != null){
+                        range.value = (song.currentTime / song.duration) * 100
+                        this.rangeSize = `${range.value}% 100%`
+                        clearInterval(findRange)
+                    }
+                },1)
+            }
         },
 
         play(){
             const song = document.getElementById("song")
             if(!isNaN(song.duration) && song.duration+1 != song.currentTime){
                 let checkPlaying = setInterval(()=>{
+                    if(this.showSettings){
+                        clearInterval(checkPlaying)
+                        return 0
+                    }
                     const range = document.getElementById("range")
                     range.value = (song.currentTime / song.duration) * 100
                     this.rangeSize = `${range.value}% 100%`
@@ -142,19 +161,21 @@ export const Store = defineStore('Store', {
                             this.rangeUp = true
                         })
                     }
-                    const duration = song.duration / 60
-                    const currentTime = song.currentTime / 60
-                    const int = Math.floor(duration)
-                    let decimal = duration - int
-                    decimal = Math.floor(decimal*60)
-                    
-                    const intCurrent = Math.floor(currentTime)
-                    let decimalCurrent = currentTime - intCurrent
-                    decimalCurrent = Math.floor(decimalCurrent*60)
-
-                    this.songDuration = `${int.toString().padStart(2,0)}:${decimal.toString().padStart(2,0)}`
-                    this.songCurrent = `${intCurrent.toString().padStart(2,0)}:${decimalCurrent.toString().padStart(2,0)}`
-                    this.checkEnd()
+                    if(!this.showSettings){
+                        const duration = song.duration / 60
+                        const currentTime = song.currentTime / 60
+                        const int = Math.floor(duration)
+                        let decimal = duration - int
+                        decimal = Math.floor(decimal*60)
+                        
+                        const intCurrent = Math.floor(currentTime)
+                        let decimalCurrent = currentTime - intCurrent
+                        decimalCurrent = Math.floor(decimalCurrent*60)
+    
+                        this.songDuration = `${int.toString().padStart(2,0)}:${decimal.toString().padStart(2,0)}`
+                        this.songCurrent = `${intCurrent.toString().padStart(2,0)}:${decimalCurrent.toString().padStart(2,0)}`
+                        this.checkEnd()
+                    }
                 }
             }
         },
