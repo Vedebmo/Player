@@ -90,6 +90,16 @@ export const Store = defineStore('Store', {
                     if(range != null){
                         range.value = (song.currentTime / song.duration) * 100
                         this.rangeSize = `${range.value}% 100%`
+
+                        //Detect and fix absolute and opacities
+                        const img = document.getElementById("img")
+                        const img2 = document.getElementById("img2")
+
+                        if(img.style.opacity == 0){
+                            img.classList = "absolute2"
+                            img2.classList = "absolute"
+                        }
+
                         clearInterval(findRange)
                     }
                 },1)

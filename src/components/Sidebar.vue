@@ -1,7 +1,7 @@
 <template>
     <div class="sideBar">
         <div class="cancel" v-if="!store.tablet">
-            <input type="text" placeholder="Search 🔍">
+            <input type="text" :placeholder="store.texts[1][store.language]">
             <span class="icon-cancel-circle" @click="store.launchSettings"></span>
         </div>
         <div class="show">
