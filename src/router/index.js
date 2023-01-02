@@ -7,6 +7,11 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: () => import('@/views/Playing.vue')
+    },
+    {
+      path: '/languages',
+      name: 'languages',
+      component: () => import('@/views/Languages.vue')
     }
   ]
 })

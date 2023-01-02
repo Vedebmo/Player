@@ -23,10 +23,10 @@
                 <p>{{store.texts[4][store.language]}}</p>
             </div>
             <hr>
-            <div class="optionDivs">
+            <router-link class="optionDivs" :to="{name: 'languages'}" style="text-decoration: none;">
                 <span class="icon-language2"></span>
                 <p>{{store.texts[0][store.language]}} ></p>
-            </div>
+            </router-link>
             <Lowerbar v-if="store.tablet"></Lowerbar>
         </div>
     </div>

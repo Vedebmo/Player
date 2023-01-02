@@ -39,7 +39,7 @@ export const Store = defineStore('Store', {
     state: () => ({
         volume: 1,
         userLang,
-        language: 0,
+        language: null,
         texts,
         willChangeVolume: false,
         loop: false,
@@ -414,20 +414,58 @@ export const Store = defineStore('Store', {
             }
         },
         
-        checkLanguage(){
-            switch(this.userLang){
-                default:
-                    this.language = 0
-                    break
+        checkLanguage(checking){
+            if(this.language == null){
+                switch(this.userLang){
+                    default:
+                        this.language = 0
+                        break
+        
+                    case "es":
+                        this.language = 1
+                        break
     
-                case "es":
-                    this.language = 1
-                    break
-
-                case "it":
-                    this.language = 2
-                    break
+                    case "it":
+                        this.language = 2
+                        break
+                }
             }
+
+            if(checking){
+                this.changeLanguage(this.language)
+            }
+        },
+
+        changeLanguage(language){
+
+            let findFlags = setInterval(()=>{
+                const flag = document.getElementById("usa")
+                const flag2 = document.getElementById("spain")
+                const flag3 = document.getElementById("italy")
+                
+                if(flag != null && flag2 != null && flag3 != null){
+                    this.language = language
+        
+                    switch(this.language){
+                        default:
+                            flag.style.background = "rgba(0, 0, 0, 0.15)"
+                            flag2.style.background = ""
+                            flag3.style.background = ""
+                            break
+                        case 1:
+                            flag.style.background = ""
+                            flag2.style.background = "rgba(0, 0, 0, 0.15)"
+                            flag3.style.background = ""
+                            break
+                        case 2:
+                            flag.style.background = ""
+                            flag2.style.background = ""
+                            flag3.style.background = "rgba(0, 0, 0, 0.15)"
+                            break
+                    }
+                    clearInterval(findFlags)
+                }
+            },1)
         }
     }
 })
