@@ -466,6 +466,24 @@ export const Store = defineStore('Store', {
                     clearInterval(findFlags)
                 }
             },1)
+        },
+
+        downloadSong(){
+            const xhttp = new XMLHttpRequest()
+            const name = this.songsNames[this.songIndex]
+            xhttp.responseType = 'blob'
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    let url = window.URL.createObjectURL(this.response)
+                    let anchor = document.createElement("a")
+                    anchor.href = url
+                    anchor.download = name
+                    anchor.click()
+                    window.URL.revokeObjectURL(url)
+                }
+            };
+            xhttp.open("GET", this.songsReferences[this.songIndex], true);
+            xhttp.send();
         }
     }
 })

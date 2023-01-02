@@ -27,7 +27,7 @@
 
       <div class="options">
         <div class="left">
-          <span class="icon-download"></span>
+          <span class="icon-download" @click="store.downloadSong"></span>
           <span class="icon-plus"></span>
           <span class="icon-heart"></span>
           <span class="icon-volume-high" id="volume" @mouseenter="store.willChangeVolume = true"  @touchstart="store.willChangeVolume = true"></span>
