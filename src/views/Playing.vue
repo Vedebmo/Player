@@ -208,6 +208,7 @@
   const store = Store()
 
   store.changeTablet()
+  store.checkLanguage()
 
   window.addEventListener('resize',store.changeTablet)
 </script>

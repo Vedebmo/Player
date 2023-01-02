@@ -5,27 +5,27 @@
             <span class="icon-cancel-circle" @click="store.launchSettings"></span>
         </div>
         <div class="show">
-            <input type="text" placeholder="Search 🔍" v-if="store.tablet">
+            <input type="text" :placeholder="store.texts[1][store.language]" v-if="store.tablet">
         </div>
         <div class="options">
             <div class="optionDivs">
                 <span class="icon-user"></span>
-                <p>Account</p>
+                <p>{{store.texts[2][store.language]}}</p>
             </div>
             <hr>
             <div class="optionDivs">
                 <span class="icon-playlist_play"></span>
-                <p>Manage Songs</p>
+                <p>{{store.texts[3][store.language]}}</p>
             </div>
             <hr>
             <div class="optionDivs">
                 <span class="icon-googlepodcasts"></span>
-                <p>Wave Mode</p>
+                <p>{{store.texts[4][store.language]}}</p>
             </div>
             <hr>
             <div class="optionDivs">
                 <span class="icon-language2"></span>
-                <p>English ></p>
+                <p>{{store.texts[0][store.language]}} ></p>
             </div>
             <Lowerbar v-if="store.tablet"></Lowerbar>
         </div>

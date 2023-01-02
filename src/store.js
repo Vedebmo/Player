@@ -30,9 +30,17 @@ let random = 0
 let shuffleIcon = false
 let historyMax
 
+import texts from './assets/texts.json';
+
+let userLang = navigator.language || navigator.userLanguage;
+userLang = userLang[0] + userLang[1]
+
 export const Store = defineStore('Store', {
     state: () => ({
         volume: 1,
+        userLang,
+        language: 0,
+        texts,
         willChangeVolume: false,
         loop: false,
         historyIndex: 0,
@@ -393,6 +401,22 @@ export const Store = defineStore('Store', {
             }
             else if(volume == 1){
                 volumeIcon.classList = "icon-volume-high"
+            }
+        },
+        
+        checkLanguage(){
+            switch(this.userLang){
+                default:
+                    this.language = 0
+                    break
+    
+                case "es":
+                    this.language = 1
+                    break
+
+                case "it":
+                    this.language = 2
+                    break
             }
         }
     }
