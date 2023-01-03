@@ -40,7 +40,6 @@
 
       <!--Bars-->
 
-      <br v-if="store.willChangeVolume">
       <ProgressBar></ProgressBar>
       <Lowerbar v-if="!store.tablet"></Lowerbar>
     </div>
@@ -135,6 +134,10 @@
     padding: .5em;
     border: solid 3px black;
     border-radius: 50%;
+  }
+
+  .icon-download:hover{
+    color: #aaaaaa;
   }
 
   input[type="range"] {
