@@ -23,5 +23,35 @@
      "0": "Wave Mode",
      "1": "Modo Ondulado",
      "2": "Modalità Ondulata"
+    },
+    {
+     "0": "Password",
+     "1": "Contraseña",
+     "2": "Password"
+    },
+    {
+     "0": "Have you forgotten your password?",
+     "1": "¿Has olvidado tu contraseña?",
+     "2": "Hai dimenticato la tua password?"
+    },
+    {
+     "0": "Log In",
+     "1": "Iniciar Sesión",
+     "2": "Accedi"
+    },
+    {
+     "0": "Log In with Google",
+     "1": "Iniciar Sesión con Google",
+     "2": "Accedi con Google"
+    },
+    {
+     "0": "Not Having an account? create one",
+     "1": "¿Aún no tienes una cuenta? crea una",
+     "2": "Non hai un account? crearne una"
+    },
+    {
+     "0": "Sign Up",
+     "1": "Crear Cuenta",
+     "2": "Iscriviti"
     }
 ]

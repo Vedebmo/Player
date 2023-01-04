@@ -8,10 +8,10 @@
             <input type="text" :placeholder="store.texts[1][store.language]" v-if="store.tablet">
         </div>
         <div class="options">
-            <div class="optionDivs">
+            <router-link class="optionDivs" :to="{name: 'login'}" style="text-decoration: none;">
                 <span class="icon-user"></span>
                 <p>{{store.texts[2][store.language]}}</p>
-            </div>
+            </router-link>
             <hr>
             <div class="optionDivs">
                 <span class="icon-playlist_play"></span>
@@ -80,7 +80,7 @@ span{
 }
 
 .cancel{
-    margin-top: 7%;
+    margin-top: 3vh;
     display: flex;
     width: 100%;
     align-items: center;
@@ -99,7 +99,7 @@ span{
 
 .icon-cancel-circle{
     color: white;
-    font-size: 1.2em;
+    font-size: 5.5vh;
 }
 
 .icon-cancel-circle:hover{

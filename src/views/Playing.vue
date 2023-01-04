@@ -29,7 +29,6 @@
         <div class="left">
           <span class="icon-download" @click="store.downloadSong"></span>
           <span class="icon-plus"></span>
-          <span class="icon-heart"></span>
           <span class="icon-volume-high" id="volume" @mouseenter="store.willChangeVolume = true"  @touchstart="store.willChangeVolume = true"></span>
           <input v-if="store.willChangeVolume" type="range" id="volumeRange" v-model="store.volume" min="0" max="1" step="0.05" :style="{ backgroundSize: store.volumeSize}" @input="store.changeVolume" @mouseleave="store.willChangeVolume = false" @touchend="store.willChangeVolume = false">
         </div>

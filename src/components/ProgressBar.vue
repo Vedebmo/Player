@@ -19,7 +19,7 @@
 
 <style scoped>
 
-    input[type="range"] {    
+    input[type="range"] {
         margin: .8em auto;
         appearance: none;
         width: 80%;

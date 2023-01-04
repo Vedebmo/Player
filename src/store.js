@@ -54,6 +54,8 @@ export const Store = defineStore('Store', {
         tablet: false,
         changing: false,
         showSettings: false,
+        showPassword: false,
+        passwordType: "password",
         rangeUp: true,
         songsImages,
         maxIndex: 0,
@@ -484,6 +486,11 @@ export const Store = defineStore('Store', {
             };
             xhttp.open("GET", this.songsReferences[this.songIndex], true);
             xhttp.send();
+        },
+
+        willShowPassword(){
+            this.showPassword = !this.showPassword
+            this.passwordType == "text" ? this.passwordType = "password" : this.passwordType = "text"
         }
     }
 })
