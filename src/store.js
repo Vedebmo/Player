@@ -103,6 +103,7 @@ export const Store = defineStore('Store', {
                         }
 
                         clearInterval(findRange)
+                        this.checkSong()
                     }
                 },1)
             }

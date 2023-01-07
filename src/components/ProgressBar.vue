@@ -1,5 +1,4 @@
 <template>
-    <!-- <hr> -->
     <input type="range" id="range" @input="store.movingSong" value="0" step="any" :style="{ backgroundSize: store.rangeSize}">
     <!--Player-->
     <div class="player">

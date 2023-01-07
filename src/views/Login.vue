@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="app">
         <div class="span">
             <router-link :to="{name: 'home'}" style="text-decoration: none;" @click="store.showSettings = true">
                 <span class="icon-circle-left"></span>
@@ -7,27 +7,34 @@
         </div>
 
         <div class="login">
-            <div class="logo">
-                <img src="https://www.sivola.it/media/cache/header/d3/66/b8ffeed5941a5701a69fc1c4a870.jpeg" alt="Logo">
-            </div>
-            <h1>Log In</h1>
-            <div class="form">    
+            <div class="form">
+                <div class="logo">
+                    <img src="https://www.sivola.it/media/cache/header/d3/66/b8ffeed5941a5701a69fc1c4a870.jpeg" alt="Logo">
+                </div>
+                <h1>Log In</h1>
                 <div class="inputs">
-                    <input type="email" placeholder="Email" class="email">
-                    <br>
+                    <div class="emailPart">
+                        <input type="email" placeholder="Email" class="email">
+                        <span class="icon-eye" style="opacity: 0;"></span>
+                    </div>
                     <div class="passwordPart">
                         <input :type="store.passwordType" :placeholder="store.texts[5][store.language]">
                         <span class="icon-eye" v-if="!store.showPassword" @click="store.willShowPassword"></span>
                         <span class="icon-eye-blocked" v-if="store.showPassword" @click="store.willShowPassword"></span>
                     </div>
                 </div>
+
                 <a href="#" class="forgottenPassword">{{store.texts[6][store.language]}}</a>
-                <button class="loginBtn">{{store.texts[7][store.language]}}</button>
-                <br>
-                <button class="loginBtnGoogle">{{store.texts[8][store.language]}}
-                    <span class="icon-google"></span>
-                </button>
-                <a href="#" class="signup">{{store.texts[9][store.language]}}</a>
+
+                <div class="buttons">
+                    <button class="loginBtn">{{store.texts[7][store.language]}}</button>
+                    <br>
+                    <button class="loginBtnGoogle">{{store.texts[8][store.language]}}
+                        <span class="icon-google"></span>
+                    </button>
+                </div>
+
+                <p class="signup">{{store.texts[9][store.language]}}</p>
 
                 <button class="signupBtn">{{store.texts[10][store.language]}}</button>
             </div>
@@ -43,9 +50,14 @@
 
 <style src="@/assets/icomoon/style.css"></style>
 
-<style>
+<style scoped>
+    .app{
+        height: 90vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
     .span{
-        margin: 3vh auto auto auto;
         display: flex;
         width: 90%;
         justify-content: end;
@@ -60,13 +72,21 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin: auto;
-
         width: 90%;
+    }
+    
+    .login{
+        flex-grow: 2;
+        justify-content: center;
+    }
+
+    .form{
+        flex-grow: 1;
+        justify-content: space-evenly;
     }
 
     .logo{
-        width: 15rem;
+        width: 40vw;
         height: 20vh;
     }
 
@@ -77,13 +97,12 @@
 
     h1{
         color: white;
-        margin: 1%;
         font-family: Verdana, Geneva, Tahoma, sans-serif;
     }
 
     a{
         text-decoration: none;
-        margin: 3vh 0;
+        margin: 2vh 0;
     }
 
     a:hover{
@@ -99,15 +118,18 @@
     }
 
     input{
-        height: 3vh;
-        width: 60%;
+        border: none;
+        width: 70vw;
         font-size: 2.5vh;
         padding: 0.7% 2%;
+    }
+    
+    input[type="email"]{
+        margin-bottom: 1.5vh;
     }
 
     .icon-eye, .icon-eye-blocked{
         font-size: 3.5vh;
-        height: 98%;
         position: relative;
         left: -3.5rem;
         color: #8B8181;
@@ -120,14 +142,7 @@
         background: rgba(0, 0, 0, 0.15);
     }
 
-    .inputs{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 30rem;
-    }
-
-    .passwordPart{
+    .passwordPart, .emailPart{
         display: flex;
         justify-content: center;
         align-items: center;
@@ -169,7 +184,6 @@
     .signupBtn{
         color: white;
         display: block;
-        margin: auto;
         padding: 1% 2%;
         font-size: 4vh;
         cursor: pointer;
