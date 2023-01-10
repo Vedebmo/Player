@@ -41,7 +41,8 @@ export const Store = defineStore('Store', {
         userLang,
         language: null,
         texts,
-        willChangeVolume: false,
+        volumeOpacity: 0,
+        volumePosition: "100vw",
         loop: false,
         historyIndex: 0,
         songIndexA: 0,
@@ -392,9 +393,24 @@ export const Store = defineStore('Store', {
             this.loop ? iconLoop.style = `background: rgba(0, 0, 0, 0.4);` : iconLoop.style = ``
         },
 
-        changeVolume(){
+        changeVolume(input){
             const volumeIcon = document.getElementById("volume")
             const volumeRange = document.getElementById("volumeRange")
+
+            if(input == "In"){
+                volumeRange.disabled = false
+                this.volumePosition = "0vw"
+                this.volumeOpacity = 1
+            }
+            else if(input == "Out"){
+                this.volumeOpacity = 0
+                volumeRange.disabled = true
+                setTimeout(()=>{
+                    this.volumePosition = "100vw"
+                },300)
+                // this.volumePosition = "100vw"
+            }
+
             this.volumeSize = `${volumeRange.value * 100}% 100%`
             const song = document.getElementById("song")
             let volume = volumeRange.value

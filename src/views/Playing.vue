@@ -26,11 +26,12 @@
       <!--Options-->
 
       <div class="options">
-        <div class="left">
+        <div class="left" @mouseleave="store.changeVolume('Out')" @touchend="store.changeVolume('Out')">
           <span class="icon-download" @click="store.downloadSong"></span>
           <span class="icon-plus"></span>
-          <span class="icon-volume-high" id="volume" @mouseenter="store.willChangeVolume = true"  @touchstart="store.willChangeVolume = true"></span>
-          <input v-if="store.willChangeVolume" type="range" id="volumeRange" v-model="store.volume" min="0" max="1" step="0.05" :style="{ backgroundSize: store.volumeSize}" @input="store.changeVolume" @mouseleave="store.willChangeVolume = false" @touchend="store.willChangeVolume = false">
+          <!-- <span class="icon-volume-high" id="volume" @mouseenter="store.volumeOpacity = 1"  @touchstart="store.volumeOpacity = 1"></span> -->
+          <span class="icon-volume-high" id="volume" @mouseenter="store.changeVolume('In')"  @touchstart="store.changeVolume('In')"></span>
+          <input type="range" id="volumeRange" v-model="store.volume" min="0" max="1" step="0.05" :style="{ backgroundSize: store.volumeSize, opacity: store.volumeOpacity, left: store.volumePosition, opacity: store.volumeOpacity}" @input="store.changeVolume" disabled>
         </div>
         <div class="right">
           <h5>{{store.songCurrent}} / {{store.songDuration}}</h5>
@@ -135,7 +136,7 @@
     border-radius: 50%;
   }
 
-  .icon-download:hover{
+  .icon-download:hover, .icon-plus:hover{
     color: #aaaaaa;
   }
 
@@ -170,6 +171,11 @@
     box-shadow: none;
     border: none;
     background: transparent;
+  }
+
+  #volumeRange{
+    position: relative;
+    transition: opacity .3s;
   }
 
   @media screen and (min-width: 768px){
