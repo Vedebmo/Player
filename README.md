@@ -19,4 +19,3 @@ Thinking about the use of this player, there's a list of features to be added:
  - Allow users to upload their own songs
  - Wave mode
  - Minigames to play while listening to music
- - Multilingual

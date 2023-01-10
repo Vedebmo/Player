@@ -79,6 +79,16 @@ export const Store = defineStore('Store', {
                 this.checkSong()
             },1)
         },
+        
+        fixAbsolute(){
+            const img = document.getElementById("img")
+            const img2 = document.getElementById("img2")
+    
+            if(img.style.opacity == 0){
+                img.classList = "absolute2"
+                img2.classList = "absolute"
+            }
+        },
 
         launchSettings(){
             const song = document.getElementById("song")
@@ -95,13 +105,7 @@ export const Store = defineStore('Store', {
                         this.rangeSize = `${range.value}% 100%`
 
                         //Detect and fix absolute and opacities
-                        const img = document.getElementById("img")
-                        const img2 = document.getElementById("img2")
-
-                        if(img.style.opacity == 0){
-                            img.classList = "absolute2"
-                            img2.classList = "absolute"
-                        }
+                        this.fixAbsolute()
 
                         clearInterval(findRange)
                         this.checkSong()
@@ -200,6 +204,10 @@ export const Store = defineStore('Store', {
                     }
                 }
             }
+
+            try{
+                this.fixAbsolute()
+            }catch{}
         },
 
         download(){
