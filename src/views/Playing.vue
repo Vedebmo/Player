@@ -29,14 +29,14 @@
         <div class="left" @mouseleave="store.changeVolume('Out')" @touchend="store.changeVolume('Out')">
           <span class="icon-download" @click="store.downloadSong"></span>
           <span class="icon-plus"></span>
-          <span class="icon-volume-high" id="volume" @mouseenter="store.changeVolume('In')"  @touchstart="store.changeVolume('In')"></span>
-          <input type="range" id="volumeRange" v-model="store.volume" min="0" max="1" step="any" :style="{ backgroundSize: store.volumeSize, opacity: store.volumeOpacity, left: store.volumePosition, opacity: store.volumeOpacity}" @input="store.changeVolume" disabled>
+          <span class="icon-volume-high" id="volume" @mouseenter="store.changeVolume('In')"  @touchstart="store.changeVolume('In')" @click="store.changeVolume('Previous')"></span>
+          <input type="range" id="volumeRange" min="0" max="1" step="any" :style="{ backgroundSize: store.volumeSize, opacity: store.volumeOpacity, left: store.volumePosition, opacity: store.volumeOpacity}" @input="store.changeVolume" disabled>
         </div>
         <div class="right">
           <h5>{{store.songCurrent}} / {{store.songDuration}}</h5>
         </div>
       </div>
-      
+
       <!--Bars-->
 
       <ProgressBar></ProgressBar>
@@ -135,7 +135,7 @@
     border-radius: 50%;
   }
 
-  .icon-download:hover, .icon-plus:hover{
+  .icon-download:hover, .icon-plus:hover, #volume:hover{
     color: #aaaaaa;
   }
 

@@ -37,13 +37,14 @@ userLang = userLang[0] + userLang[1]
 
 export const Store = defineStore('Store', {
     state: () => ({
-        volume: 1,
+        volumePrevious: 1,
+        volumePosition: "100vw",
+        volumeOpacity: 0,
+        volumeSize: "100% 100%",
         returned: false,
         userLang,
         language: null,
         texts,
-        volumeOpacity: 0,
-        volumePosition: "100vw",
         loop: false,
         historyIndex: 0,
         songIndexA: 0,
@@ -69,7 +70,6 @@ export const Store = defineStore('Store', {
         rangeValue: 0,
         rangeUp: true,
         rangeSize: "0% 100%",
-        volumeSize: "100% 100%",
         songCurrent: "00:00",
         songDuration: "00:00"
     }),
@@ -422,6 +422,9 @@ export const Store = defineStore('Store', {
         changeVolume(input){
             const volumeIcon = document.getElementById("volume")
             const volumeRange = document.getElementById("volumeRange")
+            let volume = volumeRange.value
+            
+            volume != 0 ? this.volumePrevious = volume : ""
 
             if(input == "In"){
                 volumeRange.disabled = false
@@ -435,10 +438,12 @@ export const Store = defineStore('Store', {
                     this.volumePosition = "100vw"
                 },300)
             }
+            else if(input == "Previous"){
+                volumeRange.value != 0 ? (volume = 0, volumeRange.value = 0) : (volume = this.volumePrevious, volumeRange.value = this.volumePrevious)
+            }
 
             this.volumeSize = `${volumeRange.value * 100}% 100%`
             const song = document.getElementById("song")
-            let volume = volumeRange.value
             song.volume = volume
             
             if(volume == 0){
