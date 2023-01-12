@@ -36,7 +36,7 @@
           <h5>{{store.songCurrent}} / {{store.songDuration}}</h5>
         </div>
       </div>
-
+      
       <!--Bars-->
 
       <ProgressBar></ProgressBar>

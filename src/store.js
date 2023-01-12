@@ -23,7 +23,7 @@ let songsNames = []
 let songsReferences = []
 let songsImages = []
 let artists = []
-let history = [0]
+let history = []
 let next = false
 let previous = false
 let random = 0
@@ -155,10 +155,6 @@ export const Store = defineStore('Store', {
             else{
                 range.value = 0
             }
-        },
-
-        test(){
-            console.log(this.rangeValue)
         },
 
         checkSong(){
@@ -314,7 +310,12 @@ export const Store = defineStore('Store', {
 
         shuffle(){
             random = Math.round(Math.random() * this.maxIndex)
-            random == this.songIndex ? this.shuffle() : (this.goingShuffle = true, this.reset())
+            if(random == this.songIndex || random == history[history.length - 1]){
+                this.shuffle()
+            }
+            else{
+                this.goingShuffle = true, this.reset()
+            }
         },
 
         fading(){
@@ -365,7 +366,7 @@ export const Store = defineStore('Store', {
 
         launchShuffle(){
             this.historyIndex = 0
-            history = [0]
+            history = [this.songIndex]
             this.goingShuffle = !this.goingShuffle
             const iconShuffle = document.getElementById("iconShuffle")
             this.goingShuffle ? iconShuffle.style = `background: rgba(0, 0, 0, 0.4);` : iconShuffle.style = ``
