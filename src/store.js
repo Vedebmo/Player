@@ -420,30 +420,36 @@ export const Store = defineStore('Store', {
         },
 
         changeVolume(input){
+            const song = document.getElementById("song")
             const volumeIcon = document.getElementById("volume")
-            const volumeRange = document.getElementById("volumeRange")
-            let volume = volumeRange.value
-            
-            volume != 0 ? this.volumePrevious = volume : ""
+            let volume = song.volume
 
-            if(input == "In"){
-                volumeRange.disabled = false
-                this.volumePosition = "0vw"
-                this.volumeOpacity = 1
-            }
-            else if(input == "Out"){
-                this.volumeOpacity = 0
-                volumeRange.disabled = true
-                setTimeout(()=>{
-                    this.volumePosition = "100vw"
-                },300)
+            if(this.tablet){
+                const volumeRange = document.getElementById("volumeRange")
+                volume = volumeRange.value
+                
+                volume != 0 ? this.volumePrevious = volume : ""
+                if(input == "In"){
+                    volumeRange.disabled = false
+                    this.volumePosition = "0vw"
+                    this.volumeOpacity = 1
+                }
+                else if(input == "Out"){
+                    this.volumeOpacity = 0
+                    volumeRange.disabled = true
+                    setTimeout(()=>{
+                        this.volumePosition = "100vw"
+                    },300)
+                }
+                else if(input == "Previous"){
+                    volumeRange.value != 0 ? (volume = 0, volumeRange.value = 0) : (volume = this.volumePrevious, volumeRange.value = this.volumePrevious)
+                }
+                this.volumeSize = `${volumeRange.value * 100}% 100%`
             }
             else if(input == "Previous"){
-                volumeRange.value != 0 ? (volume = 0, volumeRange.value = 0) : (volume = this.volumePrevious, volumeRange.value = this.volumePrevious)
+                volume != 0 ? volume = 0 : volume = this.volumePrevious
             }
 
-            this.volumeSize = `${volumeRange.value * 100}% 100%`
-            const song = document.getElementById("song")
             song.volume = volume
             
             if(volume == 0){
