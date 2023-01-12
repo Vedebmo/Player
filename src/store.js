@@ -38,6 +38,7 @@ userLang = userLang[0] + userLang[1]
 export const Store = defineStore('Store', {
     state: () => ({
         volume: 1,
+        returned: false,
         userLang,
         language: null,
         texts,
@@ -57,7 +58,6 @@ export const Store = defineStore('Store', {
         showSettings: false,
         showPassword: false,
         passwordType: "password",
-        rangeUp: true,
         songsImages,
         maxIndex: 0,
         songIndex: 0,
@@ -66,6 +66,8 @@ export const Store = defineStore('Store', {
         artists,
         icon: "triangle",
         songTime: 0,
+        rangeValue: 0,
+        rangeUp: true,
         rangeSize: "0% 100%",
         volumeSize: "100% 100%",
         songCurrent: "00:00",
@@ -118,12 +120,13 @@ export const Store = defineStore('Store', {
             const song = document.getElementById("song")
             if(!isNaN(song.duration) && song.duration+1 != song.currentTime){
                 let checkPlaying = setInterval(()=>{
-                    if(this.showSettings){
+                    if(this.showSettings == true || this.returned == true){
                         clearInterval(checkPlaying)
+                        this.icon = "triangle"
                         return 0
                     }
                     const range = document.getElementById("range")
-                    range.value = (song.currentTime / song.duration) * 100
+                    this.rangeValue = (song.currentTime / song.duration) * 100
                     this.rangeSize = `${range.value}% 100%`
                     this.checkSong()
                     this.icon == "triangle" ? clearInterval(checkPlaying) : ""
@@ -138,7 +141,7 @@ export const Store = defineStore('Store', {
             const range = document.getElementById("range")
             if(this.rangeUp){
                 if(!isNaN(song.duration)){
-                    this.checkSong()
+                    this.rangeValue = range.value
                     const porcentage = range.value / 100
                     this.songTime = song.duration * porcentage
                     song.currentTime = this.songTime
@@ -154,6 +157,10 @@ export const Store = defineStore('Store', {
             }
         },
 
+        test(){
+            console.log(this.rangeValue)
+        },
+
         checkSong(){
             if(this.songsReferences[this.songIndex] == undefined || 
                 this.songsImages[this.songIndex] == undefined || 
@@ -164,7 +171,8 @@ export const Store = defineStore('Store', {
             }
             else{
                 const song = document.getElementById("song")
-                if(isNaN(song.duration)){
+                const range = document.getElementById("range")
+                if(song == null || isNaN(song.duration) == true){
                     setTimeout(()=>{
                         this.checkSong()
                     },1)
@@ -188,6 +196,15 @@ export const Store = defineStore('Store', {
                         })
                     }
                     if(!this.showSettings){
+                        if(this.returned){
+                            const range = document.getElementById("range")
+                            song.currentTime = this.songTime
+                            range.value = this.rangeValue
+                            this.rangeSize = `${this.rangeValue}% 100%`
+                            this.returned = false
+                            this.rangeUp = true
+                        }
+
                         const duration = song.duration / 60
                         const currentTime = song.currentTime / 60
                         const int = Math.floor(duration)
@@ -416,7 +433,6 @@ export const Store = defineStore('Store', {
                 setTimeout(()=>{
                     this.volumePosition = "100vw"
                 },300)
-                // this.volumePosition = "100vw"
             }
 
             this.volumeSize = `${volumeRange.value * 100}% 100%`

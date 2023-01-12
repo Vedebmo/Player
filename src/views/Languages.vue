@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="span">
-            <router-link :to="{name: 'home'}" style="text-decoration: none;">
+            <router-link :to="{name: 'home'}" style="text-decoration: none;" @click="store.showSettings = true">
                 <span class="icon-circle-left"></span>
             </router-link>
         </div>
@@ -93,6 +93,7 @@
 <script setup>
     import {Store} from "../store.js"
     const store = Store()
+    store.returned = true
 
     store.checkLanguage(true)
 </script>

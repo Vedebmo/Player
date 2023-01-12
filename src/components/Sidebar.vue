@@ -8,7 +8,7 @@
             <input type="text" :placeholder="store.texts[1][store.language]" v-if="store.tablet">
         </div>
         <div class="options">
-            <router-link class="optionDivs" :to="{name: 'login'}" style="text-decoration: none;" @click="store.changing = true">
+            <router-link class="optionDivs" :to="{name: 'login'}" style="text-decoration: none;">
                 <span class="icon-user"></span>
                 <p>{{store.texts[2][store.language]}}</p>
             </router-link>
@@ -23,7 +23,7 @@
                 <p>{{store.texts[4][store.language]}}</p>
             </div>
             <hr>
-            <router-link class="optionDivs" :to="{name: 'languages'}" style="text-decoration: none;" @click="store.changing = true">
+            <router-link class="optionDivs" :to="{name: 'languages'}" style="text-decoration: none;">
                 <span class="icon-language2"></span>
                 <p>{{store.texts[0][store.language]}} ></p>
             </router-link>

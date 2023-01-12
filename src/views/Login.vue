@@ -44,6 +44,7 @@
 <script setup>
   import {Store} from "../store.js"
   const store = Store()
+  store.returned = true
 
   store.checkLanguage()
 </script>

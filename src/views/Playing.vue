@@ -29,9 +29,8 @@
         <div class="left" @mouseleave="store.changeVolume('Out')" @touchend="store.changeVolume('Out')">
           <span class="icon-download" @click="store.downloadSong"></span>
           <span class="icon-plus"></span>
-          <!-- <span class="icon-volume-high" id="volume" @mouseenter="store.volumeOpacity = 1"  @touchstart="store.volumeOpacity = 1"></span> -->
           <span class="icon-volume-high" id="volume" @mouseenter="store.changeVolume('In')"  @touchstart="store.changeVolume('In')"></span>
-          <input type="range" id="volumeRange" v-model="store.volume" min="0" max="1" step="0.05" :style="{ backgroundSize: store.volumeSize, opacity: store.volumeOpacity, left: store.volumePosition, opacity: store.volumeOpacity}" @input="store.changeVolume" disabled>
+          <input type="range" id="volumeRange" v-model="store.volume" min="0" max="1" step="any" :style="{ backgroundSize: store.volumeSize, opacity: store.volumeOpacity, left: store.volumePosition, opacity: store.volumeOpacity}" @input="store.changeVolume" disabled>
         </div>
         <div class="right">
           <h5>{{store.songCurrent}} / {{store.songDuration}}</h5>
@@ -197,7 +196,6 @@
 </style>
 
 <script>
-
   import ProgressBar from '../components/ProgressBar.vue';
   import Lowerbar from '../components/Lowerbar.vue';
   import Sidebar from '../components/Sidebar.vue';
