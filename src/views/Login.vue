@@ -29,7 +29,7 @@
                 <div class="buttons">
                     <button class="loginBtn">{{store.texts[7][store.language]}}</button>
                     <br>
-                    <button class="loginBtnGoogle">{{store.texts[8][store.language]}}
+                    <button class="loginBtnGoogle" @click="store.login">{{store.texts[8][store.language]}}
                         <span class="icon-google"></span>
                     </button>
                 </div>
@@ -46,7 +46,10 @@
   const store = Store()
   store.returned = true
 
+  store.changeTablet()
   store.checkLanguage()
+
+  store.checkAuth()
 </script>
 
 <style src="@/assets/icomoon/style.css"></style>

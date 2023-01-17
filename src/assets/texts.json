@@ -53,5 +53,10 @@
      "0": "Sign Up",
      "1": "Crear Cuenta",
      "2": "Iscriviti"
+    },
+    {
+     "0": "Error Loging, please try again",
+     "1": "Error al iniciar sesión, por favor intentelo de nuevo",
+     "2": "Errore nel accesso, per favore prova di nuovo"
     }
 ]

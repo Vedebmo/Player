@@ -13,11 +13,11 @@
                 <p>{{store.texts[2][store.language]}}</p>
             </router-link>
             <hr>
-            <div class="optionDivs">
+            <div class="optionDivs" v-if="store.loggedIn">
                 <span class="icon-playlist_play"></span>
                 <p>{{store.texts[3][store.language]}}</p>
             </div>
-            <hr>
+            <hr  v-if="store.loggedIn">
             <div class="optionDivs">
                 <span class="icon-googlepodcasts"></span>
                 <p>{{store.texts[4][store.language]}}</p>

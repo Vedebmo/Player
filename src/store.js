@@ -1,3 +1,7 @@
+import texts from './assets/texts.json';
+
+import router from './router'
+
 import { defineStore } from "pinia"
 
 import { initializeApp } from "firebase/app";
@@ -13,6 +17,10 @@ const firebaseConfig = {
 
 // firebase.initializeApp(firebaseConfig);
 const fire = initializeApp(firebaseConfig);
+
+// firebase GoogleAuth
+import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "firebase/auth";
+const provider = new GoogleAuthProvider();
 
 import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage";
 const storage = getStorage();
@@ -30,13 +38,13 @@ let random = 0
 let shuffleIcon = false
 let historyMax
 
-import texts from './assets/texts.json';
-
 let userLang = navigator.language || navigator.userLanguage;
 userLang = userLang[0] + userLang[1]
 
 export const Store = defineStore('Store', {
     state: () => ({
+        user: null,
+        loggedIn: false,
         volumePrevious: 1,
         volumePosition: "100vw",
         volumeOpacity: 0,
@@ -544,6 +552,60 @@ export const Store = defineStore('Store', {
         willShowPassword(){
             this.showPassword = !this.showPassword
             this.passwordType == "text" ? this.passwordType = "password" : this.passwordType = "text"
-        }
+        },
+
+        login(){
+            const auth = getAuth();
+
+            if(this.tablet){
+                signInWithPopup(auth, provider)
+                .then((result) => {
+                    const credential = GoogleAuthProvider.credentialFromResult(result)
+                    const token = credential.accessToken
+                    const user = result.user
+                    this.user = user
+                    this.loggedIn = true
+                    router.push({ path: '/' })
+                }).catch((error) => {
+                    console.log(error)
+                    alert(this.texts[11][this.language])
+                });
+                return 0
+            }
+
+            signInWithRedirect(auth, provider)
+            .then((result) => {
+                const credential = GoogleAuthProvider.credentialFromResult(result);
+                const token = credential.accessToken;
+                const user = result.user;
+                this.user = user
+                this.loggedIn
+            }).catch((error) => {
+                alert(this.texts[11][this.language])
+            });
+        },
+
+        checkAuth(){
+
+            if(this.loggedIn){
+                router.push({ path: '/' })
+                return 0
+            }
+            
+            const auth = getAuth();
+            getRedirectResult(auth)
+              .then((result) => {
+                const credential = GoogleAuthProvider.credentialFromResult(result);
+                const token = credential.accessToken;
+                const user = result.user;
+                this.user = user
+                this.loggedIn
+                this.$router.push({ name: 'home' });
+              }).catch((error) => {
+                if (error.customData != undefined){
+                    alert(this.texts[11][this.language])
+                }
+              });
+        },
     }
 })

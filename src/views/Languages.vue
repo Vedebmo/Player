@@ -95,5 +95,6 @@
     const store = Store()
     store.returned = true
 
+    store.changeTablet()
     store.checkLanguage(true)
 </script>
