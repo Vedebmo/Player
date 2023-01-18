@@ -93,5 +93,20 @@
      "0": "Are you sure you want to Log Out?",
      "1": "¿Tiene seguridad de querer de Cerrar Sesión?",
      "2": "Hai sicurezza di voler Uscire?"
+    },
+    {
+     "0": "Save",
+     "1": "Guardar",
+     "2": "Salva"
+    },
+    {
+     "0": "Cancel",
+     "1": "Cancelar",
+     "2": "Annulla"
+    },
+    {
+     "0": "Confirm Password",
+     "1": "Confirme la Contraseña",
+     "2": "Conferma la Password"
     }
 ]

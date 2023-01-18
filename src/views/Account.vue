@@ -16,10 +16,10 @@
             </div>
             <h1 v-if="store.loggedIn">{{ store.user.displayName }}</h1>
             <input v-if="store.loggedIn" type="email" :placeholder="store.user.email" class="email" disabled>
-            <button class="btn edit">
+            <router-link :to="{name: 'edit'}" style="text-decoration: none;" @click="store.showSettings = true" class="btn edit">
                 {{store.texts[15][store.language]}}
                 <span class="icon-pencil"></span>
-            </button>
+            </router-link>
             <button class="btn logout" @click="store.logout()">{{store.texts[16][store.language]}}</button>
             <button class="btn delete">
                 {{store.texts[17][store.language]}}
@@ -114,13 +114,14 @@
         transition: all .3s ease-in;
     }
     
-    .btn:first-of-type{
+    .edit{
         margin-top: 4vh;
         color: #8B8181;
         background: white;
+        text-align: center;
     }
 
-    .btn:first-of-type:hover{
+    .edit:hover{
         background: #bbbbbb;
         color: #727070;
     }
