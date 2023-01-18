@@ -18,8 +18,8 @@ const firebaseConfig = {
 // firebase.initializeApp(firebaseConfig);
 const fire = initializeApp(firebaseConfig);
 
-// firebase GoogleAuth
-import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "firebase/auth";
+// firebase Auth
+import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithRedirect, getRedirectResult, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut } from "firebase/auth";
 const provider = new GoogleAuthProvider();
 
 import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage";
@@ -44,6 +44,7 @@ userLang = userLang[0] + userLang[1]
 export const Store = defineStore('Store', {
     state: () => ({
         user: null,
+        userImage: "",
         loggedIn: false,
         volumePrevious: 1,
         volumePosition: "100vw",
@@ -558,7 +559,26 @@ export const Store = defineStore('Store', {
             const auth = getAuth();
 
             if(this.tablet){
-                signInWithPopup(auth, provider)
+                setPersistence(auth, browserLocalPersistence)
+                .then(()=>{
+                    signInWithPopup(auth, provider)
+                    .then((result) => {
+                        const credential = GoogleAuthProvider.credentialFromResult(result)
+                        const token = credential.accessToken
+                        const user = result.user
+                        this.user = user
+                        this.loggedIn = true
+                        router.push({ path: '/' })
+                    }).catch((error) => {
+                        alert(this.texts[11][this.language])
+                    });
+                })
+                return 0
+            }
+            
+            setPersistence(auth, browserLocalPersistence)
+            .then(()=>{
+                signInWithRedirect(auth, provider)
                 .then((result) => {
                     const credential = GoogleAuthProvider.credentialFromResult(result)
                     const token = credential.accessToken
@@ -567,45 +587,68 @@ export const Store = defineStore('Store', {
                     this.loggedIn = true
                     router.push({ path: '/' })
                 }).catch((error) => {
-                    console.log(error)
                     alert(this.texts[11][this.language])
                 });
-                return 0
-            }
-
-            signInWithRedirect(auth, provider)
-            .then((result) => {
-                const credential = GoogleAuthProvider.credentialFromResult(result);
-                const token = credential.accessToken;
-                const user = result.user;
-                this.user = user
-                this.loggedIn
-            }).catch((error) => {
-                alert(this.texts[11][this.language])
-            });
+            })
         },
 
         checkAuth(){
-
             if(this.loggedIn){
-                router.push({ path: '/' })
+                router.push({ path: '/account' })
                 return 0
             }
             
             const auth = getAuth();
+            onAuthStateChanged(auth, (user) => {
+                if(user){
+                    const uid = user.uid;
+                    this.user = user
+                    this.loggedIn = true
+                    this.userImage = user.photoURL
+                    this.checkAuth()
+                    return 0
+                }
+            })
+
             getRedirectResult(auth)
               .then((result) => {
                 const credential = GoogleAuthProvider.credentialFromResult(result);
                 const token = credential.accessToken;
                 const user = result.user;
                 this.user = user
-                this.loggedIn
-                this.$router.push({ name: 'home' });
+                this.loggedIn = true
+                router.push({ path: '/' })
               }).catch((error) => {
                 if (error.customData != undefined){
                     alert(this.texts[11][this.language])
                 }
               });
         },
+
+        findAuth(){
+            const auth = getAuth();
+            onAuthStateChanged(auth, (user) => {
+                if(user){
+                    const uid = user.uid;
+                    this.user = user
+                    this.loggedIn = true
+                    this.userImage = user.photoURL
+                }
+                else{
+                    router.currentRoute._value.path == "/account" ? router.push({ path: '/login' }) : ""
+                }
+            })
+        },
+
+        logout(){
+            const auth = getAuth();
+            if(confirm(this.texts[18][this.language])){
+                signOut(auth).then(() => {
+                    this.loggedIn = false
+                    this.user = null
+                    router.push({ path: '/' })
+                })
+            }
+        }
     }
 })

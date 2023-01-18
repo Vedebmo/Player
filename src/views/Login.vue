@@ -15,7 +15,7 @@
                 <div class="inputs">
                     <div class="emailPart">
                         <input type="email" placeholder="Email" class="email">
-                        <span class="icon-eye" style="opacity: 0;"></span>
+                        <span class="icon-eye" style="position: relative; opacity: 0; left: 100vw;"></span>
                     </div>
                     <div class="passwordPart">
                         <input :type="store.passwordType" :placeholder="store.texts[5][store.language]">
@@ -29,7 +29,8 @@
                 <div class="buttons">
                     <button class="loginBtn">{{store.texts[7][store.language]}}</button>
                     <br>
-                    <button class="loginBtnGoogle" @click="store.login">{{store.texts[8][store.language]}}
+                    <button class="loginBtnGoogle" @click="store.login">
+                        {{store.texts[8][store.language]}}
                         <span class="icon-google"></span>
                     </button>
                 </div>
@@ -48,7 +49,6 @@
 
   store.changeTablet()
   store.checkLanguage()
-
   store.checkAuth()
 </script>
 
@@ -156,6 +156,7 @@
     }
 
     .loginBtn, .loginBtnGoogle{
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
         color: white;
         display: block;
         width: 10rem;

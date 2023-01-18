@@ -12,8 +12,8 @@
 
       <div class="img-container">
         <span v-if="store.tablet" @click="store.rollDice" id="dice" class="icon-dice"></span>
-        <img :src="store.songsImages[store.songIndexA]" id="img" alt="Image not found" :style="{opacity: store.fade2}" class="absolute">
-        <img :src="store.songsImages[store.songIndexB]" id="img2" alt="Image not found" class="absolute2" :style="{opacity: store.fade}">
+        <img :src="store.songsImages[store.songIndexA]" id="img" :alt="store.texts[12][store.language]" :style="{opacity: store.fade2}" class="absolute">
+        <img :src="store.songsImages[store.songIndexB]" id="img2" :alt="store.texts[12][store.language]" class="absolute2" :style="{opacity: store.fade}">
       </div>
 
       <!--Titles-->
@@ -215,6 +215,7 @@
   
   store.changeTablet()
   store.checkLanguage()
+  store.findAuth()
   
   window.addEventListener('resize',store.changeTablet)
 </script>

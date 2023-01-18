@@ -8,17 +8,17 @@
         
         <div class="options">
             <div class="optionDivs" @click="store.changeLanguage(0)" id="usa">
-                <img src="@/assets/united.png" alt="American Flag">
+                <img src="@/assets/united.png" :alt="store.texts[13][store.language][0]">
                 <p>English</p>
             </div>
             <hr>
             <div class="optionDivs" @click="store.changeLanguage(1)" id="spain">
-                <img src="@/assets/spain.png" alt="Bandera Española">
+                <img src="@/assets/spain.png" :alt="store.texts[13][store.language][1]">
                 <p>Español</p>
             </div>
             <hr>
             <div class="optionDivs" @click="store.changeLanguage(2)" id="italy">
-                <img src="@/assets/italy.png" alt="Bandiera Italiana">
+                <img src="@/assets/italy.png" :alt="store.texts[13][store.language][2]">
                 <p>Italiano</p>
             </div>
         </div>

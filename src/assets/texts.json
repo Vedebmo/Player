@@ -58,5 +58,40 @@
      "0": "Error Loging, please try again",
      "1": "Error al iniciar sesión, por favor intentelo de nuevo",
      "2": "Errore nel accesso, per favore prova di nuovo"
+    },
+    {
+     "0": "Image not found",
+     "1": "Imagen no encontrada",
+     "2": "Imagine no trovata"
+    },
+    {
+     "0": ["American Flag", "Spain Flag", "Italian Flag"],
+     "1": ["Bandera Estadounidense", "Bandera Española", "Bandera Italiana"],
+     "2": ["Bandiera Americana", "Bandiera Spagnola", "Bandiera Italiana" ]
+    },
+    {
+     "0": "User Image",
+     "1": "Imagen del usuario",
+     "2": "Imagine dell' utente"
+    },
+    {
+     "0": "Edit Profile",
+     "1": "Editar Perfil",
+     "2": "Modifica Profilo"
+    },
+    {
+     "0": "Log Out",
+     "1": "Cerrar Sesión",
+     "2": "Esci"
+    },
+    {
+     "0": "Delete Profile",
+     "1": "Borrar Perfil",
+     "2": "Cancella Profilo"
+    },
+    {
+     "0": "Are you sure you want to Log Out?",
+     "1": "¿Tiene seguridad de querer de Cerrar Sesión?",
+     "2": "Hai sicurezza di voler Uscire?"
     }
 ]
