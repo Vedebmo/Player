@@ -22,7 +22,7 @@
             </div>
             <h1 v-if="store.loggedIn">{{ store.user.displayName }}</h1>
             <div class="emailPart">
-                <input type="email" placeholder="Email" class="email">
+                <input type="email" :placeholder="store.user.email" class="email">
                 <span class="icon-eye" style="position: relative; opacity: 0; left: 100vw;"></span>
             </div>
             <div class="passwordPart">
@@ -62,7 +62,7 @@
 
 <style scoped>
     .app{
-        height: 90vh;
+        height: 80vh;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -90,6 +90,7 @@
 
     .right{
         display: flex;
+        width: -webkit-fill-available;
         flex-direction: column;
         align-items: center;
         height: -webkit-fill-available;
@@ -102,11 +103,11 @@
         width: 45%;
         display: flex;
         align-items: flex-end;
+        justify-content: center;
     }
     
     img{
         border-radius: 50%;
-        width: 100%;
         height: 100%;
     }
 
@@ -121,6 +122,7 @@
         border: none;
         padding: 1.5% 2%;
         font-size: 2.5vh;
+        margin: 1.5% 0;
     }
 
     .btn{
@@ -188,8 +190,8 @@
         color: #D2B8D3;
         border-radius: 50%;
         padding: 20px;
-        position: relative;
-        right: 30%;
+        position: absolute;
+        left: 50%;
         font-size: 30px;
         cursor: pointer;
         transition: all .3s ease-in;
@@ -209,6 +211,8 @@
     .camera{
         padding: 30px;
         font-size: 50px;
+        position: absolute;
+        left: 15rem;
     }
 
   }

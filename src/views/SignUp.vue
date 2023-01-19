@@ -11,10 +11,14 @@
                 <div class="logo">
                     <img src="https://www.sivola.it/media/cache/header/d3/66/b8ffeed5941a5701a69fc1c4a870.jpeg" alt="Logo">
                 </div>
-                <h1>{{store.texts[7][store.language]}}</h1>
+                <h1>{{store.texts[25][store.language]}}</h1>
                 <div class="inputs">
+                    <div class="nickPart">
+                        <input type="text" placeholder="Nickname" id="nickname">
+                        <span class="icon-eye" style="position: relative; opacity: 0; left: 100vw;"></span>
+                    </div>
                     <div class="emailPart">
-                        <input type="email" placeholder="Email" class="email" id="email">
+                        <input type="email" placeholder="Email" id="email">
                         <span class="icon-eye" style="position: relative; opacity: 0; left: 100vw;"></span>
                     </div>
                     <div class="passwordPart">
@@ -22,24 +26,23 @@
                         <span class="icon-eye" v-if="!store.showPassword" @click="store.willShowPassword"></span>
                         <span class="icon-eye-blocked" v-if="store.showPassword" @click="store.willShowPassword"></span>
                     </div>
+                    <div class="passwordPart">
+                        <input :type="store.passwordType" :placeholder="store.texts[21][store.language]" id="Confirmpassword">
+                        <span class="icon-eye" v-if="!store.showPassword" @click="store.willShowPassword"></span>
+                        <span class="icon-eye-blocked" v-if="store.showPassword" @click="store.willShowPassword"></span>
+                    </div>
                 </div>
 
-                <a href="#" class="forgottenPassword">{{store.texts[6][store.language]}}</a>
+                <a href="/login" class="login">{{store.texts[27][store.language]}}</a>
 
                 <div class="buttons">
-                    <button class="loginBtn" @click="store.login">{{store.texts[7][store.language]}}</button>
+                    <button class="signUp" @click="store.signUp">{{store.texts[25][store.language]}}</button>
                     <br>
-                    <button class="loginBtnGoogle" @click="store.loginGoogle">
-                        {{store.texts[8][store.language]}}
+                    <button class="signUpGoogle" @click="store.loginGoogle">
+                        {{store.texts[26][store.language]}}
                         <span class="icon-google"></span>
                     </button>
                 </div>
-
-                <p class="signup">{{store.texts[9][store.language]}}</p>
-
-                <router-link :to="{name: 'signup'}" style="text-decoration: none;" @click="store.showSettings = true"  class="signupBtn">
-                    {{store.texts[10][store.language]}}
-                </router-link>
             </div>
         </div>
     </div>
@@ -108,14 +111,14 @@
 
     a{
         text-decoration: none;
-        margin: 2vh 0;
+        margin: 2vh 0 4vh;
     }
 
     a:hover{
         text-decoration: underline;
     }
 
-    .forgottenPassword{
+    .login{
         color: #0791E6;
     }
 
@@ -130,8 +133,11 @@
         padding: 0.7% 2%;
     }
     
-    input[type="email"]{
-        margin-bottom: 1.5vh;
+    .inputs{
+        display: flex;
+        flex-direction: column;
+        height: -webkit-fill-available;
+        justify-content: space-evenly;
     }
 
     .icon-eye, .icon-eye-blocked{
@@ -148,7 +154,7 @@
         background: rgba(0, 0, 0, 0.15);
     }
 
-    .passwordPart, .emailPart{
+    .passwordPart, .emailPart, .nickPart{
         display: flex;
         justify-content: center;
         align-items: center;
@@ -157,11 +163,10 @@
         left: 2vh;
     }
 
-    .loginBtn, .loginBtnGoogle{
+    .signUp, .signUpGoogle{
         font-family: Verdana, Geneva, Tahoma, sans-serif;
         color: white;
         display: block;
-        width: 10rem;
         cursor: pointer;
         border: none;
         padding: .5rem;
@@ -169,22 +174,22 @@
         transition: .3s;
     }
 
-    .loginBtn{
+    .signUp{
         background: #D2B8D3;
         font-size: 150%;
     }
 
-    .loginBtn:hover{
+    .signUp:hover{
         background: #a48ba5;
     }
 
-    .loginBtnGoogle{
+    .signUpGoogle{
         background: #A62929;
         height: 4vh;
-        padding: 0;
+        padding: revert;
     }
 
-    .loginBtnGoogle:hover{
+    .signUpGoogle:hover{
         background: #851e1e;
     }
 

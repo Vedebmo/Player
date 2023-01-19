@@ -108,5 +108,45 @@
      "0": "Confirm Password",
      "1": "Confirme la Contraseña",
      "2": "Conferma la Password"
+    },
+    {
+     "0": "Sorry, that email is not valid",
+     "1": "Lo lamento, ese email no es valido",
+     "2": "Spiacente, questo email non e valido"
+    },
+    {
+     "0": "Sorry, that user was not found",
+     "1": "Lo lamento, ese usuario no se ha encontrado",
+     "2": "Spiacente, questo utente non è stato trovato"
+    },
+    {
+     "0": "Sorry, the password is not correct",
+     "1": "Lo lamento, la contraseña es incorrecta",
+     "2": "Spiacente, la password non è correta"
+    },
+    {
+     "0": "Sign Up",
+     "1": "Crear Cuenta",
+     "2": "Crea Un Account"
+    },
+    {
+     "0": "Sign Up with Google",
+     "1": "Crear Cuenta con Google",
+     "2": "Crea Un Account con Google"
+    },
+    {
+     "0": "I already have an account",
+     "1": "Ya tengo una cuenta",
+     "2": "Ho già  un account"
+    },
+    {
+     "0": "The password can't be weak",
+     "1": "La contraseña no puede ser débil",
+     "2": "La password non può essere debole"
+    },
+    {
+     "0": "Passwords Don't match",
+     "1": "Las contraseñas no coinciden",
+     "2": "Le password non corrispondono"
     }
 ]

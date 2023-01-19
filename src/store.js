@@ -19,8 +19,7 @@ const firebaseConfig = {
 const fire = initializeApp(firebaseConfig);
 
 // firebase Auth
-import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithRedirect, getRedirectResult, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut } from "firebase/auth";
-const provider = new GoogleAuthProvider();
+import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithRedirect, getRedirectResult, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 
 import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage";
 const storage = getStorage();
@@ -483,8 +482,7 @@ export const Store = defineStore('Store', {
                 switch(this.userLang){
                     default:
                         this.language = 0
-                        break
-        
+
                     case "es":
                         this.language = 1
                         break
@@ -556,17 +554,43 @@ export const Store = defineStore('Store', {
         },
 
         login(){
-            const auth = getAuth();
+            let email = document.getElementById("email")
+            let password = document.getElementById("password")
+            email = email.value
+            password = password.value
 
+            const auth = getAuth();
+            signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                this.user = userCredential.user
+                this.loggedIn = true
+            })
+            .catch((error) => {
+                switch (error.code) {
+                    case "auth/invalid-email":
+                        alert(this.texts[22][this.language])
+                        break
+                    case "auth/user-not-found":
+                        alert(this.texts[23][this.language])
+                        break
+                    case "auth/wrong-password":
+                        alert(this.texts[24][this.language])
+                        break
+                    default:
+                        alert(this.texts[11][this.language])
+                }
+            });
+        },
+
+        loginGoogle(){
+            const auth = getAuth();
+            const provider = new GoogleAuthProvider();
             if(this.tablet){
                 setPersistence(auth, browserLocalPersistence)
                 .then(()=>{
                     signInWithPopup(auth, provider)
                     .then((result) => {
-                        const credential = GoogleAuthProvider.credentialFromResult(result)
-                        const token = credential.accessToken
-                        const user = result.user
-                        this.user = user
+                        this.user = result.user
                         this.loggedIn = true
                         router.push({ path: '/' })
                     }).catch((error) => {
@@ -580,16 +604,47 @@ export const Store = defineStore('Store', {
             .then(()=>{
                 signInWithRedirect(auth, provider)
                 .then((result) => {
-                    const credential = GoogleAuthProvider.credentialFromResult(result)
-                    const token = credential.accessToken
-                    const user = result.user
-                    this.user = user
+                    this.user = result.user
                     this.loggedIn = true
                     router.push({ path: '/' })
                 }).catch((error) => {
                     alert(this.texts[11][this.language])
                 });
             })
+        },
+
+        signUp(){
+            let nickname = document.getElementById("nickname")
+            let email = document.getElementById("email")
+            let password = document.getElementById("password")
+            let password2 = document.getElementById("Confirmpassword")
+            email = email.value
+            password = password.value
+            password2 = password2.value
+
+            if(password == password2){
+                const auth = getAuth();
+                createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    this.user = userCredential.user
+                    this.loggedIn = true
+                })
+                .catch((error) => {
+                    switch (error.code) {
+                        case "auth/invalid-email":
+                            alert(this.texts[22][this.language])
+                            break
+                        case "auth/weak-password":
+                            alert(this.texts[28][this.language])
+                            break
+                        default:
+                            alert(this.texts[11][this.language])
+                    }
+                });
+            }
+            else{
+                alert(this.texts[29][this.language])
+            }
         },
 
         checkAuth(){
@@ -605,6 +660,10 @@ export const Store = defineStore('Store', {
                     this.user = user
                     this.loggedIn = true
                     this.userImage = user.photoURL
+                    if(this.userImage == null){
+                        this.userImage = "https://firebasestorage.googleapis.com/v0/b/test-d70c3.appspot.com/o/Default%2FUser.png?alt=media&token=2308279b-c410-4f63-9e9e-5d6402b31cbf"
+                        this.user.displayName = "Test"
+                    }
                     this.checkAuth()
                     return 0
                 }
@@ -612,10 +671,7 @@ export const Store = defineStore('Store', {
 
             getRedirectResult(auth)
               .then((result) => {
-                const credential = GoogleAuthProvider.credentialFromResult(result);
-                const token = credential.accessToken;
-                const user = result.user;
-                this.user = user
+                this.user = result.user
                 this.loggedIn = true
                 router.push({ path: '/' })
               }).catch((error) => {
@@ -633,6 +689,9 @@ export const Store = defineStore('Store', {
                     this.user = user
                     this.loggedIn = true
                     this.userImage = user.photoURL
+                    if(this.userImage == null){
+                        this.userImage = "https://firebasestorage.googleapis.com/v0/b/test-d70c3.appspot.com/o/Default%2FUser.png?alt=media&token=2308279b-c410-4f63-9e9e-5d6402b31cbf"
+                    }
                 }
                 else{
                     router.currentRoute._value.path == "/account" ? router.push({ path: '/login' }) : ""

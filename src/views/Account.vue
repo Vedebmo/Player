@@ -43,7 +43,7 @@
 
 <style scoped>
     .app{
-        height: 90vh;
+        height: 80vh;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -71,6 +71,7 @@
 
     .right{
         display: flex;
+        width: -webkit-fill-available;
         flex-direction: column;
         align-items: center;
         height: -webkit-fill-available;
@@ -81,11 +82,12 @@
     .img-container{
         height: 35%;
         width: 45%;
+        display: flex;
+        justify-content: center;
     }
     
     img{
         border-radius: 50%;
-        width: 100%;
         height: 100%;
     }
 
