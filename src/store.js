@@ -19,7 +19,7 @@ const firebaseConfig = {
 const fire = initializeApp(firebaseConfig);
 
 // firebase Auth
-import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithRedirect, getRedirectResult, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithRedirect, getRedirectResult, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, reauthenticateWithCredential, deleteUser } from "firebase/auth";
 
 import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage";
 const storage = getStorage();
@@ -42,6 +42,10 @@ userLang = userLang[0] + userLang[1]
 
 export const Store = defineStore('Store', {
     state: () => ({
+        lookForCredentials: false,
+        showModal: false,
+        modalPosition: "100vw",
+        modalOpacity: 0,
         user: null,
         userImage: "",
         loggedIn: false,
@@ -562,8 +566,8 @@ export const Store = defineStore('Store', {
             const auth = getAuth();
             signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-                this.user = userCredential.user
-                this.loggedIn = true
+                this.loggedIn = false
+                this.checkAuth()
             })
             .catch((error) => {
                 switch (error.code) {
@@ -590,9 +594,8 @@ export const Store = defineStore('Store', {
                 .then(()=>{
                     signInWithPopup(auth, provider)
                     .then((result) => {
-                        this.user = result.user
-                        this.loggedIn = true
-                        router.push({ path: '/' })
+                        this.loggedIn = false
+                        this.checkAuth()
                     }).catch((error) => {
                         alert(this.texts[11][this.language])
                     });
@@ -604,9 +607,8 @@ export const Store = defineStore('Store', {
             .then(()=>{
                 signInWithRedirect(auth, provider)
                 .then((result) => {
-                    this.user = result.user
-                    this.loggedIn = true
-                    router.push({ path: '/' })
+                    this.loggedIn = false
+                    this.checkAuth()
                 }).catch((error) => {
                     alert(this.texts[11][this.language])
                 });
@@ -621,13 +623,18 @@ export const Store = defineStore('Store', {
             email = email.value
             password = password.value
             password2 = password2.value
+            nickname = nickname.value
 
             if(password == password2){
                 const auth = getAuth();
                 createUserWithEmailAndPassword(auth, email, password)
                 .then((userCredential) => {
-                    this.user = userCredential.user
-                    this.loggedIn = true
+                    updateProfile(userCredential.user, {
+                        displayName: nickname, photoURL: "https://firebasestorage.googleapis.com/v0/b/test-d70c3.appspot.com/o/Default%2FUser.png?alt=media&token=2308279b-c410-4f63-9e9e-5d6402b31cbf"
+                    }).then(()=>{
+                        this.loggedIn = false
+                        this.checkAuth()
+                    })
                 })
                 .catch((error) => {
                     switch (error.code) {
@@ -636,6 +643,9 @@ export const Store = defineStore('Store', {
                             break
                         case "auth/weak-password":
                             alert(this.texts[28][this.language])
+                            break
+                        case "auth/email-already-in-use":
+                            alert(this.texts[30][this.language])
                             break
                         default:
                             alert(this.texts[11][this.language])
@@ -656,14 +666,9 @@ export const Store = defineStore('Store', {
             const auth = getAuth();
             onAuthStateChanged(auth, (user) => {
                 if(user){
-                    const uid = user.uid;
                     this.user = user
                     this.loggedIn = true
                     this.userImage = user.photoURL
-                    if(this.userImage == null){
-                        this.userImage = "https://firebasestorage.googleapis.com/v0/b/test-d70c3.appspot.com/o/Default%2FUser.png?alt=media&token=2308279b-c410-4f63-9e9e-5d6402b31cbf"
-                        this.user.displayName = "Test"
-                    }
                     this.checkAuth()
                     return 0
                 }
@@ -689,9 +694,6 @@ export const Store = defineStore('Store', {
                     this.user = user
                     this.loggedIn = true
                     this.userImage = user.photoURL
-                    if(this.userImage == null){
-                        this.userImage = "https://firebasestorage.googleapis.com/v0/b/test-d70c3.appspot.com/o/Default%2FUser.png?alt=media&token=2308279b-c410-4f63-9e9e-5d6402b31cbf"
-                    }
                 }
                 else{
                     router.currentRoute._value.path == "/account" ? router.push({ path: '/login' }) : ""
@@ -705,9 +707,84 @@ export const Store = defineStore('Store', {
                 signOut(auth).then(() => {
                     this.loggedIn = false
                     this.user = null
+                    this.userImage = ""
                     router.push({ path: '/' })
                 })
             }
+        },
+
+        launchModal(){
+            this.showModal = !this.showModal
+            this.modalPosition == "100vw" ? (this.modalPosition = "auto", this.modalOpacity = 1) : (this.modalOpacity = 0, setTimeout(()=>{
+                this.modalPosition = "100vw"  
+            },500))
+        },
+
+        delete(credential){
+            const auth = getAuth();
+            const user = auth.currentUser;
+
+            reauthenticateWithCredential(user, credential)
+            .then(() => {
+              deleteUser(user).then(() => {
+                alert(this.texts[36][this.language])
+                this.loggedIn = false
+                this.user = null
+                this.userImage = ""
+                this.showModal = false
+                this.lookForCredentials = false
+                router.push({ path: '/' })
+              }).catch(() => {
+                alert(this.texts[11][this.language])
+              });              
+            }).catch(() => {
+                alert(this.texts[11][this.language])
+            });
+        },
+
+        getCredentials(method){
+            const auth = getAuth();
+            if(method == "email"){
+                console.log("Xd")
+                let email = document.getElementById("email")
+                let password = document.getElementById("password")
+                email = email.value
+                password = password.value
+    
+                signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    this.delete(userCredential)
+                })
+                .catch((error) => {
+                    console.log(error.code)
+                    //TE FALTA: ver por que da error y por que no hay error.code
+                    switch (error.code) {
+                        case "auth/invalid-email":
+                            alert(this.texts[22][this.language])
+                            break
+                        case "auth/user-not-found":
+                            alert(this.texts[23][this.language])
+                            break
+                        case "auth/wrong-password":
+                            alert(this.texts[24][this.language])
+                            break
+                        default:
+                            alert(this.texts[11][this.language])
+                    }
+                });
+            }
+            else if(method == "google"){
+                const provider = new GoogleAuthProvider();
+                signInWithPopup(auth, provider)
+                .then((result) => {
+                    const userCredential = GoogleAuthProvider.credentialFromResult(result);
+                    //TE FALTA: verificar que sea la misma cuenta logeada
+                    this.delete(userCredential)
+                }).catch((error) => {
+                    alert(this.texts[11][this.language])
+                });
+            }
+
         }
     }
 })

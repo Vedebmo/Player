@@ -55,9 +55,9 @@
      "2": "Iscriviti"
     },
     {
-     "0": "Error Loging, please try again",
-     "1": "Error al iniciar sesión, por favor intentelo de nuevo",
-     "2": "Errore nel accesso, per favore prova di nuovo"
+     "0": "Error, please try again",
+     "1": "Error, por favor intentelo de nuevo",
+     "2": "Errore, per favore prova di nuovo"
     },
     {
      "0": "Image not found",
@@ -148,5 +148,40 @@
      "0": "Passwords Don't match",
      "1": "Las contraseñas no coinciden",
      "2": "Le password non corrispondono"
+    },
+    {
+     "0": "Email already used in an account",
+     "1": "El correo ya se encuentra usado en una cuenta",
+     "2": "Email già utilizzata in un account"
+    },
+    {
+     "0": "Are you sure you want to delete?",
+     "1": "¿Tiene seguridad de querer de eliminar la cuenta",
+     "2": "Hai sicurezza di voler eliminare l'account?"
+    },
+    {
+     "0": "Would be so sad to see you go 😢, if you’re sure of deleting this account remember it can’t be undo, but can always create a new one",
+     "1": "Sería triste verte partir 😢, si desea elimanar la cuenta recuerde que esta acción no puede ser deshecha, pero siempre puede crear una nueva",
+     "2": "Sarebbe così triste vederti andare via 😢, se hai sicurezza di cancellare questo account ricorda che non può essere annullato, ma puoi sempre crearne uno nuovo "
+    },
+    {
+     "0": "No, I better keep playing 🎮",
+     "1": "No, mejor sigo la partida 🎮",
+     "2": "No, meglio continuare il gioco 🎮"
+    },
+    {
+     "0": "Yes, it’s a game over 💀",
+     "1": "Si, es un game over 💀",
+     "2": "Si, è un game over 💀"
+    },
+    {
+     "0": "Confirm your identity before deleting the account",
+     "1": "Confirme su identidad antes de eliminar la cuenta",
+     "2": "Conferma la sua identità prima di eliminare l'account"
+    },
+    {
+     "0": "Deleted sucessfully",
+     "1": "La eliminación fue realizada con éxito",
+     "2": "L'eliminazione  è stata con successo"
     }
 ]
