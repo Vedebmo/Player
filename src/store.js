@@ -19,7 +19,7 @@ const firebaseConfig = {
 const fire = initializeApp(firebaseConfig);
 
 // firebase Auth
-import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithRedirect, getRedirectResult, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, reauthenticateWithCredential, deleteUser } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithRedirect, getRedirectResult, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, reauthenticateWithCredential, deleteUser, EmailAuthProvider } from "firebase/auth";
 
 import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage";
 const storage = getStorage();
@@ -731,8 +731,8 @@ export const Store = defineStore('Store', {
                 this.loggedIn = false
                 this.user = null
                 this.userImage = ""
-                this.showModal = false
                 this.lookForCredentials = false
+                this.launchModal()
                 router.push({ path: '/' })
               }).catch(() => {
                 alert(this.texts[11][this.language])
@@ -745,19 +745,18 @@ export const Store = defineStore('Store', {
         getCredentials(method){
             const auth = getAuth();
             if(method == "email"){
-                console.log("Xd")
+                //TE FALTA: verificar que sea la misma cuenta logeada
                 let email = document.getElementById("email")
                 let password = document.getElementById("password")
                 email = email.value
                 password = password.value
     
                 signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
+                .then(() => {
+                    const userCredential = EmailAuthProvider.credential(auth.currentUser.email, password);
                     this.delete(userCredential)
                 })
                 .catch((error) => {
-                    console.log(error.code)
-                    //TE FALTA: ver por que da error y por que no hay error.code
                     switch (error.code) {
                         case "auth/invalid-email":
                             alert(this.texts[22][this.language])
@@ -774,11 +773,11 @@ export const Store = defineStore('Store', {
                 });
             }
             else if(method == "google"){
+                //TE FALTA: verificar que sea la misma cuenta logeada
                 const provider = new GoogleAuthProvider();
                 signInWithPopup(auth, provider)
                 .then((result) => {
                     const userCredential = GoogleAuthProvider.credentialFromResult(result);
-                    //TE FALTA: verificar que sea la misma cuenta logeada
                     this.delete(userCredential)
                 }).catch((error) => {
                     alert(this.texts[11][this.language])
