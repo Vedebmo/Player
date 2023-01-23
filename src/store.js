@@ -19,7 +19,7 @@ const firebaseConfig = {
 const fire = initializeApp(firebaseConfig);
 
 // firebase Auth
-import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithRedirect, getRedirectResult, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, reauthenticateWithCredential, deleteUser, EmailAuthProvider } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithRedirect, getRedirectResult, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, reauthenticateWithCredential, deleteUser, EmailAuthProvider, fetchSignInMethodsForEmail, reauthenticateWithPopup  } from "firebase/auth";
 
 import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage";
 const storage = getStorage();
@@ -43,6 +43,7 @@ userLang = userLang[0] + userLang[1]
 export const Store = defineStore('Store', {
     state: () => ({
         lookForCredentials: false,
+        credentials: "",
         showModal: false,
         modalPosition: "100vw",
         modalOpacity: 0,
@@ -663,8 +664,8 @@ export const Store = defineStore('Store', {
                 return 0
             }
             
-            const auth = getAuth();
-            onAuthStateChanged(auth, (user) => {
+            const auth = getAuth()
+            const user = auth.currentUser
                 if(user){
                     this.user = user
                     this.loggedIn = true
@@ -672,7 +673,6 @@ export const Store = defineStore('Store', {
                     this.checkAuth()
                     return 0
                 }
-            })
 
             getRedirectResult(auth)
               .then((result) => {
@@ -687,8 +687,8 @@ export const Store = defineStore('Store', {
         },
 
         findAuth(){
-            const auth = getAuth();
-            onAuthStateChanged(auth, (user) => {
+            const auth = getAuth()
+            const user = auth.currentUser
                 if(user){
                     const uid = user.uid;
                     this.user = user
@@ -698,7 +698,6 @@ export const Store = defineStore('Store', {
                 else{
                     router.currentRoute._value.path == "/account" ? router.push({ path: '/login' }) : ""
                 }
-            })
         },
 
         logout(){
@@ -717,6 +716,7 @@ export const Store = defineStore('Store', {
             this.showModal = !this.showModal
             this.modalPosition == "100vw" ? (this.modalPosition = "auto", this.modalOpacity = 1) : (this.modalOpacity = 0, setTimeout(()=>{
                 this.modalPosition = "100vw"  
+                this.lookForCredentials = false
             },500))
         },
 
@@ -737,53 +737,45 @@ export const Store = defineStore('Store', {
               }).catch(() => {
                 alert(this.texts[11][this.language])
               });              
-            }).catch(() => {
+            }).catch((error) => {
                 alert(this.texts[11][this.language])
             });
         },
 
         getCredentials(method){
             const auth = getAuth();
+            const user = auth.currentUser;
             if(method == "email"){
-                //TE FALTA: verificar que sea la misma cuenta logeada
-                let email = document.getElementById("email")
                 let password = document.getElementById("password")
-                email = email.value
                 password = password.value
-    
-                signInWithEmailAndPassword(auth, email, password)
-                .then(() => {
-                    const userCredential = EmailAuthProvider.credential(auth.currentUser.email, password);
-                    this.delete(userCredential)
-                })
-                .catch((error) => {
-                    switch (error.code) {
-                        case "auth/invalid-email":
-                            alert(this.texts[22][this.language])
-                            break
-                        case "auth/user-not-found":
-                            alert(this.texts[23][this.language])
-                            break
-                        case "auth/wrong-password":
-                            alert(this.texts[24][this.language])
-                            break
-                        default:
-                            alert(this.texts[11][this.language])
-                    }
-                });
+
+                const userCredential = EmailAuthProvider.credential(auth.currentUser.email, password);
+                this.delete(userCredential)
             }
             else if(method == "google"){
-                //TE FALTA: verificar que sea la misma cuenta logeada
                 const provider = new GoogleAuthProvider();
-                signInWithPopup(auth, provider)
-                .then((result) => {
-                    const userCredential = GoogleAuthProvider.credentialFromResult(result);
-                    this.delete(userCredential)
-                }).catch((error) => {
-                    alert(this.texts[11][this.language])
-                });
-            }
+                const email = this.user.email
+                let googleFound = false
 
-        }
+                fetchSignInMethodsForEmail(auth,email)
+                .then((methods)=>{
+                    methods.forEach((method)=>{
+                        if(method.indexOf("google") != -1){
+                            googleFound = true
+                            reauthenticateWithPopup(user, provider)
+                            .then((result) => {
+                                const userCredential = GoogleAuthProvider.credentialFromResult(result);
+                                this.delete(userCredential)
+                            }).catch((error)=>{
+                                alert(this.texts[37][this.language])
+                            })
+                        }
+                    })
+                    if(!googleFound){
+                        alert(this.texts[38][this.language])
+                    }
+                })
+            }
+        },
     }
 })

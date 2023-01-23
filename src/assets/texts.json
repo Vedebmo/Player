@@ -183,5 +183,15 @@
      "0": "Deleted sucessfully",
      "1": "La eliminación fue realizada con éxito",
      "2": "L'eliminazione  è stata con successo"
+    },
+    {
+     "0": "This Google account is not related to the current user logged. Please sign in and try again",
+     "1": "Esta cuenta de Google no está relacionada con el usuario actualmente conectado. Por favor inicie sesión e intente de nuevo",
+     "2": "Questo Google account non è collegato all'utente attualmente connesso. Per favore accedi e riprova"
+    },
+    {
+     "0": "This user is not related with any Google account. Please try using your email and password",
+     "1": "Esta usuario no está relacionado con ninguna cuenta de Google. Por favor intente usando su correo y contraseña",
+     "2": "Questo utente non è collegato a nessun Google account. Per favore riprova con il email e la password"
     }
 ]

@@ -5,6 +5,9 @@
             </router-link>
         </div>
     <div class="app">
+
+        <!-- Modal -->
+
         <div class="modal" :style="{opacity: store.modalOpacity, left: store.modalPosition}">
             <div class="close" v-if="!store.lookForCredentials">
                 <span class="icon-cross" @click="store.launchModal"></span>
@@ -16,8 +19,9 @@
                 <button class="yes" @click="store.lookForCredentials = true">{{store.texts[34][store.language]}}</button>
             </div>
             
+            
             <!-- Ask for credentials part -->
-
+            
             <div class="credentials" v-if="store.lookForCredentials">
                 <div class="close">
                     <span class="icon-circle-left" @click="store.lookForCredentials = false"></span>
@@ -46,6 +50,8 @@
                 </div>
             </div>
         </div>
+
+
         <div class="left" v-if="store.tablet">
             <div class="img-container">
                 <img :src="store.userImage" :alt="store.texts[14][store.language]">
