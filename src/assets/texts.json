@@ -193,5 +193,15 @@
      "0": "This user is not related with any Google account. Please try using your email and password",
      "1": "Esta usuario no está relacionado con ninguna cuenta de Google. Por favor intente usando su correo y contraseña",
      "2": "Questo utente non è collegato a nessun Google account. Per favore riprova con il email e la password"
+    },
+    {
+     "0": "New Password",
+     "1": "Contraseña Nueva",
+     "2": "Nouva Password"
+    },
+    {
+     "0": "Confirm the new Password",
+     "1": "Confirme la Contraseña nueva",
+     "2": "Conferma la nuova Password"
     }
 ]

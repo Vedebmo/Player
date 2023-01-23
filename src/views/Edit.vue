@@ -20,23 +20,25 @@
                     <span class="icon-camera"></span>
                 </div>
             </div>
-            <h1 v-if="store.loggedIn">{{ store.user.displayName }}</h1>
-            <div class="emailPart">
-                <input type="email" :placeholder="store.user.email" class="email">
+            <h1 v-if="store.loggedIn" contentEditable="true" @focusin="store.editDisplayName('In')" @focusout="store.editDisplayName">
+                {{ store.user.displayName }} 
+                <span class="icon-pencil" v-if="store.showPencil"></span>
+            </h1>
+            <div class="emailPart" v-if="store.loggedIn">
+                <input type="email" :placeholder="store.user.email" class="email" id="newEmail">
                 <span class="icon-eye" style="position: relative; opacity: 0; left: 100vw;"></span>
             </div>
             <div class="passwordPart">
-                <input :type="store.passwordType" :placeholder="store.texts[5][store.language]">
+                <input :type="store.passwordType" :placeholder="store.texts[39][store.language]" id="newPassword">
                 <span class="icon-eye" v-if="!store.showPassword" @click="store.willShowPassword"></span>
                 <span class="icon-eye-blocked" v-if="store.showPassword" @click="store.willShowPassword"></span>
             </div>
             <div class="passwordPart">
-                <input :type="store.passwordType" :placeholder="store.texts[21][store.language]">
+                <input :type="store.passwordType" :placeholder="store.texts[40][store.language]" id="newPassword2">
                 <span class="icon-eye" v-if="!store.showPassword" @click="store.willShowPassword"></span>
                 <span class="icon-eye-blocked" v-if="store.showPassword" @click="store.willShowPassword"></span>
             </div>
-            <!-- <input v-if="store.loggedIn" type="email" :placeholder="store.user.email" class="email" disabled> -->
-            <button class="btn save">
+            <button class="btn save" @click="saveEdit">
                 {{store.texts[19][store.language]}}
             </button>
             <router-link :to="{name: 'account'}" style="text-decoration: none;" @click="store.showSettings = true"  class="btn cancel">
@@ -114,6 +116,16 @@
     h1{
         color: white;
         font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+
+    h1:hover{
+        cursor: pointer;
+        text-decoration: underline solid white 2px;
+    }
+
+    h1:focus{
+        cursor: text;
+        text-decoration: none;
     }
 
     input{

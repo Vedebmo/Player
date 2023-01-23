@@ -42,6 +42,7 @@ userLang = userLang[0] + userLang[1]
 
 export const Store = defineStore('Store', {
     state: () => ({
+        showPencil: true,
         lookForCredentials: false,
         credentials: "",
         showModal: false,
@@ -787,5 +788,32 @@ export const Store = defineStore('Store', {
                 })
             }
         },
+        editDisplayName(input){
+            input == "In" ? (this.showPencil = false) : this.showPencil = true
+        },
+
+        saveEdit(){
+            const auth = getAuth();
+            const user = auth.currentUser;
+
+            let nickname = document.getElementById("nickname")
+            nickname = nickname.value
+            let newNickname = ""
+            nickname != user.displayName ? newNickname = nickname : ""
+
+            let email = document.getElementById("newEmail")
+            email = email.value
+            let newEmail = ""
+            email != user.email ? newEmail = email : ""
+
+            let password = document.getElementById("newPassword")
+            let password2 = document.getElementById("newPassword2")
+            if(password == password2){
+                //Update everything
+            }
+            else{
+                alert(this.texts[29][this.language])
+            }
+        }
     }
 })
