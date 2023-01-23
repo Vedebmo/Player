@@ -621,18 +621,26 @@ export const Store = defineStore('Store', {
             let email = document.getElementById("email")
             let password = document.getElementById("password")
             let password2 = document.getElementById("Confirmpassword")
-            email = email.value
-            password = password.value
-            password2 = password2.value
-            nickname = nickname.value
-
-            if(password == password2){
+            let emailValue = email.value
+            let passwordValue = password.value
+            let password2Value = password2.value
+            let nicknameValue = nickname.value
+            
+            if(passwordValue == password2Value){
                 const auth = getAuth();
-                createUserWithEmailAndPassword(auth, email, password)
+                createUserWithEmailAndPassword(auth, emailValue, passwordValue)
                 .then((userCredential) => {
                     updateProfile(userCredential.user, {
-                        displayName: nickname, photoURL: "https://firebasestorage.googleapis.com/v0/b/test-d70c3.appspot.com/o/Default%2FUser.png?alt=media&token=2308279b-c410-4f63-9e9e-5d6402b31cbf"
+                        displayName: nicknameValue, photoURL: "https://firebasestorage.googleapis.com/v0/b/test-d70c3.appspot.com/o/Default%2FUser.png?alt=media&token=2308279b-c410-4f63-9e9e-5d6402b31cbf"
                     }).then(()=>{
+                        password.value = ""
+                        email.value = ""
+                        password2.value = ""
+                        nickname.value = ""
+                        passwordValue = ""
+                        emailValue = ""
+                        password2Value = ""
+                        nicknameValue = ""
                         this.loggedIn = false
                         this.checkAuth()
                     })
@@ -665,7 +673,7 @@ export const Store = defineStore('Store', {
             }
             
             const auth = getAuth()
-            const user = auth.currentUser
+            onAuthStateChanged(auth, (user)=>{
                 if(user){
                     this.user = user
                     this.loggedIn = true
@@ -673,6 +681,7 @@ export const Store = defineStore('Store', {
                     this.checkAuth()
                     return 0
                 }
+            })
 
             getRedirectResult(auth)
               .then((result) => {
@@ -688,7 +697,7 @@ export const Store = defineStore('Store', {
 
         findAuth(){
             const auth = getAuth()
-            const user = auth.currentUser
+            onAuthStateChanged(auth, (user)=>{
                 if(user){
                     const uid = user.uid;
                     this.user = user
@@ -698,6 +707,7 @@ export const Store = defineStore('Store', {
                 else{
                     router.currentRoute._value.path == "/account" ? router.push({ path: '/login' }) : ""
                 }
+            })
         },
 
         logout(){
