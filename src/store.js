@@ -19,7 +19,7 @@ const firebaseConfig = {
 const fire = initializeApp(firebaseConfig);
 
 // firebase Auth
-import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithRedirect, getRedirectResult, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, reauthenticateWithCredential, deleteUser, EmailAuthProvider, fetchSignInMethodsForEmail, reauthenticateWithPopup  } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithRedirect, getRedirectResult, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, reauthenticateWithCredential, deleteUser, EmailAuthProvider, fetchSignInMethodsForEmail, reauthenticateWithPopup, updateEmail, updatePassword } from "firebase/auth";
 
 import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage";
 const storage = getStorage();
@@ -723,12 +723,30 @@ export const Store = defineStore('Store', {
             }
         },
 
-        launchModal(){
-            this.showModal = !this.showModal
-            this.modalPosition == "100vw" ? (this.modalPosition = "auto", this.modalOpacity = 1) : (this.modalOpacity = 0, setTimeout(()=>{
-                this.modalPosition = "100vw"  
-                this.lookForCredentials = false
-            },500))
+        launchModal(utility){
+            if(utility == "edit"){
+                let password = document.getElementById("newPassword")
+                let password2 = document.getElementById("newPassword2")
+
+                if(password.value == "" || password2.value == ""){
+                    alert(this.texts[44][this.language])
+                    return 0
+                }
+
+                if(password.value == password2.value){
+                    this.launchModal()
+                }
+                else{
+                    alert(this.texts[29][this.language])
+                }
+            }
+            else{
+                this.showModal = !this.showModal
+                this.modalPosition == "100vw" ? (this.modalPosition = "auto", this.modalOpacity = 1) : (this.modalOpacity = 0, setTimeout(()=>{
+                    this.modalPosition = "100vw"  
+                    this.lookForCredentials = false
+                },500))
+            }
         },
 
         delete(credential){
@@ -753,15 +771,20 @@ export const Store = defineStore('Store', {
             });
         },
 
-        getCredentials(method){
+        getCredentials(data){
             const auth = getAuth();
             const user = auth.currentUser;
+
+            const method = data[0]
+            const utility = data[1]
+
             if(method == "email"){
                 let password = document.getElementById("password")
                 password = password.value
 
                 const userCredential = EmailAuthProvider.credential(auth.currentUser.email, password);
-                this.delete(userCredential)
+                utility == "delete" ? this.delete(userCredential) : this.saveEdit(userCredential)
+                
             }
             else if(method == "google"){
                 const provider = new GoogleAuthProvider();
@@ -776,7 +799,7 @@ export const Store = defineStore('Store', {
                             reauthenticateWithPopup(user, provider)
                             .then((result) => {
                                 const userCredential = GoogleAuthProvider.credentialFromResult(result);
-                                this.delete(userCredential)
+                                utility == "delete" ? this.delete(userCredential) : this.saveEdit(userCredential)                                
                             }).catch((error)=>{
                                 alert(this.texts[37][this.language])
                             })
@@ -792,28 +815,81 @@ export const Store = defineStore('Store', {
             input == "In" ? (this.showPencil = false) : this.showPencil = true
         },
 
-        saveEdit(){
+        saveEdit(credential){
             const auth = getAuth();
             const user = auth.currentUser;
+            let errorLaunchPosition = 0
+            
+            reauthenticateWithCredential(user, credential)
+            .then(() => {
+                let nickname = document.getElementById("nickname")
 
-            let nickname = document.getElementById("nickname")
-            nickname = nickname.value
-            let newNickname = ""
-            nickname != user.displayName ? newNickname = nickname : ""
+                updateProfile(auth.currentUser, {displayName: nickname.textContent})
+                .then(() => {
+                    let email = document.getElementById("newEmail")
+                    updateEmail(user, email.value)
+                    .then(() => {
+                        let password = document.getElementById("newPassword")
+        
+                        updatePassword(user, password.value)
+                        .catch((error)=>{
+                            if(error.code == "auth/weak-password"){
+                                errorLaunchPosition = 4
+                                return 0
+                            }
+                            errorLaunchPosition = 1
+                        })
+                    })
+                    .catch((error)=>{
+                        if(error.code == "invalid-email"){
+                            errorLaunchPosition = 2
+                            return 0
+                        }
+                        else if (error.code == "auth/email-already-in-use"){
+                            errorLaunchPosition = 3
+                            return 0
+                        }
+                        errorLaunchPosition = 1
+                    })
+                })
+                .catch((error) => {
+                    errorLaunchPosition = 1
+                })                    
+            })
+            .then(()=>{
+                if(errorLaunchPosition == 0){
+                    alert(this.texts[45][this.language])
+                    this.launchModal()
+                    return 0
+                }
+                switch (errorLaunchPosition){
+                    default:
+                        alert(this.texts[11][this.language])
+                        
+                    case 1:
+                        alert(this.texts[11][this.language])
+                        break
 
-            let email = document.getElementById("newEmail")
-            email = email.value
-            let newEmail = ""
-            email != user.email ? newEmail = email : ""
+                    case 2:
+                        alert(this.texts[22][this.language])
+                        alert(this.texts[46][this.language])
+                        break
 
-            let password = document.getElementById("newPassword")
-            let password2 = document.getElementById("newPassword2")
-            if(password == password2){
-                //Update everything
-            }
-            else{
-                alert(this.texts[29][this.language])
-            }
+                    case 3:
+                        alert(this.texts[30][this.language])
+                        alert(this.texts[46][this.language])
+                        break
+
+                    case 4:
+                        alert(this.texts[28][this.language])
+                        alert(this.texts[47][this.language])
+                        break
+                }
+
+            })
+            .catch((error) => {
+                alert(this.texts[11][this.language])
+            });
         }
     }
 })

@@ -41,9 +41,9 @@
                 </div>
 
                 <div class="buttons">
-                    <button class="loginBtn" @click="store.getCredentials('email')">{{store.texts[7][store.language]}}</button>
+                    <button class="loginBtn" @click="store.getCredentials(['email', 'delete'])">{{store.texts[7][store.language]}}</button>
                     <br>
-                    <button class="loginBtnGoogle" @click="store.getCredentials('google')">
+                    <button class="loginBtnGoogle" @click="store.getCredentials(['google', 'delete'])">
                         {{store.texts[8][store.language]}}
                         <span class="icon-google"></span>
                     </button>

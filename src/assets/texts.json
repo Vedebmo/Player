@@ -203,5 +203,40 @@
      "0": "Confirm the new Password",
      "1": "Confirme la Contraseña nueva",
      "2": "Conferma la nuova Password"
+    },
+    {
+     "0": "Confirm your identity before updating the account",
+     "1": "Confirme su identidad antes de actualizar la cuenta",
+     "2": "Conferma la sua identità prima di aggiornare l'account"
+    },
+    {
+     "0": "Old Email",
+     "1": "Correo Viejo",
+     "2": "Vecchia Email "
+    },
+    {
+     "0": "Old Password",
+     "1": "Contraseña Vieja",
+     "2": "Vecchia Password"
+    },
+    {
+     "0": "Passwords can't be empty",
+     "1": "Las contraseñas no pueden estar vacias",
+     "2": "Le Password non possono essere vuote"
+    },
+    {
+     "0": "Account updated successfully",
+     "1": "Cuenta actualizada exitosamente",
+     "2": "Account aggiornato con successo"
+    },
+    {
+     "0": "Email and password not updated",
+     "1": "El correo y la contraseña no fueron actualizados",
+     "2": "L'Email e la password non sono state aggiornate"
+    },
+    {
+     "0": "Password not updated",
+     "1": "La contraseña no fue actualizada",
+     "2": "La password non è stata aggiornata"
     }
 ]
