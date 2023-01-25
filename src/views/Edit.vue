@@ -7,7 +7,7 @@
     <div class="app">
         <div class="left" v-if="store.tablet">
             <div class="img-container">
-                <img :src="store.userImage" :alt="store.texts[14][store.language]">
+                <img :src="store.userImage" :alt="store.texts[14][store.language]" referrerpolicy="no-referrer">
                 <div class="camera">
                     <span class="icon-camera"></span>
                 </div>
@@ -15,7 +15,7 @@
         </div>
         <div class="right">
             <div class="img-container" v-if="!store.tablet">
-                <img :src="store.userImage" :alt="store.texts[14][store.language]">
+                <img :src="store.userImage" :alt="store.texts[14][store.language]" referrerpolicy="no-referrer">
                 <div class="camera">
                     <span class="icon-camera"></span>
                 </div>

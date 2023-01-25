@@ -238,5 +238,10 @@
      "0": "Password not updated",
      "1": "La contraseña no fue actualizada",
      "2": "La password non è stata aggiornata"
+    },
+    {
+     "0": "This will only update the nickname. Do you want to continue?",
+     "1": "Esto solo actualizará el nickame. ¿Desea continuar?",
+     "2": "Questo aggiornerà solo il nickname. Vuoi continuare?"
     }
 ]

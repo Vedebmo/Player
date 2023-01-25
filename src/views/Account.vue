@@ -54,12 +54,12 @@
 
         <div class="left" v-if="store.tablet">
             <div class="img-container">
-                <img :src="store.userImage" :alt="store.texts[14][store.language]">
+                <img :src="store.userImage" :alt="store.texts[14][store.language]" referrerpolicy="no-referrer">
             </div>
         </div>
         <div class="right">
             <div class="img-container" v-if="!store.tablet">
-                <img :src="store.userImage" :alt="store.texts[14][store.language]">
+                <img :src="store.userImage" :alt="store.texts[14][store.language]" referrerpolicy="no-referrer">
             </div>
             <h1 v-if="store.loggedIn">{{ store.user.displayName }}</h1>
             <input v-if="store.loggedIn" type="email" :placeholder="store.user.email" class="email" disabled>

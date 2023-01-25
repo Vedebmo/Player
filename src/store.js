@@ -42,6 +42,7 @@ userLang = userLang[0] + userLang[1]
 
 export const Store = defineStore('Store', {
     state: () => ({
+        onlyNickname: false,
         showPencil: true,
         lookForCredentials: false,
         credentials: "",
@@ -729,6 +730,12 @@ export const Store = defineStore('Store', {
                 let password2 = document.getElementById("newPassword2")
 
                 if(password.value == "" || password2.value == ""){
+                    const onlyNickname = confirm(this.texts[48][this.language])
+                    this.onlyNickname = onlyNickname
+                    if(onlyNickname){
+                        this.launchModal()
+                        return 0
+                    }
                     alert(this.texts[44][this.language])
                     return 0
                 }
@@ -818,7 +825,6 @@ export const Store = defineStore('Store', {
         saveEdit(credential){
             const auth = getAuth();
             const user = auth.currentUser;
-            let errorLaunchPosition = 0
             
             reauthenticateWithCredential(user, credential)
             .then(() => {
@@ -826,70 +832,76 @@ export const Store = defineStore('Store', {
 
                 updateProfile(auth.currentUser, {displayName: nickname.textContent})
                 .then(() => {
+                    if(this.onlyNickname){
+                        this.editErrorManager(0)
+                        return 0
+                    }
+
                     let email = document.getElementById("newEmail")
                     updateEmail(user, email.value)
                     .then(() => {
                         let password = document.getElementById("newPassword")
         
                         updatePassword(user, password.value)
+                        .then(()=>{this.editErrorManager(0)})
                         .catch((error)=>{
                             if(error.code == "auth/weak-password"){
-                                errorLaunchPosition = 4
+                                this.editErrorManager(4)
                                 return 0
                             }
-                            errorLaunchPosition = 1
+                            this.editErrorManager(1)
                         })
                     })
                     .catch((error)=>{
                         if(error.code == "invalid-email"){
-                            errorLaunchPosition = 2
+                            this.editErrorManager(2)
                             return 0
                         }
                         else if (error.code == "auth/email-already-in-use"){
-                            errorLaunchPosition = 3
+                            this.editErrorManager(3)
                             return 0
                         }
-                        errorLaunchPosition = 1
+                        this.editErrorManager(1)
                     })
                 })
                 .catch((error) => {
-                    errorLaunchPosition = 1
+                    this.editErrorManager(1)
                 })                    
-            })
-            .then(()=>{
-                if(errorLaunchPosition == 0){
-                    alert(this.texts[45][this.language])
-                    this.launchModal()
-                    return 0
-                }
-                switch (errorLaunchPosition){
-                    default:
-                        alert(this.texts[11][this.language])
-                        
-                    case 1:
-                        alert(this.texts[11][this.language])
-                        break
-
-                    case 2:
-                        alert(this.texts[22][this.language])
-                        alert(this.texts[46][this.language])
-                        break
-
-                    case 3:
-                        alert(this.texts[30][this.language])
-                        alert(this.texts[46][this.language])
-                        break
-
-                    case 4:
-                        alert(this.texts[28][this.language])
-                        alert(this.texts[47][this.language])
-                        break
-                }
-
             })
             .catch((error) => {
                 alert(this.texts[11][this.language])
             });
+        },
+
+        editErrorManager(errorLaunchPosition){
+            if(errorLaunchPosition == 0){
+                alert(this.texts[45][this.language])
+                this.launchModal()
+                return 0
+            }
+            switch (errorLaunchPosition){
+                default:
+                    alert(this.texts[11][this.language])
+
+                case 1:
+                    alert(this.texts[11][this.language])
+                    break
+
+                case 2:
+                    alert(this.texts[22][this.language])
+                    alert(this.texts[46][this.language])
+                    break
+
+                case 3:
+                    alert(this.texts[30][this.language])
+                    alert(this.texts[46][this.language])
+                    break
+
+                case 4:
+                    alert(this.texts[28][this.language])
+                    alert(this.texts[47][this.language])
+                    break
+            }
         }
     }
 })
