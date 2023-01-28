@@ -21,7 +21,7 @@ const fire = initializeApp(firebaseConfig);
 // firebase Auth
 import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithRedirect, getRedirectResult, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, reauthenticateWithCredential, deleteUser, EmailAuthProvider, fetchSignInMethodsForEmail, reauthenticateWithPopup, updateEmail, updatePassword } from "firebase/auth";
 
-import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage";
+import { getStorage, ref, getDownloadURL, listAll, uploadBytes } from "firebase/storage";
 const storage = getStorage();
 const storageRef = ref(storage,"Songs/");
 const song = document.getElementById("song")
@@ -42,6 +42,7 @@ userLang = userLang[0] + userLang[1]
 
 export const Store = defineStore('Store', {
     state: () => ({
+        img: "",
         onlyNickname: false,
         showPencil: true,
         lookForCredentials: false,
@@ -49,7 +50,6 @@ export const Store = defineStore('Store', {
         showModal: false,
         modalPosition: "100vw",
         modalOpacity: 0,
-        user: null,
         userImage: "",
         loggedIn: false,
         volumePrevious: 1,
@@ -822,15 +822,62 @@ export const Store = defineStore('Store', {
             input == "In" ? (this.showPencil = false) : this.showPencil = true
         },
 
+        checkImageRepeat(images,img,timesRepeated){
+            let times = timesRepeated
+            let willrepeat = false
+            let newName = `(${times})${img.name}`
+
+            let repeated = images.filter(el => el == newName).length
+
+            if(repeated != 0){
+                times++
+                let value = this.checkImageRepeat(images,img,times)
+                return value
+            }
+            else{
+                newName = `(${times})${img.name}`
+                return newName
+            }
+        },
+
         saveEdit(credential){
             const auth = getAuth();
             const user = auth.currentUser;
-            
+
             reauthenticateWithCredential(user, credential)
             .then(() => {
                 let nickname = document.getElementById("nickname")
+                const img = this.img
 
-                updateProfile(auth.currentUser, {displayName: nickname.textContent})
+                const storage = getStorage();
+                let storageRef = ref(storage, `User Images/`);
+                let images = []
+                
+                listAll(storageRef)
+                .then((res)=>{
+                    res.items.forEach((image)=>{
+                        images.push(image.name)
+                    })
+                })
+                .then(()=>{
+                    storageRef = ref(storage, `User Images/${img.name}`);
+                    if(images.includes(img.name)){
+                        const newName = this.checkImageRepeat(images,img,1)
+                        console.log("New name: " + newName)
+                        storageRef = ref(storage, `User Images/${newName}`);
+                    }
+                    uploadBytes(storageRef, img)
+                    .then(()=>{
+                        // updateProfile(auth.currentUser, {
+                        //     displayName: nickname.textContent,
+                        //     photoURL: this.userImage
+                        // })
+                    })
+                    .catch(()=>{
+                        alert(this.texts[11][this.language])
+                    })
+                })
+
                 .then(() => {
                     if(this.onlyNickname){
                         this.editErrorManager(0)
@@ -902,6 +949,30 @@ export const Store = defineStore('Store', {
                     alert(this.texts[47][this.language])
                     break
             }
-        }
+        },
+        requestPhoto(){
+            let file = document.createElement("input")
+            file.type = "file"
+            file.accept = ".png, .webp, .jpg, .jpeg"
+            file.click()
+
+            file.addEventListener("change", ()=>{
+                if(file.files.length != 0){
+                    let img = file.files[0]
+                    if(img.type == "image/png" || img.type == "image/webp" || img.type == "image/jpg" || img.type == "image/jpeg"){
+                        if(img.size <= "5242880"){
+                            this.userImage = URL.createObjectURL(img)
+                            this.img = img
+                        }
+                        else{
+                            alert(this.texts[49][this.language])
+                        }
+                    }
+                    else{
+                        alert(this.texts[50][this.language])
+                    }
+                }
+            })
+        }            
     }
 })

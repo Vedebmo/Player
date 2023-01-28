@@ -82,7 +82,7 @@
     store.changeTablet()
     store.checkLanguage()
     store.findAuth()
-
+    
     window.addEventListener('resize',store.changeTablet)
 </script>
 
@@ -113,7 +113,7 @@
         align-items: center;
         justify-content: center;
         height: -webkit-fill-available;
-        width: 50%;
+        width: 70%;
     }
 
     .right{
@@ -128,7 +128,8 @@
 
     .img-container{
         height: 35%;
-        width: 45%;
+        max-width: 45%;
+        aspect-ratio: 1;
         display: flex;
         justify-content: center;
     }
@@ -136,6 +137,7 @@
     img{
         border-radius: 50%;
         height: 100%;
+        width: 100%;
     }
 
     h1{
@@ -355,7 +357,7 @@
     @media screen and (min-width: 768px){
     .img-container{
         height: 75%;
-        width: 75%;
+        max-width: 75%;
     }
 
     .buttons{

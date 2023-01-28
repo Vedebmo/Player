@@ -8,7 +8,7 @@
         <div class="left" v-if="store.tablet">
             <div class="img-container">
                 <img :src="store.userImage" :alt="store.texts[14][store.language]" referrerpolicy="no-referrer">
-                <div class="camera">
+                <div class="camera" @click="store.requestPhoto">
                     <span class="icon-camera"></span>
                 </div>
             </div>
@@ -16,7 +16,7 @@
         <div class="right">
             <div class="img-container" v-if="!store.tablet">
                 <img :src="store.userImage" :alt="store.texts[14][store.language]" referrerpolicy="no-referrer">
-                <div class="camera">
+                <div class="camera" @click="store.requestPhoto">
                     <span class="icon-camera"></span>
                 </div>
             </div>
@@ -90,7 +90,7 @@
     store.changeTablet()
     store.checkLanguage()
     store.findAuth()
-
+    
     window.addEventListener('resize',store.changeTablet)
 </script>
 
@@ -121,7 +121,7 @@
         align-items: center;
         justify-content: center;
         height: -webkit-fill-available;
-        width: 50%;
+        width: 70%;
     }
 
     .right{
@@ -136,7 +136,8 @@
 
     .img-container{
         height: 35%;
-        width: 45%;
+        max-width: 45%;
+        aspect-ratio: 1;
         display: flex;
         align-items: flex-end;
         justify-content: center;
@@ -145,6 +146,7 @@
     img{
         border-radius: 50%;
         height: 100%;
+        width: 100%;
     }
 
     .right h1{
@@ -358,16 +360,15 @@
     }
     
     @media screen and (min-width: 768px){
-        .img-container{
-            height: 75%;
-            width: 75%;
+    .img-container{
+        height: 75%;
+        max-width: 75%;
     }
 
     .camera{
         padding: 30px;
         font-size: 50px;
-        position: absolute;
-        left: 15rem;
+        left: 25%;
     }
 
   }

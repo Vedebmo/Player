@@ -72,7 +72,7 @@
     {
      "0": "User Image",
      "1": "Imagen del usuario",
-     "2": "Imagine dell' utente"
+     "2": "Immagine dell'utente"
     },
     {
      "0": "Edit Profile",
@@ -240,8 +240,18 @@
      "2": "La password non è stata aggiornata"
     },
     {
-     "0": "This will only update the nickname. Do you want to continue?",
-     "1": "Esto solo actualizará el nickame. ¿Desea continuar?",
-     "2": "Questo aggiornerà solo il nickname. Vuoi continuare?"
+     "0": "This will only update the nickname and user image. Do you want to continue?",
+     "1": "Esto solo actualizará el nickame y la imagen de usuario. ¿Desea continuar?",
+     "2": "Questo aggiornerà solo il nickname e l'immagine dell'utente. Vuoi continuare?"
+    },
+    {
+     "0": "This image is too big, try one less than 5Mb",
+     "1": "Esta imagen es muy pesada, intente con una menor a 5Mb",
+     "2": "Questa immagine è troppo pesante, provi con una più piccola di 5Mb"
+    },
+    {
+     "0": "That file format is not allowed",
+     "1": "El formato de este archivo no es aceptado",
+     "2": "Il formato di questo file non è accettato"
     }
 ]
