@@ -43,6 +43,7 @@ userLang = userLang[0] + userLang[1]
 export const Store = defineStore('Store', {
     state: () => ({
         img: "",
+        imageChanged: false,
         onlyNickname: false,
         showPencil: true,
         lookForCredentials: false,
@@ -852,68 +853,53 @@ export const Store = defineStore('Store', {
                 const storage = getStorage();
                 let storageRef = ref(storage, `User Images/`);
                 let images = []
-                
-                listAll(storageRef)
-                .then((res)=>{
-                    res.items.forEach((image)=>{
-                        images.push(image.name)
-                    })
-                })
-                .then(()=>{
-                    storageRef = ref(storage, `User Images/${img.name}`);
-                    if(images.includes(img.name)){
-                        const newName = this.checkImageRepeat(images,img,1)
-                        console.log("New name: " + newName)
-                        storageRef = ref(storage, `User Images/${newName}`);
-                    }
-                    uploadBytes(storageRef, img)
-                    .then(()=>{
-                        // updateProfile(auth.currentUser, {
-                        //     displayName: nickname.textContent,
-                        //     photoURL: this.userImage
-                        // })
-                    })
-                    .catch(()=>{
-                        alert(this.texts[11][this.language])
-                    })
-                })
 
-                .then(() => {
-                    if(this.onlyNickname){
-                        this.editErrorManager(0)
-                        return 0
-                    }
-
-                    let email = document.getElementById("newEmail")
-                    updateEmail(user, email.value)
-                    .then(() => {
-                        let password = document.getElementById("newPassword")
-        
-                        updatePassword(user, password.value)
-                        .then(()=>{this.editErrorManager(0)})
-                        .catch((error)=>{
-                            if(error.code == "auth/weak-password"){
-                                this.editErrorManager(4)
-                                return 0
-                            }
-                            this.editErrorManager(1)
+                if(this.imageChanged){
+                    this.imageChanged = false
+                    listAll(storageRef)
+                    .then((res)=>{
+                        res.items.forEach((image)=>{
+                            images.push(image.name)
                         })
                     })
-                    .catch((error)=>{
-                        if(error.code == "invalid-email"){
-                            this.editErrorManager(2)
-                            return 0
+                    .then(()=>{
+                        storageRef = ref(storage, `User Images/${img.name}`);
+                        if(images.includes(img.name)){
+                            const newName = this.checkImageRepeat(images,img,1)
+                            storageRef = ref(storage, `User Images/${newName}`);
                         }
-                        else if (error.code == "auth/email-already-in-use"){
-                            this.editErrorManager(3)
-                            return 0
-                        }
+                        uploadBytes(storageRef, img)
+                        .then((snapshot)=>{
+                            getDownloadURL(snapshot.ref)
+                            .then((url)=>{
+                                updateProfile(auth.currentUser, {
+                                    displayName: nickname.textContent,
+                                    photoURL: url
+                                })
+                                this.userImage = url
+                            })
+                        })
+                        .catch(()=>{
+                            alert(this.texts[11][this.language])
+                        })
+                    })
+                    .then(() => {
+                        this.keepSaving()
+                    })
+                    .catch((error) => {
                         this.editErrorManager(1)
                     })
-                })
-                .catch((error) => {
-                    this.editErrorManager(1)
-                })                    
+                }
+                else{
+                    try{
+                        updateProfile(auth.currentUser, {displayName: nickname.textContent})
+                        .then(()=>{
+                            this.keepSaving()
+                        })
+                    }catch(error){
+                        alert(this.texts[11][this.language])                        
+                    }
+                }                
             })
             .catch((error) => {
                 alert(this.texts[11][this.language])
@@ -924,6 +910,9 @@ export const Store = defineStore('Store', {
             if(errorLaunchPosition == 0){
                 alert(this.texts[45][this.language])
                 this.launchModal()
+                setTimeout(()=>{
+                    router.push({ path: '/account' })
+                },1000)
                 return 0
             }
             switch (errorLaunchPosition){
@@ -950,6 +939,41 @@ export const Store = defineStore('Store', {
                     break
             }
         },
+
+        keepSaving(){
+            if(this.onlyNickname){
+                this.editErrorManager(0)
+                return 0
+            }
+
+            let email = document.getElementById("newEmail")
+            updateEmail(user, email.value)
+            .then(() => {
+                let password = document.getElementById("newPassword")
+
+                updatePassword(user, password.value)
+                .then(()=>{this.editErrorManager(0)})
+                .catch((error)=>{
+                    if(error.code == "auth/weak-password"){
+                        this.editErrorManager(4)
+                        return 0
+                    }
+                    this.editErrorManager(1)
+                })
+            })
+            .catch((error)=>{
+                if(error.code == "invalid-email"){
+                    this.editErrorManager(2)
+                    return 0
+                }
+                else if (error.code == "auth/email-already-in-use"){
+                    this.editErrorManager(3)
+                    return 0
+                }
+                this.editErrorManager(1)
+            })
+        },
+
         requestPhoto(){
             let file = document.createElement("input")
             file.type = "file"
@@ -963,6 +987,7 @@ export const Store = defineStore('Store', {
                         if(img.size <= "5242880"){
                             this.userImage = URL.createObjectURL(img)
                             this.img = img
+                            this.imageChanged = true
                         }
                         else{
                             alert(this.texts[49][this.language])
