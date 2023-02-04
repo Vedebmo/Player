@@ -1,48 +1,58 @@
 <template>
     <div class="app">
-        <div class="span">
-            <router-link :to="{name: 'home'}" style="text-decoration: none;" @click="store.showSettings = true">
-                <span class="icon-circle-left"></span>
-            </router-link>
-        </div>
-
-        <div class="login">
-            <div class="form">
-                <div class="logo">
-                    <img src="https://www.sivola.it/media/cache/header/d3/66/b8ffeed5941a5701a69fc1c4a870.jpeg" alt="Logo">
+        <div class="loginParent">
+            <div class="sidepart" v-if="store.tablet">
+                    <div class="img-container">
+                        <img src="https://www.sivola.it/media/cache/header/d3/66/b8ffeed5941a5701a69fc1c4a870.jpeg" alt="Img">
+                    </div>
+                    <h1>PlayMax</h1>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta, delectus. Fugit commodi eius aliquid deserunt numquam quisquam, sed nulla aut autem odio voluptas totam voluptatem vel officiis esse quod assumenda.</p>
+            </div>
+            <div class="login">
+                <div class="span">
+                    <router-link :to="{name: 'login'}" style="text-decoration: none;">
+                        <span class="icon-circle-left"></span>
+                    </router-link>
                 </div>
-                <h1>{{store.texts[25][store.language]}}</h1>
-                <div class="inputs">
-                    <div class="nickPart">
-                        <input type="text" placeholder="Nickname" id="nickname">
-                        <span class="icon-eye" style="position: relative; opacity: 0; left: 100vw;"></span>
+                <div class="form">
+                    <div class="logo">
+                        <img src="https://www.sivola.it/media/cache/header/d3/66/b8ffeed5941a5701a69fc1c4a870.jpeg" alt="Logo">
                     </div>
-                    <div class="emailPart">
-                        <input type="email" placeholder="Email" id="email">
-                        <span class="icon-eye" style="position: relative; opacity: 0; left: 100vw;"></span>
+                    <h1>{{store.texts[25][store.language]}}</h1>
+                    <div class="inputs">
+                        <div class="nickPart">
+                            <input type="text" placeholder="Nickname" id="nickname">
+                            <span class="icon-eye" style="position: relative; opacity: 0; left: 100vw;"></span>
+                        </div>
+                        <div class="emailPart">
+                            <input type="email" placeholder="Email" id="email">
+                            <span class="icon-eye" style="position: relative; opacity: 0; left: 100vw;"></span>
+                        </div>
+                        <div class="passwordPart">
+                            <input :type="store.passwordType" :placeholder="store.texts[5][store.language]" id="password">
+                            <span class="icon-eye" v-if="!store.showPassword" @click="store.willShowPassword"></span>
+                            <span class="icon-eye-blocked" v-if="store.showPassword" @click="store.willShowPassword"></span>
+                        </div>
+                        <div class="passwordPart">
+                            <input :type="store.passwordType" :placeholder="store.texts[21][store.language]" id="Confirmpassword">
+                            <span class="icon-eye" v-if="!store.showPassword" @click="store.willShowPassword"></span>
+                            <span class="icon-eye-blocked" v-if="store.showPassword" @click="store.willShowPassword"></span>
+                        </div>
                     </div>
-                    <div class="passwordPart">
-                        <input :type="store.passwordType" :placeholder="store.texts[5][store.language]" id="password">
-                        <span class="icon-eye" v-if="!store.showPassword" @click="store.willShowPassword"></span>
-                        <span class="icon-eye-blocked" v-if="store.showPassword" @click="store.willShowPassword"></span>
-                    </div>
-                    <div class="passwordPart">
-                        <input :type="store.passwordType" :placeholder="store.texts[21][store.language]" id="Confirmpassword">
-                        <span class="icon-eye" v-if="!store.showPassword" @click="store.willShowPassword"></span>
-                        <span class="icon-eye-blocked" v-if="store.showPassword" @click="store.willShowPassword"></span>
+    
+                    <a href="/login" class="login">{{store.texts[27][store.language]}}</a>
+    
+                    <div class="buttons">
+                        <button class="signUp" @click="store.signUp">{{store.texts[25][store.language]}}</button>
+                        <br>
+                        <button class="signUpGoogle" @click="store.loginGoogle">
+                            {{store.texts[26][store.language]}}
+                            <span class="icon-google"></span>
+                        </button>
                     </div>
                 </div>
-
-                <a href="/login" class="login">{{store.texts[27][store.language]}}</a>
-
-                <div class="buttons">
-                    <button class="signUp" @click="store.signUp">{{store.texts[25][store.language]}}</button>
-                    <br>
-                    <button class="signUpGoogle" @click="store.loginGoogle">
-                        {{store.texts[26][store.language]}}
-                        <span class="icon-google"></span>
-                    </button>
-                </div>
+                <br>
+                <br>
             </div>
         </div>
     </div>
@@ -77,6 +87,19 @@
         font-size: 5.5vh;
     }
 
+    .loginParent{
+        height: -webkit-fill-available;
+        width: -webkit-fill-available;
+        display: flex;
+        align-items: center;
+    }
+
+    .sidepart{
+        width: 50vw;
+        margin: 5%;
+        text-align: justify;
+    }
+
     .login, .form{
         display: flex;
         flex-direction: column;
@@ -104,7 +127,7 @@
         height: 100%;
     }
 
-    h1{
+    h1,p{
         color: white;
         font-family: Verdana, Geneva, Tahoma, sans-serif;
     }
@@ -131,6 +154,7 @@
         width: 70vw;
         font-size: 2.5vh;
         padding: 0.7% 2%;
+        margin: 1% 0;
     }
     
     .inputs{
@@ -206,5 +230,34 @@
 
     .signupBtn:hover{
         background: #D2B8D3;
+    }
+
+    @media screen and (min-width: 768px){
+        .app{
+            height: 100vh;
+        }
+        .logo{
+            width: 80%;
+        }
+
+        .login{
+            background: rgba(0, 0, 0, 0.15);
+            padding: 2%;
+            margin: 2%;
+            width: auto;
+        }
+
+        .login h1{
+            font-size: x-large;
+        }
+
+        input{
+            width: auto;
+            margin: 3% 0;
+        }
+
+        .icon-eye, .icon-eye-blocked{
+            left: -2rem;
+        }
     }
 </style>
