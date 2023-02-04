@@ -19,7 +19,7 @@ const firebaseConfig = {
 const fire = initializeApp(firebaseConfig);
 
 // firebase Auth
-import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithRedirect, getRedirectResult, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, reauthenticateWithCredential, deleteUser, EmailAuthProvider, fetchSignInMethodsForEmail, reauthenticateWithPopup, updateEmail, updatePassword } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithRedirect, getRedirectResult, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, reauthenticateWithCredential, deleteUser, EmailAuthProvider, fetchSignInMethodsForEmail, reauthenticateWithPopup, updateEmail, updatePassword, sendPasswordResetEmail  } from "firebase/auth";
 
 import { getStorage, ref, getDownloadURL, listAll, uploadBytes } from "firebase/storage";
 const storage = getStorage();
@@ -708,7 +708,7 @@ export const Store = defineStore('Store', {
                     this.userImage = user.photoURL
                 }
                 else{
-                    router.currentRoute._value.path == "/account" ? router.push({ path: '/login' }) : ""
+                    (router.currentRoute._value.path == "/account" || router.currentRoute._value.path == "/edit" || router.currentRoute._value.path == "/forgot") ? router.push({ path: '/login' }) : ""
                 }
             })
         },
@@ -737,6 +737,7 @@ export const Store = defineStore('Store', {
                         this.launchModal()
                         return 0
                     }
+                    alert(this.texts[44][this.language])
                     alert(this.texts[44][this.language])
                     return 0
                 }
@@ -941,13 +942,29 @@ export const Store = defineStore('Store', {
         },
 
         keepSaving(){
+            const auth = getAuth();
+            const user = auth.currentUser;
+            let email = document.getElementById("newEmail")
+            email = email.value
             if(this.onlyNickname){
+                if(email.length > 0){
+                    updateEmail(user, email).then(() => {})
+                    .catch((error)=>{
+                        if(error.code == "invalid-email"){
+                            this.editErrorManager(2)
+                            return 0
+                        }
+                        else if (error.code == "auth/email-already-in-use"){
+                            this.editErrorManager(3)
+                            return 0
+                        }
+                        this.editErrorManager(1)
+                    })
+                }
                 this.editErrorManager(0)
                 return 0
             }
-
-            let email = document.getElementById("newEmail")
-            updateEmail(user, email.value)
+            updateEmail(user, email)
             .then(() => {
                 let password = document.getElementById("newPassword")
 
@@ -998,6 +1015,34 @@ export const Store = defineStore('Store', {
                     }
                 }
             })
-        }            
+        },
+
+        forgotPassword(){
+            const auth = getAuth();
+
+            auth.useDeviceLanguage()
+
+            let email = document.getElementById("email")
+            email = email.value
+            sendPasswordResetEmail(auth, email)
+            .then(()=>{
+                alert(this.texts[54][this.language])
+                setTimeout(()=>{
+                    router.push({ path: '/login' })
+                },1000)
+            })
+            .catch((error)=>{
+                switch (error.code) {
+                    case "auth/invalid-email":
+                        alert(this.texts[22][this.language])
+                        break
+                    case "auth/user-not-found":
+                        alert(this.texts[23][this.language])
+                        break
+                    default:
+                        alert(this.texts[11][this.language])
+                }
+            })
+        }
     }
 })

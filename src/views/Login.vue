@@ -24,7 +24,7 @@
                     </div>
                 </div>
 
-                <a href="#" class="forgottenPassword">{{store.texts[6][store.language]}}</a>
+                <a href="/forgot" class="forgottenPassword">{{store.texts[6][store.language]}}</a>
 
                 <div class="buttons">
                     <button class="loginBtn" @click="store.login">{{store.texts[7][store.language]}}</button>

@@ -167,7 +167,7 @@
     {
      "0": "No, I better keep playing 🎮",
      "1": "No, mejor sigo la partida 🎮",
-     "2": "No, meglio continuare il gioco 🎮"
+     "2": "No, meglio continuo il gioco 🎮"
     },
     {
      "0": "Yes, it’s a game over 💀",
@@ -240,9 +240,9 @@
      "2": "La password non è stata aggiornata"
     },
     {
-     "0": "This will only update the nickname and user image. Do you want to continue?",
-     "1": "Esto solo actualizará el nickame y la imagen de usuario. ¿Desea continuar?",
-     "2": "Questo aggiornerà solo il nickname e l'immagine dell'utente. Vuoi continuare?"
+     "0": "This will only update the nickname, user image and email if you changed it. Do you want to continue?",
+     "1": "Esto solo actualizará el nickame, la imagen de usuario y el email si fue cambiado. ¿Desea continuar?",
+     "2": "Questo aggiornerà solo il nickname, l'immagine dell'utente e l'email se lo hai modificato. Vuoi continuare?"
     },
     {
      "0": "This image is too big, try one less than 5Mb",
@@ -253,5 +253,40 @@
      "0": "That file format is not allowed",
      "1": "El formato de este archivo no es aceptado",
      "2": "Il formato di questo file non è accettato"
+    },
+    {
+     "0": "Find your account",
+     "1": "Encuentre su cuenta",
+     "2": "Trovi il suo account"
+    },
+    {
+     "0": "Insert your email account to get access to your account",
+     "1": "Coloque su email para obtener acceso a su cuenta",
+     "2": "Inserire l'email per accedere al suo account"
+    },
+    {
+     "0": "Submit",
+     "1": "Continuar",
+     "2": "Avanti"
+    },
+    {
+     "0": "A message to reset your password has been sent to your email",
+     "1": "Un mensaje para resetear su cuenta ha sido enviado a su email",
+     "2": "Un messaggio per reimpostare il suo account è stato inviato al suo account"
+    },
+    {
+     "0": "An invisible wall?",
+     "1": "¿Es una pared invisible?",
+     "2": "Un muro invisibile?"
+    },
+    {
+     "0": "Looks like we can’t play through here",
+     "1": "Al parecer la partida no puede ir más allá de aquí",
+     "2": "Sembra che non è possibile continuare il gioco oltre"
+    },
+    {
+     "0": "Go back to the game",
+     "1": "Volver al juego",
+     "2": "Torna al gioco"
     }
 ]
