@@ -3,10 +3,10 @@
         <div class="loginParent">
             <div class="sidepart" v-if="store.tablet">
                     <div class="img-container">
-                        <img src="https://www.sivola.it/media/cache/header/d3/66/b8ffeed5941a5701a69fc1c4a870.jpeg" alt="Img">
+                        <img src="@/assets/musicBoy.png" alt="Img">
                     </div>
                     <h1>PlayMax</h1>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta, delectus. Fugit commodi eius aliquid deserunt numquam quisquam, sed nulla aut autem odio voluptas totam voluptatem vel officiis esse quod assumenda.</p>
+                    <p>{{store.texts[58][store.language]}}</p>
             </div>
             <div class="login">
                 <div class="span">
@@ -98,6 +98,10 @@
         width: 50vw;
         margin: 5%;
         text-align: justify;
+    }
+
+    .img-container{
+        height: 55vh;
     }
 
     .login, .form{
