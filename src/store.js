@@ -109,7 +109,7 @@ export const Store = defineStore('Store', {
             const img = document.getElementById("img")
             const img2 = document.getElementById("img2")
     
-            if(img.style.opacity == 0){
+            if(img.style.opacity == 0 && this.showingWave == false){
                 img.classList = "absolute2"
                 img2.classList = "absolute"
             }
@@ -342,44 +342,53 @@ export const Store = defineStore('Store', {
         },
 
         fading(){
-            const img = document.getElementById("img")
-            const img2 = document.getElementById("img2")
-
-            if(this.fade2){
-                this.songIndexB = this.songIndex
-                this.fade2 = 0
-                this.fade = 1
-                setTimeout(() => {
-                    img.classList = "absolute2"
-                    img2.classList = "absolute"
-                },10)
+            try {
+                const wave = document.getElementById("waveform")
+                wave.removeChild(wave.firstChild)
+            } catch{}
+            if(!this.showingWave){
+                const img = document.getElementById("img")
+                const img2 = document.getElementById("img2")
+    
+                if(this.fade2){
+                    this.songIndexB = this.songIndex
+                    this.fade2 = 0
+                    this.fade = 1
+                    setTimeout(() => {
+                        img.classList = "absolute2"
+                        img2.classList = "absolute"
+                    },10)
+                }
+                else{
+                    this.songIndexA = this.songIndex
+                    this.fade2 = 1
+                    this.fade = 0
+                    setTimeout(() => {
+                        img.classList = "absolute"
+                        img2.classList = "absolute2"
+                    },10)
+                }
+    
+                if(this.tablet){
+                    const imgWidth = img.width
+                    let imgHalf = imgWidth / 2
+                    const img2Width = img2.width
+                    let img2Half = img2Width / 2
+                    let checkWidth = setInterval(()=>{
+                        if(img.width == Math.ceil(imgHalf) || img2.width == Math.ceil(img2Width*2) || img2.width == Math.ceil(img2Half) || img.width == Math.ceil(imgWidth*2)){
+                            dice.style.display = "initial"
+                            clearInterval(checkWidth)
+                        }
+                    },1)
+                }
+                try{
+                    const dice = document.getElementById("dice")
+                    dice.style.display = "none"
+                }catch{}
             }
             else{
-                this.songIndexA = this.songIndex
-                this.fade2 = 1
-                this.fade = 0
-                setTimeout(() => {
-                    img.classList = "absolute"
-                    img2.classList = "absolute2"
-                },10)
+                this.createWave()
             }
-
-            if(this.tablet){
-                const imgWidth = img.width
-                let imgHalf = imgWidth / 2
-                const img2Width = img2.width
-                let img2Half = img2Width / 2
-                let checkWidth = setInterval(()=>{
-                    if(img.width == Math.ceil(imgHalf) || img2.width == Math.ceil(img2Width*2) || img2.width == Math.ceil(img2Half) || img.width == Math.ceil(imgWidth*2)){
-                        dice.style.display = "initial"
-                        clearInterval(checkWidth)
-                    }
-                },1)
-            }
-            try{
-                const dice = document.getElementById("dice")
-                dice.style.display = "none"
-            }catch{}
         },
 
         rollDice(){
@@ -1070,17 +1079,20 @@ export const Store = defineStore('Store', {
             wavesurfer.load(`${this.songsReferences[this.songIndex]}`)
         },
         
-        toogleWave(load){
+        toogleWave(){
             if(!this.loadWave){
                 this.createWave()
                 this.loadWave = true
-                load = false
             }
-            load == true ? this.createWave() : ""
 
             const img = document.getElementById("img")
             const img2 = document.getElementById("img2")
             const wave = document.getElementById("waveform")
+
+            if(wave.firstChild == null && this.showingWave == false){
+                this.createWave()
+            }
+
             const waveIcon = document.getElementById("waveIcon")
             
             !this.showingWave ? waveIcon.style = `background: rgba(0, 0, 0, 0.4);` : waveIcon.style = ``
