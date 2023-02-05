@@ -18,7 +18,7 @@
                 <p>{{store.texts[3][store.language]}}</p>
             </div>
             <hr  v-if="store.loggedIn">
-            <div class="optionDivs">
+            <div class="optionDivs" id="waveIcon" @click="store.toogleWave">
                 <span class="icon-googlepodcasts"></span>
                 <p>{{store.texts[4][store.language]}}</p>
             </div>

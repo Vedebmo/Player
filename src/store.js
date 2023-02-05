@@ -22,6 +22,10 @@ const fire = initializeApp(firebaseConfig);
 import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithRedirect, getRedirectResult, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, reauthenticateWithCredential, deleteUser, EmailAuthProvider, fetchSignInMethodsForEmail, reauthenticateWithPopup, updateEmail, updatePassword, sendPasswordResetEmail  } from "firebase/auth";
 
 import { getStorage, ref, getDownloadURL, listAll, uploadBytes } from "firebase/storage";
+
+import WaveSurfer from "wavesurfer.js";
+import wavesurfer from 'wavesurfer.js';
+
 const storage = getStorage();
 const storageRef = ref(storage,"Songs/");
 const song = document.getElementById("song")
@@ -42,6 +46,8 @@ userLang = userLang[0] + userLang[1]
 
 export const Store = defineStore('Store', {
     state: () => ({
+        loadWave: false,
+        showingWave: false,
         img: "",
         imageChanged: false,
         onlyNickname: false,
@@ -68,6 +74,7 @@ export const Store = defineStore('Store', {
         goingShuffle: false,
         absolute: "absolute",
         absolute2: "absolute2",
+        saveImgState: [],
         fade: 0,
         fade2: 1,
         tablet: false,
@@ -1043,6 +1050,68 @@ export const Store = defineStore('Store', {
                         alert(this.texts[11][this.language])
                 }
             })
+        },
+
+        createWave(){
+            const wavesurfer = WaveSurfer.create({
+                container: '#waveform',
+                waveColor: '#D2B8D3',
+                progressColor: '#a48ba5',
+                barWidth: 5,
+                barRadius: 3,
+                cursorWidth: 0,
+                height: 200,
+                barGap: 3,
+                minPxPerSec: 100,
+                scrollParent: true,
+                hideScrollbar: true,
+                interact: false
+            })
+            wavesurfer.load(`${this.songsReferences[this.songIndex]}`)
+        },
+        
+        toogleWave(load){
+            if(!this.loadWave){
+                this.createWave()
+                this.loadWave = true
+                load = false
+            }
+            load == true ? this.createWave() : ""
+
+            const img = document.getElementById("img")
+            const img2 = document.getElementById("img2")
+            const wave = document.getElementById("waveform")
+            const waveIcon = document.getElementById("waveIcon")
+            
+            !this.showingWave ? waveIcon.style = `background: rgba(0, 0, 0, 0.4);` : waveIcon.style = ``
+            
+            if(!this.showingWave){
+                const saveValues = new Promise((resolve) => {
+                    this.saveImgState[0] = img.classList.toString()
+                    this.saveImgState[1] = img.style.opacity
+                    this.saveImgState[2] = img2.classList.toString()
+                    this.saveImgState[3] = img2.style.opacity
+                    resolve()
+                })
+                saveValues.then(() => {
+                    this.showingWave = !this.showingWave
+                    img.style.opacity = "0"
+                    img2.style.opacity = "0"
+                    setTimeout(() => {
+                        wave.style.position = "relative",
+                        img.classList = "absolute2",
+                        img2.classList = "absolute2"
+                    }, 300)
+                })
+            }
+            else{
+                this.showingWave = !this.showingWave
+                wave.style.position = "absolute",
+                img.classList = this.saveImgState[0]
+                img.style.opacity = this.saveImgState[1]
+                img2.classList = this.saveImgState[2]
+                img2.style.opacity = this.saveImgState[3]
+            }
         }
     }
 })
