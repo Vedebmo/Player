@@ -346,12 +346,22 @@ export const Store = defineStore('Store', {
                 const wave = document.getElementById("waveform")
                 wave.removeChild(wave.firstChild)
             } catch{}
-            if(!this.showingWave){
-                const img = document.getElementById("img")
-                const img2 = document.getElementById("img2")
-    
-                if(this.fade2){
-                    this.songIndexB = this.songIndex
+            const img = document.getElementById("img")
+            const img2 = document.getElementById("img2")
+            if(this.showingWave){
+                this.createWave()
+            }
+            if(this.fade2){
+                this.songIndexB = this.songIndex
+                if(this.showingWave){
+                this.saveImgState[1] = 0
+                this.saveImgState[3] = 1
+                    setTimeout(() => {
+                        this.saveImgState[0] = "absolute2"
+                        this.saveImgState[2] = "absolute"
+                    },10)
+                }
+                else{
                     this.fade2 = 0
                     this.fade = 1
                     setTimeout(() => {
@@ -359,8 +369,18 @@ export const Store = defineStore('Store', {
                         img2.classList = "absolute"
                     },10)
                 }
+            }
+            else{
+                this.songIndexA = this.songIndex
+                if(this.showingWave){
+                this.saveImgState[1] = 1
+                this.saveImgState[3] = 0
+                    setTimeout(() => {
+                        this.saveImgState[0] = "absolute"
+                        this.saveImgState[2] = "absolute2"
+                    },10)
+                }
                 else{
-                    this.songIndexA = this.songIndex
                     this.fade2 = 1
                     this.fade = 0
                     setTimeout(() => {
@@ -368,27 +388,24 @@ export const Store = defineStore('Store', {
                         img2.classList = "absolute2"
                     },10)
                 }
-    
-                if(this.tablet){
-                    const imgWidth = img.width
-                    let imgHalf = imgWidth / 2
-                    const img2Width = img2.width
-                    let img2Half = img2Width / 2
-                    let checkWidth = setInterval(()=>{
-                        if(img.width == Math.ceil(imgHalf) || img2.width == Math.ceil(img2Width*2) || img2.width == Math.ceil(img2Half) || img.width == Math.ceil(imgWidth*2)){
-                            dice.style.display = "initial"
-                            clearInterval(checkWidth)
-                        }
-                    },1)
-                }
-                try{
-                    const dice = document.getElementById("dice")
-                    dice.style.display = "none"
-                }catch{}
             }
-            else{
-                this.createWave()
+
+            if(this.tablet){
+                const imgWidth = img.width
+                let imgHalf = imgWidth / 2
+                const img2Width = img2.width
+                let img2Half = img2Width / 2
+                let checkWidth = setInterval(()=>{
+                    if(img.width == Math.ceil(imgHalf) || img2.width == Math.ceil(img2Width*2) || img2.width == Math.ceil(img2Half) || img.width == Math.ceil(imgWidth*2)){
+                        dice.style.display = "initial"
+                        clearInterval(checkWidth)
+                    }
+                },1)
             }
+            try{
+                const dice = document.getElementById("dice")
+                dice.style.display = "none"
+            }catch{}
         },
 
         rollDice(){
