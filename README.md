@@ -17,5 +17,4 @@ Big companies have control about what is allowed and what isn't, but we as commu
 Thinking about the use of this player, there's a list of features to be added:
 
  - Allow users to upload their own songs
- - Wave mode
  - Minigames to play while listening to music

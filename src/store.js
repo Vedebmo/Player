@@ -27,7 +27,7 @@ import WaveSurfer from "wavesurfer.js";
 import wavesurfer from 'wavesurfer.js';
 
 const storage = getStorage();
-const storageRef = ref(storage,"Songs/");
+const storageRef = ref(storage,"Songs/")
 const song = document.getElementById("song")
 const img = document.getElementById("img")
 let songsNames = []
@@ -46,6 +46,7 @@ userLang = userLang[0] + userLang[1]
 
 export const Store = defineStore('Store', {
     state: () => ({
+        wavesurfer: "",
         loadWave: false,
         showingWave: false,
         img: "",
@@ -155,7 +156,20 @@ export const Store = defineStore('Store', {
                     this.icon == "triangle" ? clearInterval(checkPlaying) : ""
                 },1)
 
-                this.icon == "icon-pause2" ? (this.icon = "triangle", song.pause() ) : (this.icon = "icon-pause2", song.play())
+                if(this.icon == "icon-pause2"){
+                    this.icon = "triangle"
+                    song.pause()
+                    try {
+                        this.wavesurfer.pause()     
+                    } catch{}
+                }
+                else{
+                    this.icon = "icon-pause2"
+                    song.play()
+                    try {
+                        this.wavesurfer.play()    
+                    } catch{}
+                }
             }
         },
 
@@ -170,6 +184,16 @@ export const Store = defineStore('Store', {
                     song.currentTime = this.songTime
                     this.checkSong()
                     this.rangeSize = `${range.value}% 100%`
+
+                    // Move song in the waveform
+                    try {
+                        let newPoint = this.rangeValue / 100
+                        this.wavesurfer.seekTo(newPoint)
+                        this.wavesurfer.play()
+                        setTimeout(()=>{
+                            this.wavesurfer.pause()
+                        },1)
+                    } catch{}
                 }
                 else{
                     range.value = 0
@@ -322,6 +346,7 @@ export const Store = defineStore('Store', {
 
         reset(){
             const range = document.getElementById("range")
+            this.rangeValue = 0
             range.value = 0
             this.rangeSize = `${range.value}% 100%`
             this.checkShuffleHistory()
@@ -343,8 +368,7 @@ export const Store = defineStore('Store', {
 
         fading(){
             try {
-                const wave = document.getElementById("waveform")
-                wave.removeChild(wave.firstChild)
+                this.wavesurfer.destroy()
             } catch{}
             const img = document.getElementById("img")
             const img2 = document.getElementById("img2")
@@ -1079,7 +1103,7 @@ export const Store = defineStore('Store', {
         },
 
         createWave(){
-            const wavesurfer = WaveSurfer.create({
+            this.wavesurfer = WaveSurfer.create({
                 container: '#waveform',
                 waveColor: '#D2B8D3',
                 progressColor: '#a48ba5',
@@ -1091,9 +1115,21 @@ export const Store = defineStore('Store', {
                 minPxPerSec: 100,
                 scrollParent: true,
                 hideScrollbar: true,
-                interact: false
+                interact: false,
+                responsive: true,
+                loopSelection: false
             })
-            wavesurfer.load(`${this.songsReferences[this.songIndex]}`)
+            this.wavesurfer.load(`${this.songsReferences[this.songIndex]}`)
+
+            let startPoint = this.rangeValue / 100
+
+            this.wavesurfer.on('ready', () => {
+                this.wavesurfer.setMute(true)
+                this.wavesurfer.seekTo(startPoint)
+
+                const song = document.getElementById("song")
+                song.paused == false ? this.wavesurfer.play() : ""
+            })
         },
         
         toogleWave(){
