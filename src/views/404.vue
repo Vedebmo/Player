@@ -9,7 +9,7 @@
                     <h1>{{store.texts[55][store.language]}}</h1>
                     <p>{{store.texts[56][store.language]}}</p>
                 </div>
-                <router-link :to="{name: 'login'}" style="text-decoration: none;">
+                <router-link :to="{name: 'home'}" style="text-decoration: none;">
                     <button class="loginBtn">{{store.texts[57][store.language]}}</button>
                     <br>
                 </router-link>

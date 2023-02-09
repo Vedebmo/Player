@@ -46,6 +46,7 @@ userLang = userLang[0] + userLang[1]
 
 export const Store = defineStore('Store', {
     state: () => ({
+        playing: false,
         wavesurfer: "",
         loadWave: false,
         showingWave: false,
@@ -75,7 +76,7 @@ export const Store = defineStore('Store', {
         goingShuffle: false,
         absolute: "absolute",
         absolute2: "absolute2",
-        saveImgState: [],
+        saveImgState: ["absolute", 1 , "absolute2", 0],
         fade: 0,
         fade2: 1,
         tablet: false,
@@ -99,9 +100,42 @@ export const Store = defineStore('Store', {
     }),
 
     actions:{
+        checkStates(way){
+            if(way == "back"){
+                if(this.showingWave){
+                    const waveIcon = document.getElementById("waveIcon")
+                    waveIcon.style = `background: rgba(0, 0, 0, 0.4);`
+                    this.showingWave = false
+                    this.toogleWave()
+                }
+                return 0;
+            }
+            try {
+                if(this.loop){
+                    const iconLoop = document.getElementById("iconLoop")
+                    iconLoop.style = `background: rgba(0, 0, 0, 0.4);`
+                }
+                if(this.goingShuffle){
+                    const iconShuffle = document.getElementById("iconShuffle")
+                    iconShuffle.style = `background: rgba(0, 0, 0, 0.4);`
+                }
+                if(this.showingWave){
+                    if(this.tablet){
+                        const waveIcon = document.getElementById("waveIcon")
+                        waveIcon.style = `background: rgba(0, 0, 0, 0.4);`
+                    }
+                    else if(this.showSettings){
+                        const waveIcon = document.getElementById("waveIcon")
+                        waveIcon.style = `background: rgba(0, 0, 0, 0.4);`
+                    }
+                }
+            } catch{}
+        },
+
         changeTablet(){
             window.innerWidth >= 768 ? (this.tablet = true, this.showSettings = false) : this.tablet = false
             setTimeout(()=>{
+                this.checkStates()
                 this.checkSong()
             },1)
         },
@@ -111,8 +145,8 @@ export const Store = defineStore('Store', {
             const img2 = document.getElementById("img2")
     
             if(img.style.opacity == 0 && this.showingWave == false){
-                img.classList = "absolute2"
-                img2.classList = "absolute"
+                img.classList = this.saveImgState[0]
+                img2.classList = this.saveImgState[2]
             }
         },
 
@@ -122,6 +156,15 @@ export const Store = defineStore('Store', {
             if(this.showSettings){
                 song.pause()
                 this.icon = "triangle"
+                if(this.showingWave){
+                    let findWaveIcon = setInterval(()=>{
+                        const waveIcon = document.getElementById("waveIcon")
+                        if(waveIcon != null){
+                            waveIcon.style = `background: rgba(0, 0, 0, 0.4);`
+                            clearInterval(findWaveIcon)
+                        }
+                    },1)
+                }
             }
             else{
                 let findRange = setInterval(()=>{
@@ -133,10 +176,16 @@ export const Store = defineStore('Store', {
                         //Detect and fix absolute and opacities
                         this.fixAbsolute()
 
+                        if(this.showingWave){
+                            this.showingWave = false
+                            this.toogleWave()
+                        }
+
                         clearInterval(findRange)
                         this.checkSong()
                     }
                 },1)
+                this.checkStates()
             }
         },
 
@@ -159,6 +208,7 @@ export const Store = defineStore('Store', {
                 if(this.icon == "icon-pause2"){
                     this.icon = "triangle"
                     song.pause()
+                    this.playing = false
                     try {
                         this.wavesurfer.pause()     
                     } catch{}
@@ -166,6 +216,7 @@ export const Store = defineStore('Store', {
                 else{
                     this.icon = "icon-pause2"
                     song.play()
+                    this.playing = true 
                     try {
                         this.wavesurfer.play()    
                     } catch{}
@@ -191,7 +242,9 @@ export const Store = defineStore('Store', {
                         this.wavesurfer.seekTo(newPoint)
                         this.wavesurfer.play()
                         setTimeout(()=>{
-                            this.wavesurfer.pause()
+                            if(!this.playing){
+                                this.wavesurfer.pause()
+                            }
                         },1)
                     } catch{}
                 }
@@ -377,41 +430,51 @@ export const Store = defineStore('Store', {
             }
             if(this.fade2){
                 this.songIndexB = this.songIndex
-                if(this.showingWave){
+                // if(this.showingWave){
                 this.saveImgState[1] = 0
                 this.saveImgState[3] = 1
                     setTimeout(() => {
                         this.saveImgState[0] = "absolute2"
                         this.saveImgState[2] = "absolute"
+
+                        this.fade2 = this.saveImgState[1]
+                        this.fade = this.saveImgState[3]
+                        if(!this.showingWave){
+                            img.classList = this.saveImgState[0]
+                            img2.classList = this.saveImgState[2]
+                        }
                     },10)
-                }
-                else{
-                    this.fade2 = 0
-                    this.fade = 1
-                    setTimeout(() => {
-                        img.classList = "absolute2"
-                        img2.classList = "absolute"
-                    },10)
-                }
+                // }
+                // else{
+                //     this.fade2 = 0
+                //     this.fade = 1
+                //     this.absolute = this.saveImgState[2]
+                //     this.absolute2 = this.saveImgState[0]
+                // }
             }
             else{
                 this.songIndexA = this.songIndex
-                if(this.showingWave){
+                // if(this.showingWave){
                 this.saveImgState[1] = 1
                 this.saveImgState[3] = 0
                     setTimeout(() => {
                         this.saveImgState[0] = "absolute"
                         this.saveImgState[2] = "absolute2"
+
+                        this.fade2 = this.saveImgState[1]
+                        this.fade = this.saveImgState[3]
+                        if(!this.showingWave){
+                            img.classList = this.saveImgState[0]
+                            img2.classList = this.saveImgState[2]
+                        }
                     },10)
-                }
-                else{
-                    this.fade2 = 1
-                    this.fade = 0
-                    setTimeout(() => {
-                        img.classList = "absolute"
-                        img2.classList = "absolute2"
-                    },10)
-                }
+                // }
+                // else{
+                //     this.fade2 = 1
+                //     this.fade = 0
+                //     this.absolute = this.saveImgState[0]
+                //     this.absolute2 = this.saveImgState[2]
+                // }
             }
 
             if(this.tablet){
@@ -1133,49 +1196,51 @@ export const Store = defineStore('Store', {
         },
         
         toogleWave(){
-            if(!this.loadWave){
-                this.createWave()
-                this.loadWave = true
-            }
-
-            const img = document.getElementById("img")
-            const img2 = document.getElementById("img2")
-            const wave = document.getElementById("waveform")
-
-            if(wave.firstChild == null && this.showingWave == false){
-                this.createWave()
-            }
-
-            const waveIcon = document.getElementById("waveIcon")
-            
-            !this.showingWave ? waveIcon.style = `background: rgba(0, 0, 0, 0.4);` : waveIcon.style = ``
-            
-            if(!this.showingWave){
-                const saveValues = new Promise((resolve) => {
-                    this.saveImgState[0] = img.classList.toString()
-                    this.saveImgState[1] = img.style.opacity
-                    this.saveImgState[2] = img2.classList.toString()
-                    this.saveImgState[3] = img2.style.opacity
-                    resolve()
-                })
-                saveValues.then(() => {
+            if(!this.showSettings){
+                if(!this.loadWave){
+                    this.createWave()
+                    this.loadWave = true
+                }
+                const img = document.getElementById("img")
+                const img2 = document.getElementById("img2")
+                const wave = document.getElementById("waveform")
+                if(this.tablet){
+                    const waveIcon = document.getElementById("waveIcon")
+                    !this.showingWave ? waveIcon.style = `background: rgba(0, 0, 0, 0.4);` : waveIcon.style = ``
+                }
+                
+                if(wave.firstChild == null && this.showingWave == false){
+                    this.createWave()
+                }
+                if(!this.showingWave){
+                    const saveValues = new Promise((resolve) => {
+                        this.saveImgState[0] = img.classList.toString()
+                        this.saveImgState[1] = img.style.opacity
+                        this.saveImgState[2] = img2.classList.toString()
+                        this.saveImgState[3] = img2.style.opacity
+                        resolve()
+                    })
+                    saveValues.then(() => {
+                        this.showingWave = !this.showingWave
+                        img.style.opacity = "0"
+                        img2.style.opacity = "0"
+                        setTimeout(() => {
+                            wave.style.position = "relative",
+                            img.classList = "absolute2",
+                            img2.classList = "absolute2"
+                        }, 300)
+                    })
+                }
+                else{
                     this.showingWave = !this.showingWave
-                    img.style.opacity = "0"
-                    img2.style.opacity = "0"
-                    setTimeout(() => {
-                        wave.style.position = "relative",
-                        img.classList = "absolute2",
-                        img2.classList = "absolute2"
-                    }, 300)
-                })
+                    wave.style.position = "absolute"
+                    this.fading()
+                }
             }
             else{
+                const waveIcon = document.getElementById("waveIcon")
+                !this.showingWave ? waveIcon.style = `background: rgba(0, 0, 0, 0.4);` : waveIcon.style = ``
                 this.showingWave = !this.showingWave
-                wave.style.position = "absolute",
-                img.classList = this.saveImgState[0]
-                img.style.opacity = this.saveImgState[1]
-                img2.classList = this.saveImgState[2]
-                img2.style.opacity = this.saveImgState[3]
             }
         }
     }

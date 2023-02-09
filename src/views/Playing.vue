@@ -12,8 +12,8 @@
 
       <div class="img-container">
         <span v-if="store.tablet" @click="store.rollDice" id="dice" class="icon-dice"></span>
-        <img :src="store.songsImages[store.songIndexA]" id="img" :alt="store.texts[12][store.language]" :style="{opacity: store.fade2}" class="absolute">
-        <img :src="store.songsImages[store.songIndexB]" id="img2" :alt="store.texts[12][store.language]" class="absolute2" :style="{opacity: store.fade}">
+        <img :src="store.songsImages[store.songIndexA]" id="img" :alt="store.texts[12][store.language]" :style="{opacity: store.fade2}" :class="store.absolute">
+        <img :src="store.songsImages[store.songIndexB]" id="img2" :alt="store.texts[12][store.language]" :class="store.absolute2" :style="{opacity: store.fade}">
         <div id="waveform" style="position: absolute;"></div>
       </div>
 
@@ -206,11 +206,16 @@
   import ProgressBar from '../components/ProgressBar.vue';
   import Lowerbar from '../components/Lowerbar.vue';
   import Sidebar from '../components/Sidebar.vue';
+  import {Store} from "../store.js"
+  const store = Store()
 
   export default{
     name: "Playing",
     components: {
         ProgressBar, Lowerbar, Sidebar
+    },
+    mounted(){
+        store.checkStates("back")
     }
   }
 </script>
