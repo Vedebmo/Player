@@ -46,6 +46,7 @@ userLang = userLang[0] + userLang[1]
 
 export const Store = defineStore('Store', {
     state: () => ({
+        showPlaylists: false,
         playing: false,
         wavesurfer: "",
         loadWave: false,
@@ -828,7 +829,8 @@ export const Store = defineStore('Store', {
                     this.userImage = user.photoURL
                 }
                 else{
-                    (router.currentRoute._value.path == "/account" || router.currentRoute._value.path == "/edit" || router.currentRoute._value.path == "/forgot") ? router.push({ path: '/login' }) : ""
+                    (router.currentRoute._value.path == "/account" || router.currentRoute._value.path == "/edit" || router.currentRoute._value.path == "/forgot" 
+                    || router.currentRoute._value.path == "/songs") ? router.push({ path: '/login' }) : ""
                 }
             })
         },

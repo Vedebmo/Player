@@ -24,7 +24,6 @@
 
   store.changeTablet()
   store.checkLanguage()
-  store.checkAuth()
 </script>
 
 <style src="@/assets/icomoon/style.css"></style>

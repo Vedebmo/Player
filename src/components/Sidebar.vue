@@ -13,10 +13,10 @@
                 <p>{{store.texts[2][store.language]}}</p>
             </router-link>
             <hr>
-            <div class="optionDivs" v-if="store.loggedIn">
+            <router-link class="optionDivs" :to="{name: 'songs'}" style="text-decoration: none;" v-if="store.loggedIn">
                 <span class="icon-playlist_play"></span>
                 <p>{{store.texts[3][store.language]}}</p>
-            </div>
+            </router-link>
             <hr  v-if="store.loggedIn">
             <div class="optionDivs" id="waveIcon" @click="store.toogleWave">
                 <span class="icon-googlepodcasts"></span>

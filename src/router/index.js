@@ -42,6 +42,11 @@ const router = createRouter({
       path: '/forgot',
       name: 'forgot',
       component: () => import('@/views/Forgot.vue')
+    },
+    {
+      path: '/songs',
+      name: 'songs',
+      component: () => import('@/views/SongsManager.vue')
     }
   ]
 })
