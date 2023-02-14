@@ -61,6 +61,7 @@
   store.changeTablet()
   store.checkLanguage()
   store.findAuth()
+  store.activateScrollbar()
 
   window.addEventListener('resize',store.changeTablet)
 </script>
@@ -68,9 +69,12 @@
 <style scoped>
 
     body{
-        overflow-y: auto;
+        background: #74c20d;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
     }
-
+    
     .app{
         height: 90vh;
         display: flex;
@@ -160,5 +164,4 @@
         position: absolute;
         cursor: pointer;
     }
-
 </style>

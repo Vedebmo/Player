@@ -15,4 +15,19 @@ import {RouterView } from 'vue-router'
     padding: 0;
     overflow: hidden;
   }
+
+  /* ScrollBar */
+
+  ::-webkit-scrollbar {
+      width: 15px;
+  }
+
+  ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.3);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+      background: white;
+      border-radius: 10px;
+  }
 </style>

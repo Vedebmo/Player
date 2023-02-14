@@ -1244,6 +1244,10 @@ export const Store = defineStore('Store', {
                 !this.showingWave ? waveIcon.style = `background: rgba(0, 0, 0, 0.4);` : waveIcon.style = ``
                 this.showingWave = !this.showingWave
             }
+        },
+
+        activateScrollbar(){
+            document.querySelector("body").style.overflowY = "auto"
         }
     }
 })
