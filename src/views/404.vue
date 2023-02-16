@@ -26,9 +26,6 @@
   store.checkLanguage()
 </script>
 
-<style src="@/assets/icomoon/style.css"></style>
-
-
 <style scoped>
     .app{
         height: 90vh;
@@ -76,7 +73,6 @@
 
     h1, p{
         color: white;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
     }
 
     input{
@@ -87,7 +83,6 @@
     }
 
     .loginBtn{
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
         color: white;
         display: block;
         width: 15rem;

@@ -65,8 +65,6 @@
   window.addEventListener('resize',store.changeTablet)
 </script>
 
-<style src="@/assets/icomoon/style.css"></style>
-
 <style scoped>
     .app{
         height: 90vh;
@@ -131,7 +129,6 @@
 
     h1,p{
         color: white;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
     }
 
     a{
@@ -186,7 +183,6 @@
     }
 
     .loginBtn, .loginBtnGoogle{
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
         color: white;
         display: block;
         width: 10rem;

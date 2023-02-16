@@ -118,7 +118,6 @@ p{
     text-decoration: none;
     color: white;
     font-size: 1rem;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 hr{

@@ -1248,6 +1248,10 @@ export const Store = defineStore('Store', {
 
         activateScrollbar(){
             document.querySelector("body").style.overflowY = "auto"
+        },
+
+        add(){
+            this.showPlaylists == false ? router.push({ path: "/upload"}) : ""
         }
     }
 })

@@ -86,8 +86,6 @@
     window.addEventListener('resize',store.changeTablet)
 </script>
 
-<style src="@/assets/icomoon/style.css"></style>
-
 <style scoped>
     .app{
         height: 80vh;
@@ -142,7 +140,6 @@
 
     h1{
         color: white;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
     }
 
     input{
@@ -155,7 +152,6 @@
 
     .btn{
         border: none;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
         cursor: pointer;
         font-size: large;
         transition: all .3s ease-in;
@@ -225,13 +221,12 @@
     }
 
     .modal h1{
-        font-size: 3vw;
+        font-size: 2vmax;
         color: #8B8181;
     }
 
     .modal p{
         padding: 0 5%;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
     }
 
     .buttons{
@@ -244,7 +239,6 @@
     }
     .modal button{
         border: none;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
         cursor: pointer;
         font-size: large;
         transition: all .3s ease-in;
@@ -325,7 +319,6 @@
     }
 
     .loginBtn, .loginBtnGoogle{
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
         color: white;
         display: block;
         width: 10rem;

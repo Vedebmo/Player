@@ -1,5 +1,4 @@
 <script setup>
-// import { RouterLink, RouterView } from 'vue-router'
 import {RouterView } from 'vue-router'
 </script>
 
@@ -8,8 +7,11 @@ import {RouterView } from 'vue-router'
   
 </template>
 
+<style src="@/assets/icomoon/style.css"></style>
+
 <style>
   body{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     background: #201C29;
     margin: 0;
     padding: 0;

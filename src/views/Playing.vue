@@ -49,8 +49,6 @@
 
 </template>
   
-<style src="@/assets/icomoon/style.css"></style>
-
 <style scoped>
   .none{
     display: none;
@@ -88,7 +86,6 @@
   }
 
   h1, h5{
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
     margin: 0;
     text-align: center;
     color: white;

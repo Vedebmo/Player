@@ -25,8 +25,6 @@
     </div>
 </template>
 
-<style src="@/assets/icomoon/style.css"></style>
-
 <style scoped>
 
     img{
@@ -86,7 +84,6 @@
         text-decoration: none;
         color: white;
         font-size: 2rem;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
     }
 </style>
 

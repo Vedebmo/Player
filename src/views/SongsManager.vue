@@ -8,7 +8,7 @@
         </div>
         <div class="buttons">
             <button>Playlists</button>
-            <button>
+            <button @click="store.add">
                 <div>
                     Add <span class="icon-plus"></span>
                 </div>
@@ -51,8 +51,6 @@
     </div>
 </template>
 
-<style src="@/assets/icomoon/style.css"></style>
-
 <script setup>
   import {Store} from "../store.js"
   const store = Store()
@@ -67,14 +65,6 @@
 </script>
 
 <style scoped>
-
-    body{
-        background: #74c20d;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-    }
-    
     .app{
         height: 90vh;
         display: flex;
@@ -86,10 +76,7 @@
         display: flex;
         width: 90%;
         justify-content: end;
-    }
-
-    h1{
-        width: -webkit-fill-available;
+        align-items: center;
     }
 
     .h2{
@@ -114,9 +101,9 @@
         background-color: #000000;
         color: white;
         font-weight: bolder;
-        padding: 10% 0%;
+        padding: 10% 0;
         margin: 2%;
-        width: 15vw;
+        width: 25vw;
         height: 5vh;
         display: flex;
         align-items: center;
@@ -163,5 +150,11 @@
         font-size: 250%;
         position: absolute;
         cursor: pointer;
+    }
+
+    @media screen and (min-width: 768px){
+        button{
+            width: 10vw;
+        }        
     }
 </style>
