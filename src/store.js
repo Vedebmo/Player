@@ -46,6 +46,7 @@ userLang = userLang[0] + userLang[1]
 
 export const Store = defineStore('Store', {
     state: () => ({
+        audioUpload: "",
         showPlaylists: false,
         playing: false,
         wavesurfer: "",
@@ -431,51 +432,35 @@ export const Store = defineStore('Store', {
             }
             if(this.fade2){
                 this.songIndexB = this.songIndex
-                // if(this.showingWave){
                 this.saveImgState[1] = 0
                 this.saveImgState[3] = 1
-                    setTimeout(() => {
-                        this.saveImgState[0] = "absolute2"
-                        this.saveImgState[2] = "absolute"
+                setTimeout(() => {
+                    this.saveImgState[0] = "absolute2"
+                    this.saveImgState[2] = "absolute"
 
-                        this.fade2 = this.saveImgState[1]
-                        this.fade = this.saveImgState[3]
-                        if(!this.showingWave){
-                            img.classList = this.saveImgState[0]
-                            img2.classList = this.saveImgState[2]
-                        }
-                    },10)
-                // }
-                // else{
-                //     this.fade2 = 0
-                //     this.fade = 1
-                //     this.absolute = this.saveImgState[2]
-                //     this.absolute2 = this.saveImgState[0]
-                // }
+                    this.fade2 = this.saveImgState[1]
+                    this.fade = this.saveImgState[3]
+                    if(!this.showingWave){
+                        img.classList = this.saveImgState[0]
+                        img2.classList = this.saveImgState[2]
+                    }
+                },10)
             }
             else{
                 this.songIndexA = this.songIndex
-                // if(this.showingWave){
                 this.saveImgState[1] = 1
                 this.saveImgState[3] = 0
-                    setTimeout(() => {
-                        this.saveImgState[0] = "absolute"
-                        this.saveImgState[2] = "absolute2"
+                setTimeout(() => {
+                    this.saveImgState[0] = "absolute"
+                    this.saveImgState[2] = "absolute2"
 
-                        this.fade2 = this.saveImgState[1]
-                        this.fade = this.saveImgState[3]
-                        if(!this.showingWave){
-                            img.classList = this.saveImgState[0]
-                            img2.classList = this.saveImgState[2]
-                        }
-                    },10)
-                // }
-                // else{
-                //     this.fade2 = 1
-                //     this.fade = 0
-                //     this.absolute = this.saveImgState[0]
-                //     this.absolute2 = this.saveImgState[2]
-                // }
+                    this.fade2 = this.saveImgState[1]
+                    this.fade = this.saveImgState[3]
+                    if(!this.showingWave){
+                        img.classList = this.saveImgState[0]
+                        img2.classList = this.saveImgState[2]
+                    }
+                },10)
             }
 
             if(this.tablet){
@@ -1113,30 +1098,61 @@ export const Store = defineStore('Store', {
             })
         },
 
-        requestPhoto(){
+        requestFile(type){
             let file = document.createElement("input")
             file.type = "file"
-            file.accept = ".png, .webp, .jpg, .jpeg"
-            file.click()
+            if(type == "img"){
+                file.accept = ".png, .webp, .jpg, .jpeg"
+                file.click()
 
-            file.addEventListener("change", ()=>{
-                if(file.files.length != 0){
-                    let img = file.files[0]
-                    if(img.type == "image/png" || img.type == "image/webp" || img.type == "image/jpg" || img.type == "image/jpeg"){
-                        if(img.size <= "5242880"){
-                            this.userImage = URL.createObjectURL(img)
-                            this.img = img
-                            this.imageChanged = true
+                file.addEventListener("change", ()=>{
+                    if(file.files.length != 0){
+                        let img = file.files[0]
+                        if(img.type == "image/png" || img.type == "image/webp" || img.type == "image/jpg" || img.type == "image/jpeg"){
+                            if(img.size <= "104857600"){
+                                this.userImage = URL.createObjectURL(img)
+                                this.img = img
+                                this.imageChanged = true
+                            }
+                            else{
+                                alert(this.texts[49][this.language])
+                            }
                         }
                         else{
-                            alert(this.texts[49][this.language])
+                            alert(this.texts[50][this.language])
                         }
                     }
-                    else{
-                        alert(this.texts[50][this.language])
+                })
+            }
+            else{
+                file.accept = ".wav, .mp3, .ogg"
+                file.click()
+
+                file.addEventListener("change", ()=>{
+                    if(file.files.length != 0){
+                        let audio = file.files[0]
+                        if(audio.type == "audio/wav" || audio.type == "audio/mpeg" || audio.type == "audio/ogg"){
+                            if(audio.size <= "104857600"){
+                                
+                                const saveAudio = new Promise((resolve) => {
+                                    audio = URL.createObjectURL(audio)
+                                    resolve()
+                                })
+
+                                saveAudio.then(()=>{
+                                    this.audioUpload = audio
+                                })
+                            }
+                            else{
+                                alert(this.texts[49][this.language])
+                            }
+                        }
+                        else{
+                            alert(this.texts[50][this.language])
+                        }
                     }
-                }
-            })
+                })
+            }
         },
 
         forgotPassword(){
@@ -1252,6 +1268,10 @@ export const Store = defineStore('Store', {
 
         add(){
             this.showPlaylists == false ? router.push({ path: "/upload"}) : ""
+        },
+
+        uploadSong(){
+            
         }
     }
 })

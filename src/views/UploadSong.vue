@@ -1,5 +1,8 @@
 <template>
     <div class="app">
+
+        <audio :src="store.audioUpload" id="song"></audio>
+        
         <div class="span">
             <h1 style="margin-right: 2%;">Add Songs</h1>
             <router-link :to="{name: 'songs'}" style="text-decoration: none;" @click="store.showSettings = true">
@@ -21,20 +24,31 @@
             Artist's name
             <span class="icon-pencil" v-if="store.showPencil"></span>
         </h3>
-        <button class="uploadSong">
-            Upload a song
-            <span class="icon-cloud-upload"></span>
-        </button>
 
-        <input v-if="store.tablet" type="range" id="volumeRange" min="0" max="1" step="any" :style="{ backgroundSize: store.volumeSize, opacity: store.volumeOpacity, left: store.volumePosition, opacity: store.volumeOpacity}" @input="store.changeVolume" disabled>
+        <div class="parent">
+            <div style="width: 80vw; position: absolute;">
+                <button class="uploadSong" @click="store.requestFile">
+                    Upload a song
+                    <span class="icon-cloud-upload"></span>
+                </button>
+            </div>
+            
+            <div class="volumeParent" @mouseleave="store.changeVolume('Out')" @touchend="store.changeVolume('Out')" v-if="store.tablet">
+                <span class="icon-volume-high" id="volume" @mouseenter="store.changeVolume('In')"  @touchstart="store.changeVolume('In')" @click="store.changeVolume('Previous')"></span>
+                <input type="range" id="volumeRange" min="0" max="1" step="any" :style="{ backgroundSize: store.volumeSize, opacity: store.volumeOpacity, left: store.volumePosition, opacity: store.volumeOpacity}" @input="store.changeVolume" disabled>
+            </div>
+        </div>
+
         <ProgressBar></ProgressBar>
 
         <button class="submit">Upload song to public</button>
-        <label class="several">
-            <input type="checkbox" id="checkbox">
-            <span  class="checkbox"></span>
-            Add several songs
-        </label>
+        <div class="severalParent">
+            <label class="several">
+                <input type="checkbox" id="checkbox">
+                <span  class="checkbox"></span>
+                Add several songs
+            </label>
+        </div>
     </div>
 </template>
 
@@ -60,7 +74,7 @@
 
 <style>
     .app{
-        font-size: 1vmax;
+        font-size: 1.2vmax;
         height: 90vh;
         display: flex;
         flex-direction: column;
@@ -87,20 +101,35 @@
 
     h1,h3{
         color: white;
+        margin: .5% 0%;
     }
 
     .icon-cloud-upload{
         color: #D2B8D3;
     }
 
+    img{
+        width: 100%;
+        z-index: 0;
+        transition: opacity 0.5s;
+        height: 50vh;
+    }
+
+    .parent{
+        display: flex;
+        flex-direction: row-reverse;
+        width: 80%;
+        justify-content: start;
+    }
+
     #upload{
-        display: grid;
-        place-items: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         background-color: rgba(0, 0, 0, 0.15);
-        padding: 2vh;
         cursor: pointer;
-        height: 20vmax;
-        width: 20vmax;
+        width: 80%;
+        min-height: 40vh;
         text-align: center;
     }
 
@@ -125,7 +154,7 @@
         transition: all .3s;
         display: flex;
         align-items: center;
-        font-size: 3vmax;
+        margin: auto;
         padding: 1%;
     }
 
@@ -147,21 +176,26 @@
         cursor: pointer;
         transition: all .3s;
         color: white;
-        font-size: 2vmax;
+        /* font-size: 2vmax; */
     }
 
     .submit:hover{
         background: #D2B8D3;
     }
 
-    .several{
-        margin-top: 7%;
-        color: white;
+    .severalParent{
+        width: 80%;
         display: flex;
         align-items: center;
+    }
+
+    .several{
+        margin-top: 7%;
+        align-items: center;
+        display: flex;
+        color: white;
         cursor: pointer;
-        width: 80%;
-        font-size: large
+        font-size: large;
     }
 
     input[type="checkbox"]{
@@ -209,6 +243,69 @@
         -webkit-transform: rotate(45deg);
         -ms-transform: rotate(45deg);
         transform: rotate(45deg);
+    }
+
+    .volumeParent{
+        display: flex;
+        place-items: center;
+    }
+
+    .lefted{
+        display: flex;
+        place-items: center;
+        width: 80%;
+    }
+
+    #volume{
+        color: white;
+        margin: 0 15% 0 0;
+        font-size: 2em;
+    }
+
+    #volume:hover{
+        cursor: pointer;
+    }
+
+    #volumeRange{
+        position: relative;
+        transition: opacity .3s;
+    }
+
+    #volume:hover{
+        color: #aaaaaa;
+    }
+
+    input[type="range"] {
+        margin-left: -.5rem;
+        appearance: none;
+        width: 80%;
+        height: 4px;
+        background: #66757F;
+        border-radius: 5px;
+        background-image: linear-gradient(white, white);
+        background-repeat: no-repeat;
+    }
+
+    input[type="range"]:hover{
+        cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+        appearance: none;
+        height: 15px;
+        width: 15px;
+        border-radius: 50%;
+        background: white;
+        cursor: pointer;
+        box-shadow: 0 0 2px 0 #66757F;
+        transition: background .3s ease-in-out;
+    }
+
+    input[type=range]::-webkit-slider-runnable-track  {
+        appearance: none;
+        box-shadow: none;
+        border: none;
+        background: transparent;
     }
 
     @media screen and (min-width: 768px){

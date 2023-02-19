@@ -108,7 +108,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 100%;
+        font-size: 15px;
         cursor: pointer;
         transition: all .5s;
         border: none;
@@ -147,7 +147,7 @@
 
     .icon-pencil{
         color: #D2B8D3;
-        font-size: 250%;
+        font-size: 50px;
         position: absolute;
         cursor: pointer;
     }

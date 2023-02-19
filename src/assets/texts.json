@@ -245,9 +245,9 @@
      "2": "Questo aggiornerà solo il nickname, l'immagine dell'utente e l'email se lo hai modificato. Vuoi continuare?"
     },
     {
-     "0": "This image is too big, try one less than 5Mb",
-     "1": "Esta imagen es muy pesada, intente con una menor a 5Mb",
-     "2": "Questa immagine è troppo pesante, provi con una più piccola di 5Mb"
+     "0": "This file is too big, try one less than 100Mb",
+     "1": "Este archivo es muy pesada, intente con uno menor a 100Mb",
+     "2": "Questo file è troppo pesante, provi con uno più piccola di 100Mb"
     },
     {
      "0": "That file format is not allowed",
