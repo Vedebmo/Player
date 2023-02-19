@@ -1,7 +1,7 @@
 <template>
     <div class="app">
         <div class="span">
-            <h1>Manage Songs</h1>
+            <h1>{{store.texts[59][store.language]}}</h1>
             <router-link :to="{name: 'home'}" style="text-decoration: none;" @click="store.showSettings = true">
                 <span class="icon-circle-left"></span>
             </router-link>
@@ -10,13 +10,13 @@
             <button>Playlists</button>
             <button @click="store.add">
                 <div>
-                    Add <span class="icon-plus"></span>
+                    {{store.texts[60][store.language]}} <span class="icon-plus"></span>
                 </div>
             </button>
             <button>{{ store.texts[1][store.language] }}</button>
         </div>
         
-        <h2 class="h2">Added Songs</h2>
+        <h2 class="h2">{{store.texts[61][store.language]}}</h2>
 
         <div class="container">
             <div class="song">

@@ -46,6 +46,7 @@ userLang = userLang[0] + userLang[1]
 
 export const Store = defineStore('Store', {
     state: () => ({
+        imgUpload: "",
         audioUpload: "",
         showPlaylists: false,
         playing: false,
@@ -927,7 +928,7 @@ export const Store = defineStore('Store', {
                 })
             }
         },
-        editDisplayName(input){
+        editName(input){
             input == "In" ? (this.showPencil = false) : this.showPencil = true
         },
 
@@ -1110,9 +1111,21 @@ export const Store = defineStore('Store', {
                         let img = file.files[0]
                         if(img.type == "image/png" || img.type == "image/webp" || img.type == "image/jpg" || img.type == "image/jpeg"){
                             if(img.size <= "104857600"){
-                                this.userImage = URL.createObjectURL(img)
-                                this.img = img
-                                this.imageChanged = true
+
+                                if(router.currentRoute._value.path == "/upload"){
+                                    const upload = document.getElementById("toUpload")
+                                    upload.style.display = "none"
+                                    document.getElementById("img").hidden = false
+                                    document.getElementById("change").hidden = false
+                                    document.getElementsByClassName("img-container")[0].style.width = "100%"
+                                    document.getElementsByClassName("img-container")[0].style.height = "100%"
+                                    this.imgUpload = URL.createObjectURL(img)
+                                }
+                                else{
+                                    this.userImage = URL.createObjectURL(img)
+                                    this.img = img
+                                    this.imageChanged = true
+                                }
                             }
                             else{
                                 alert(this.texts[49][this.language])
@@ -1271,7 +1284,33 @@ export const Store = defineStore('Store', {
         },
 
         uploadSong(){
-            
+            const name = document.getElementById("songName").textContent
+            const artist = document.getElementById("artistName").textContent
+            let prevent = false
+
+            if(name == `${this.texts[66][this.language]} `){
+                alert(this.texts[71][this.language])
+                prevent = true
+            }
+
+            if(artist == `${this.texts[67][this.language]} `){
+                alert(this.texts[72][this.language])
+                prevent = true
+            }
+
+            if(this.audioUpload == ""){
+                alert(this.texts[73][this.language])
+                prevent = true
+            }
+
+            if(this.imgUpload == ""){
+                alert(this.texts[74][this.language])
+                prevent = true
+            }
+
+            if(!prevent){
+                console.log("Pa arribaaaa")
+            }
         }
     }
 })

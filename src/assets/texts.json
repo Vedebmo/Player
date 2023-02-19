@@ -293,5 +293,85 @@
      "0": "Welcome to Playmax, where fun and music come together!. There's nothing better than combining your two favorite hobbies in one place!. So turn on your headphones and start enjoying the best music and gaming experience in one place with Playmax!",
      "1": "¡Bienvenido a Playmax, donde la diversión y la música se unen!. ¡No hay nada mejor que combinar tus dos pasatiempos favoritos en un solo lugar!. ¡Así que enciende tus auriculares y comienza a disfrutar de la mejor experiencia musical y de juego en un solo lugar con Playmax!",
      "2": "Benvenuti in Playmax, dove divertimento e musica si uniscono!. Non c'è niente di meglio che combinare i tuoi due passatempi preferiti in un solo posto!. Quindi accendi le tue cuffie e inizia a goderti la migliore esperienza musicale e di gioco in un solo posto con Playmax!"
+    },
+    {
+     "0": "Songs Manager",
+     "1": "Administrador de canciones",
+     "2": "Amministratore di canzoni"
+    },
+    {
+     "0": "Add",
+     "1": "Añade",
+     "2": "Aggiungi"
+    },
+    {
+     "0": "Songs Added",
+     "1": "Canciones Añádidas",
+     "2": "Canzoni Aggiunte"
+    },
+    {
+     "0": "Songs Added",
+     "1": "Canciones Añádidas",
+     "2": "Canzoni Aggiunte"
+    },
+    {
+     "0": "Add Songs",
+     "1": "Añadir Canciones",
+     "2": "Aggiungi Canzoni"
+    },
+    {
+     "0": "Upload Image",
+     "1": "Subir Imagen",
+     "2": "Carica Immagine"
+    },
+    {
+     "0": "Change Image",
+     "1": "Cambiar Imagen",
+     "2": "Modifica Immagine"
+    },
+    {
+     "0": "Song's Name",
+     "1": "Nombre de la Canción",
+     "2": "Nome della Canzone"
+    },
+    {
+     "0": "Artist's Name",
+     "1": "Nombre del Artista",
+     "2": "Nome dell'Artista"
+    },
+    {
+     "0": "Upload Song",
+     "1": "Subir Canción",
+     "2": "Carica Canzone"
+    },
+    {
+     "0": "Upload Song to public",
+     "1": "Subir Canción al público",
+     "2": "Carica Canzone in pubblico"
+    },
+    {
+     "0": "Add several songs",
+     "1": "Añadir varias canciones",
+     "2": "Aggiungi più canzoni"
+    },
+    {
+     "0": "You should change the song's name",
+     "1": "Debe cambiar el nombre de la canción",
+     "2": "Dovresti modificare il nome della canzone"
+    },
+    {
+     "0": "You should change the artist's name",
+     "1": "Debe cambiar el nombre del artista",
+     "2": "Dovresti modificare il nome dell'artista"
+    },
+    {
+     "0": "You must add a song",
+     "1": "Debe añadir una cancióñ",
+     "2": "Dovresti aggiungere una canzone"
+    },
+    {
+     "0": "You must add an image to the song",
+     "1": "Debe añadir una imagen a la canción",
+     "2": "Dovresti aggiungere un'immagine alla canzone"
     }
 ]

@@ -20,7 +20,7 @@
                     <span class="icon-camera"></span>
                 </div>
             </div>
-            <h1 v-if="store.loggedIn" contentEditable="true" @focusin="store.editDisplayName('In')" @focusout="store.editDisplayName" id="nickname">
+            <h1 v-if="store.loggedIn" contentEditable="true" @focusin="store.editName('In')" @focusout="store.editName" id="nickname">
                 {{ store.user.displayName }} 
                 <span class="icon-pencil" v-if="store.showPencil"></span>
             </h1>
