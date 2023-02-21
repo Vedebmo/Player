@@ -21,7 +21,7 @@ const fire = initializeApp(firebaseConfig);
 // firebase Auth
 import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithRedirect, getRedirectResult, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, reauthenticateWithCredential, deleteUser, EmailAuthProvider, fetchSignInMethodsForEmail, reauthenticateWithPopup, updateEmail, updatePassword, sendPasswordResetEmail  } from "firebase/auth";
 
-import { getStorage, ref, getDownloadURL, listAll, uploadBytes } from "firebase/storage";
+import { getStorage, ref, getDownloadURL, listAll, uploadBytes, uploadBytesResumable  } from "firebase/storage";
 
 import WaveSurfer from "wavesurfer.js";
 import wavesurfer from 'wavesurfer.js';
@@ -46,6 +46,10 @@ userLang = userLang[0] + userLang[1]
 
 export const Store = defineStore('Store', {
     state: () => ({
+        showModal2: false,
+        uploadProgress: [],
+        imgToUpload: "",
+        audioToUpload: "",
         imgUpload: "",
         audioUpload: "",
         showPlaylists: false,
@@ -331,6 +335,7 @@ export const Store = defineStore('Store', {
             .then((res)=>{
                 let i = 0
                 res.prefixes.forEach((folderRef) => {
+                    //You need to accept other file extensions such as .oggg, .wav, .webm, .jpg, etc.
                     songsNames[i] = folderRef._location.path.split("<!--|Space|--!>").shift().split("Songs/").pop().trim()
                     artists[i] = folderRef._location.path.split("<!--|Space|--!>").pop().trim()
                     songsReferences[i] = songsNames[i] + ' <!--|Space|--!> ' + artists[i] + "/" + songsNames[i] + '.mp3';
@@ -859,10 +864,32 @@ export const Store = defineStore('Store', {
             }
             else{
                 this.showModal = !this.showModal
-                this.modalPosition == "100vw" ? (this.modalPosition = "auto", this.modalOpacity = 1) : (this.modalOpacity = 0, setTimeout(()=>{
-                    this.modalPosition = "100vw"  
-                    this.lookForCredentials = false
-                },500))
+                if(this.modalPosition == "100vw"){
+                    this.modalPosition = "auto"
+                    this.modalOpacity = 1
+                    try {
+                        document.getElementById("app2").style.zIndex = "10"
+                    } catch{}
+                }
+                else{
+                    this.modalOpacity = 0
+                    setTimeout(()=>{
+                        this.modalPosition = "100vw"  
+                        this.lookForCredentials = false
+                        try {
+                            document.getElementById("app2").style.zIndex = "-10"
+                        } catch{}
+                    },500)
+                }
+
+                // this.modalPosition == "100vw" ? (this.modalPosition = "auto", this.modalOpacity = 1, ) : (this.modalOpacity = 0, setTimeout(()=>{
+                //     this.modalPosition = "100vw"  
+                //     this.lookForCredentials = false
+                //     try {
+                //         document.getElementById("app2").style.zIndex = "-10"
+                //     } catch{}
+                // },500))
+
             }
         },
 
@@ -929,7 +956,9 @@ export const Store = defineStore('Store', {
             }
         },
         editName(input){
-            input == "In" ? (this.showPencil = false) : this.showPencil = true
+            try {
+                input == "In" ? (this.showPencil = false) : this.showPencil = true
+            } catch{}
         },
 
         checkImageRepeat(images,img,timesRepeated){
@@ -1113,12 +1142,12 @@ export const Store = defineStore('Store', {
                             if(img.size <= "104857600"){
 
                                 if(router.currentRoute._value.path == "/upload"){
-                                    const upload = document.getElementById("toUpload")
-                                    upload.style.display = "none"
+                                    document.getElementById("toUpload").style.display = "none"
                                     document.getElementById("img").hidden = false
                                     document.getElementById("change").hidden = false
                                     document.getElementsByClassName("img-container")[0].style.width = "100%"
                                     document.getElementsByClassName("img-container")[0].style.height = "100%"
+                                    this.imgToUpload = img
                                     this.imgUpload = URL.createObjectURL(img)
                                 }
                                 else{
@@ -1148,10 +1177,11 @@ export const Store = defineStore('Store', {
                             if(audio.size <= "104857600"){
                                 
                                 const saveAudio = new Promise((resolve) => {
+                                    this.audioToUpload = audio
                                     audio = URL.createObjectURL(audio)
                                     resolve()
                                 })
-
+                                
                                 saveAudio.then(()=>{
                                     this.audioUpload = audio
                                 })
@@ -1309,8 +1339,85 @@ export const Store = defineStore('Store', {
             }
 
             if(!prevent){
-                console.log("Pa arribaaaa")
+                // this.showModal2 = true
+                this.launchModal()
+
+                const storage = getStorage();
+
+                let fullName = this.imgToUpload.type.split("/")[1]
+                fullName = `${name}.${fullName}`
+                
+                let fullName2 = this.audioToUpload.type.split("/")[1]
+                fullName2 = `${name}.${fullName2}`
+
+                const storageRef = ref(storage,`Songs/${name} <!--|Space|--!> ${artist}/${fullName}`)
+                const storageRef2 = ref(storage,`Songs/${name} <!--|Space|--!> ${artist}/${fullName2}`)
+
+                const UploadImage = new Promise((resolve) => {
+                    const upload = uploadBytesResumable (storageRef, this.imgToUpload)
+                    upload.on('state_changed', 
+                    (snapshot) => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        this.uploadProgress[0] = progress.toFixed() + '%'
+                        },
+                        (error) => {
+                            alert(this.texts[11][this.language])
+                            this.resetUpload()
+                        },
+                        ()=>{resolve()}
+                    )
+                })
+
+                const UploadSong = new Promise((resolve) => {
+                    const upload2 = uploadBytesResumable (storageRef2, this.audioToUpload)
+                    upload2.on('state_changed', 
+                    (snapshot) => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        this.uploadProgress[1] = progress.toFixed() + '%'
+                        },
+                        (error) => {
+                            alert(this.texts[11][this.language])
+                            this.resetUpload()
+                        },
+                        ()=>{resolve()}
+                    ) 
+                })
+
+                let final = 0
+                
+                UploadImage.then(()=>{
+                    final++
+                    if(final > 1){
+                        this.resetUpload()
+                    }
+                })
+
+                UploadSong.then(()=>{
+                    final++
+                    if(final > 1){
+                        this.resetUpload()
+                    }
+                })
+                
             }
+        },
+        resetUpload(){
+            this.imgUpload = ""
+            this.audioUpload == ""
+            this.imgToUpload = ""
+            this.audioToUpload == ""
+            document.getElementById("toUpload").style.display = "grid"
+            document.getElementById("song").src = ""
+            document.getElementById("img").src = ""
+            document.getElementById("img").hidden = true
+            document.getElementById("change").hidden = true
+            document.getElementsByClassName("img-container")[0].style.width = "0%"
+            document.getElementsByClassName("img-container")[0].style.height = "0%"
+            document.getElementById("songName").firstChild.textContent = this.texts[66][this.language]
+            document.getElementById("artistName").firstChild.textContent = this.texts[67][this.language]
+            
+            
+            this.launchModal()
         }
     }
 })

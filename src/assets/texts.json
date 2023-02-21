@@ -373,5 +373,20 @@
      "0": "You must add an image to the song",
      "1": "Debe añadir una imagen a la canción",
      "2": "Dovresti aggiungere un'immagine alla canzone"
+    },
+    {
+     "0": "Uploading...",
+     "1": "Subiendo...",
+     "2": "Caricamento..."
+    },
+    {
+     "0": "Image:",
+     "1": "Imagen:",
+     "2": "Immagine:"
+    },
+    {
+     "0": "Song:",
+     "1": "Canción:",
+     "2": "Canzone:"
     }
 ]

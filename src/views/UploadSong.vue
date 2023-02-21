@@ -20,11 +20,11 @@
             </div>
         </div>
         <h1 contentEditable="true" id="songName" @focusin="store.editName('In')" @focusout="store.editName">
-            {{store.texts[66][store.language]}}
+            <p>{{store.texts[66][store.language]}}</p>
             <span class="icon-pencil" v-if="store.showPencil"></span>
         </h1>
         <h3 contentEditable="true" id="artistName" @focusin="store.editName('In')" @focusout="store.editName">
-            {{store.texts[67][store.language]}}
+            <p>{{store.texts[67][store.language]}}</p>
             <span class="icon-pencil" v-if="store.showPencil"></span>
         </h3>
 
@@ -54,6 +54,8 @@
                 {{store.texts[70][store.language]}}
             </label>
         </div>
+
+        <Modal></Modal>
     </div>
 </template>
 
@@ -63,6 +65,7 @@
 
 <script>
     import ProgressBar from '../components/ProgressBar.vue';
+    import Modal from '../components/Modal.vue';
 </script>
 
 <script setup>
@@ -107,6 +110,10 @@
     h1,h3{
         color: white;
         margin: .5% 0%;
+    }
+
+    h1 p, h3 p{
+        display: inline;
     }
 
     .icon-cloud-upload{
@@ -197,7 +204,6 @@
         cursor: pointer;
         transition: all .3s;
         color: white;
-        /* font-size: 2vmax; */
     }
 
     .submit:hover{
@@ -328,6 +334,11 @@
         box-shadow: none;
         border: none;
         background: transparent;
+    }
+
+    .icon-pencil{
+        position: relative;
+        left: 5%;
     }
 
     @media screen and (min-width: 768px){
