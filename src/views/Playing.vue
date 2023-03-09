@@ -213,6 +213,7 @@
     },
     mounted(){
         store.checkStates("back")
+        store.updateSongList()
     }
   }
 </script>
@@ -224,7 +225,6 @@
   
   store.changeTablet()
   store.checkLanguage()
-  store.findAuth()
-  
+  store.findAuth()  
   window.addEventListener('resize',store.changeTablet)
 </script>

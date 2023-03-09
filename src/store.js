@@ -49,6 +49,7 @@ userLang = userLang[0] + userLang[1]
 export const Store = defineStore('Store', {
     state: () => ({
         showModal2: false,
+        updated: false,
         uploadProgress: [],
         imgToUpload: "",
         audioToUpload: "",
@@ -109,6 +110,15 @@ export const Store = defineStore('Store', {
     }),
 
     actions:{
+
+        updateSongList(){
+            if(this.updated){
+                this.updated = false
+                this.download()
+                this.reset()
+            }
+        },
+
         checkStates(way){
             if(way == "back"){
                 if(this.showingWave){
@@ -889,15 +899,6 @@ export const Store = defineStore('Store', {
                         } catch{}
                     },500)
                 }
-
-                // this.modalPosition == "100vw" ? (this.modalPosition = "auto", this.modalOpacity = 1, ) : (this.modalOpacity = 0, setTimeout(()=>{
-                //     this.modalPosition = "100vw"  
-                //     this.lookForCredentials = false
-                //     try {
-                //         document.getElementById("app2").style.zIndex = "-10"
-                //     } catch{}
-                // },500))
-
             }
         },
 
@@ -1348,6 +1349,7 @@ export const Store = defineStore('Store', {
 
             if(!prevent){
                 // this.showModal2 = true
+                this.play()
                 this.launchModal()
 
                 const storage = getStorage();
@@ -1396,6 +1398,8 @@ export const Store = defineStore('Store', {
                 UploadImage.then(()=>{
                     final++
                     if(final > 1){
+                        this.updated = true
+                        alert(this.texts[78][this.language])
                         this.resetUpload()
                     }
                 })
@@ -1403,6 +1407,8 @@ export const Store = defineStore('Store', {
                 UploadSong.then(()=>{
                     final++
                     if(final > 1){
+                        this.updated = true
+                        alert(this.texts[78][this.language])
                         this.resetUpload()
                     }
                 })
@@ -1411,9 +1417,9 @@ export const Store = defineStore('Store', {
         },
         resetUpload(){
             this.imgUpload = ""
-            this.audioUpload == ""
+            this.audioUpload = ""
             this.imgToUpload = ""
-            this.audioToUpload == ""
+            this.audioToUpload = ""
             document.getElementById("toUpload").style.display = "grid"
             document.getElementById("song").src = ""
             document.getElementById("img").src = ""
@@ -1423,9 +1429,34 @@ export const Store = defineStore('Store', {
             document.getElementsByClassName("img-container")[0].style.height = "0%"
             document.getElementById("songName").firstChild.textContent = this.texts[66][this.language]
             document.getElementById("artistName").firstChild.textContent = this.texts[67][this.language]
-            
+            this.rangeSize = `0% 100%`
+            setTimeout(()=>{
+                document.getElementById("range").value = 0
+            },100)
             
             this.launchModal()
+        },
+
+        addEvent(){
+            document.addEventListener("drop", function(event) {
+                var dataTransfer = event.dataTransfer;
+                var isImage = false;
+                
+                if (dataTransfer.types && (dataTransfer.types.indexOf("Files") !== -1)) {
+                    var files = dataTransfer.files;
+                    for (var i = 0; i < files.length; i++) {
+                        if (files[i].type.indexOf("image/") === 0) {
+                            isImage = true;
+                            break;
+                        }
+                    }
+                }
+                
+                if (isImage) {
+                    event.preventDefault();
+                }
+            });
+            
         }
     }
 })

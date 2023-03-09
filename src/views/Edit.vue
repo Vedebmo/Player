@@ -84,6 +84,18 @@
     </div>
 </template>
 
+<script>
+    import {Store} from "../store.js"
+    const store = Store()
+
+    export default{
+    name: "Edit",
+    mounted(){
+        store.addEvent()
+    }
+  }
+</script>
+
 <script setup>
     import {Store} from "../store.js"
     const store = Store()

@@ -11,7 +11,7 @@
         </div>
         <div id="upload" @click="store.requestFile('img')">
             <div class="img-container">
-                <img :src="store.imgUpload" alt="Img" id="img" hidden>
+                <img :src="store.imgUpload" alt="Img" id="img" hidden draggable="false">
                 <p id="change" hidden>{{store.texts[65][store.language]}}</p>
             </div>
             <div id="toUpload">
@@ -66,18 +66,30 @@
 <script>
     import ProgressBar from '../components/ProgressBar.vue';
     import Modal from '../components/Modal.vue';
+    import {Store} from "../store.js"
+    const store = Store()
+
+    export default{
+    name: "UploadSong",
+    mounted(){
+        store.launchModal()
+        store.resetUpload()
+        store.addEvent()
+    }
+  }
 </script>
 
 <script setup>
-  import {Store} from "../store.js"
-  const store = Store()
-  store.returned = true
+    import {Store} from "../store.js"
+    const store = Store()
+    store.returned = true
 
-  store.changeTablet()
-  store.checkLanguage()
-  store.findAuth()
+    store.changeTablet()
+    store.checkLanguage()
+    store.findAuth()
+    store.activateScrollbar()
 
-  window.addEventListener('resize',store.changeTablet)
+    window.addEventListener('resize',store.changeTablet)
 </script>
 
 <style scoped>
