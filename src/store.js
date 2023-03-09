@@ -32,7 +32,9 @@ const song = document.getElementById("song")
 const img = document.getElementById("img")
 let songsNames = []
 let songsReferences = []
+let audioExtensions = []
 let songsImages = []
+let imgExtensions = []
 let artists = []
 let history = []
 let next = false
@@ -335,11 +337,17 @@ export const Store = defineStore('Store', {
             .then((res)=>{
                 let i = 0
                 res.prefixes.forEach((folderRef) => {
-                    //You need to accept other file extensions such as .oggg, .wav, .webm, .jpg, etc.
-                    songsNames[i] = folderRef._location.path.split("<!--|Space|--!>").shift().split("Songs/").pop().trim()
-                    artists[i] = folderRef._location.path.split("<!--|Space|--!>").pop().trim()
-                    songsReferences[i] = songsNames[i] + ' <!--|Space|--!> ' + artists[i] + "/" + songsNames[i] + '.mp3';
-                    songsImages[i] = songsNames[i] + ' <!--|Space|--!> ' + artists[i] + "/" + songsNames[i] + '.png';
+                    songsNames[i] = folderRef._location.path.split("<!--|Space|--!>")[0].split("Songs/")[1].trim()
+                    artists[i] = folderRef._location.path.split("<!--|Space|--!>")[1].trim()
+                    imgExtensions[i] = folderRef._location.path.split("<!--|Space|--!>")[2].trim()
+                    audioExtensions[i] = folderRef._location.path.split("<!--|Space|--!>")[3].split('/')[0]
+
+                    let file = `${songsNames[i]}.${audioExtensions[i].trim()}`
+                    let file2 = `${songsNames[i]}.${imgExtensions[i]}`
+
+                    songsReferences[i] = `${songsNames[i]} <!--|Space|--!> ${artists[i]} <!--|Space|--!> ${imgExtensions[i]} <!--|Space|--!> ${audioExtensions[i].trim()}/${file}`;
+
+                    songsImages[i] = `${songsNames[i]} <!--|Space|--!> ${artists[i]} <!--|Space|--!> ${imgExtensions[i]} <!--|Space|--!> ${audioExtensions[i].trim()}/${file2}`;
                     songsReferences[i] = ref(storageRef, songsReferences[i])
                     songsImages[i] = ref(storageRef, songsImages[i])
                     i++
@@ -1344,14 +1352,14 @@ export const Store = defineStore('Store', {
 
                 const storage = getStorage();
 
-                let fullName = this.imgToUpload.type.split("/")[1]
-                fullName = `${name}.${fullName}`
+                let extension = this.imgToUpload.type.split("/")[1]
+                const fullName = `${name}.${extension}`
                 
-                let fullName2 = this.audioToUpload.type.split("/")[1]
-                fullName2 = `${name}.${fullName2}`
+                let extension2 = this.audioToUpload.type.split("/")[1]
+                const fullName2 = `${name}.${extension2}`
 
-                const storageRef = ref(storage,`Songs/${name} <!--|Space|--!> ${artist}/${fullName}`)
-                const storageRef2 = ref(storage,`Songs/${name} <!--|Space|--!> ${artist}/${fullName2}`)
+                const storageRef = ref(storage,`Songs/${name} <!--|Space|--!> ${artist} <!--|Space|--!> ${extension} <!--|Space|--!> ${extension2}/${fullName}`)
+                const storageRef2 = ref(storage,`Songs/${name} <!--|Space|--!> ${artist} <!--|Space|--!> ${extension} <!--|Space|--!> ${extension2}/${fullName2}`)
 
                 const UploadImage = new Promise((resolve) => {
                     const upload = uploadBytesResumable (storageRef, this.imgToUpload)

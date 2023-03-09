@@ -80,7 +80,7 @@
   window.addEventListener('resize',store.changeTablet)
 </script>
 
-<style>
+<style scoped>
     .app{
         font-size: 1.2vmax;
         height: 90vh;
