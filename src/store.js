@@ -48,6 +48,8 @@ userLang = userLang[0] + userLang[1]
 
 export const Store = defineStore('Store', {
     state: () => ({
+        saveProgress: [false, 0,0],
+        songsQuantity: 1,
         showModal2: false,
         updated: false,
         uploadProgress: [],
@@ -126,6 +128,17 @@ export const Store = defineStore('Store', {
                     waveIcon.style = `background: rgba(0, 0, 0, 0.4);`
                     this.showingWave = false
                     this.toogleWave()
+                }
+                if(this.saveProgress[0]){
+                    const range = document.getElementById("range")
+                    this.rangeValue = this.saveProgress[1]
+                    range.value = this.rangeValue
+                    this.rangeSize = `${range.value}% 100%`
+
+                    this.songTime = this.saveProgress[2]
+                    this.checkSong()
+
+                    this.saveProgress = [false, 0, 0]
                 }
                 return 0;
             }
@@ -423,16 +436,18 @@ export const Store = defineStore('Store', {
             }
         },
 
-        reset(){
+        reset(upload){
             const range = document.getElementById("range")
             this.rangeValue = 0
             range.value = 0
             this.rangeSize = `${range.value}% 100%`
-            this.checkShuffleHistory()
-            setTimeout(() => {
-                this.checkSong()
-                this.changing = true
-            }, 1);
+            if(!upload){
+                this.checkShuffleHistory()
+                setTimeout(() => {
+                    this.checkSong()
+                    this.changing = true
+                }, 1);
+            }
         },
 
         shuffle(){
@@ -1438,6 +1453,45 @@ export const Store = defineStore('Store', {
         },
 
         addEvent(){
+            if(router.currentRoute._value.path == "/edit"){
+                    let nickName = document.getElementById("nickname")
+                    if(nickName == null){
+                        setTimeout(()=>{
+                            this.addEvent()
+                        },100)
+                        return 0
+                    }
+                    nickName.firstChild.addEventListener("blur", ()=>{
+                        if(nickName.firstChild.textContent.length == 0){
+                            nickName.firstChild.textContent = this.user.displayName
+                        }
+                    })
+            }
+            else{
+                let name = document.getElementById("songName")
+                let artist = document.getElementById("artistName")
+
+                if(name == null || artist == null){
+                    setTimeout(()=>{
+                        this.addEvent()
+                    },100)
+                    return 0
+                }
+                
+                name.firstChild.addEventListener("blur", ()=>{
+                    if(name.firstChild.textContent.length == 0){
+                        name.firstChild.textContent = this.texts[66][this.language]
+                    }
+                })
+                
+                artist.firstChild.addEventListener("blur", ()=>{
+                    if(artist.firstChild.textContent.length == 0){
+                        artist.firstChild.textContent = this.texts[67][this.language]
+                    }
+                })
+            }
+
+
             document.addEventListener("drop", function(event) {
                 var dataTransfer = event.dataTransfer;
                 var isImage = false;
@@ -1455,8 +1509,43 @@ export const Store = defineStore('Store', {
                 if (isImage) {
                     event.preventDefault();
                 }
-            });
-            
+            })
+
+            document.addEventListener("paste", function(event) {
+                var dataTransfer = event.clipboardData;
+                var isImage = false;
+                
+                if (dataTransfer.types && (dataTransfer.types.indexOf("Files") !== -1)) {
+                    var files = dataTransfer.files;
+                    for (var i = 0; i < files.length; i++) {
+                        if (files[i].type.indexOf("image/") === 0) {
+                            isImage = true;
+                            break;
+                        }
+                    }
+                }
+                
+                if (isImage) {
+                    event.preventDefault();
+                }
+            })
+        },
+
+        askHowManySongs(){
+            if(document.getElementById("checkbox").checked){
+                let num = prompt(this.texts[79][this.language])
+                if(num != null && isNaN(num) == false && num >= 2){
+                    num = parseInt(num)
+                    this.songsQuantity = num
+                }
+                else{
+                    num == 1 ? "" : alert(this.texts[11][this.language])
+                    document.getElementById("checkbox").checked = false
+                }
+            }
+            else{
+                this.songsQuantity = 1
+            }
         }
     }
 })

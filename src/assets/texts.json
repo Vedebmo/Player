@@ -393,5 +393,10 @@
      "0": "Everything's ready",
      "1": "Todo listo",
      "2": "Tutto è pronto"
+    },
+    {
+     "0": "How Many song would you like to add?",
+     "1": "¿Cuantas canciones desea añadir?",
+     "2": "Quanti canzoni vui aggingere?"
     }
 ]

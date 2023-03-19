@@ -9,47 +9,49 @@
                 <span class="icon-circle-left"></span>
             </router-link>
         </div>
-        <div id="upload" @click="store.requestFile('img')">
-            <div class="img-container">
-                <img :src="store.imgUpload" alt="Img" id="img" hidden draggable="false">
-                <p id="change" hidden>{{store.texts[65][store.language]}}</p>
-            </div>
-            <div id="toUpload">
-                <span class="icon-cloud-upload"></span>
-                <h1>{{store.texts[64][store.language]}}</h1>
-            </div>
-        </div>
-        <h1 contentEditable="true" id="songName" @focusin="store.editName('In')" @focusout="store.editName">
-            <p>{{store.texts[66][store.language]}}</p>
-            <span class="icon-pencil" v-if="store.showPencil"></span>
-        </h1>
-        <h3 contentEditable="true" id="artistName" @focusin="store.editName('In')" @focusout="store.editName">
-            <p>{{store.texts[67][store.language]}}</p>
-            <span class="icon-pencil" v-if="store.showPencil"></span>
-        </h3>
-
-        <div class="parent">
-            <div style="width: 80vw; position: absolute; z-index: 1;">
-                <button class="uploadSong" @click="store.requestFile">
-                    {{store.texts[68][store.language]}}
+        <div class="all" v-for="n in store.songsQuantity">
+            <div id="upload" @click="store.requestFile('img')">
+                <div class="img-container">
+                    <img :src="store.imgUpload" alt="Img" id="img" hidden draggable="false">
+                    <p id="change" hidden>{{store.texts[65][store.language]}}</p>
+                </div>
+                <div id="toUpload">
                     <span class="icon-cloud-upload"></span>
-                </button>
+                    <h1>{{store.texts[64][store.language]}}</h1>
+                </div>
             </div>
-
-            <div class="volumeParent" @mouseleave="store.changeVolume('Out')" @touchend="store.changeVolume('Out')" v-if="store.tablet">
-                <span class="icon-volume-high" id="volume" @mouseenter="store.changeVolume('In')"  @touchstart="store.changeVolume('In')" @click="store.changeVolume('Previous')"></span>
-                <input type="range" id="volumeRange" min="0" max="1" step="any" :style="{ backgroundSize: store.volumeSize, opacity: store.volumeOpacity, left: store.volumePosition, opacity: store.volumeOpacity}" @input="store.changeVolume" disabled>
+            <h1 id="songName">
+                <p contentEditable="true" @focusin="store.editName('In')" @focusout="store.editName">{{store.texts[66][store.language]}}</p>
+                <span class="icon-pencil" v-if="store.showPencil" onclick="document.getElementById('songName').firstChild.focus()"></span>
+            </h1>
+            <h3 id="artistName">
+                <p contentEditable="true" @focusin="store.editName('In')" @focusout="store.editName">{{store.texts[67][store.language]}}</p>
+                <span class="icon-pencil" v-if="store.showPencil" onclick="document.getElementById('artistName').firstChild.focus()"></span>
+            </h3>
+    
+            <div class="parent">
+                <div style="width: 80vw; position: absolute; z-index: 1;">
+                    <button class="uploadSong" @click="store.requestFile">
+                        {{store.texts[68][store.language]}}
+                        <span class="icon-cloud-upload"></span>
+                    </button>
+                </div>
+    
+                <div class="volumeParent" @mouseleave="store.changeVolume('Out')" @touchend="store.changeVolume('Out')" v-if="store.tablet">
+                    <span class="icon-volume-high" id="volume" @mouseenter="store.changeVolume('In')"  @touchstart="store.changeVolume('In')" @click="store.changeVolume('Previous')"></span>
+                    <input type="range" id="volumeRange" min="0" max="1" step="any" :style="{ backgroundSize: store.volumeSize, opacity: store.volumeOpacity, left: store.volumePosition, opacity: store.volumeOpacity}" @input="store.changeVolume" disabled>
+                </div>
+    
+                <div v-else><br><br></div>
             </div>
-
-            <div v-else><br><br></div>
+    
+            <ProgressBar></ProgressBar>
         </div>
-
-        <ProgressBar></ProgressBar>
 
         <button class="submit" @click="store.uploadSong">{{store.texts[69][store.language]}}</button>
         <div class="severalParent">
             <label class="several">
-                <input type="checkbox" id="checkbox">
+                <input type="checkbox" id="checkbox" @change="store.askHowManySongs">
                 <span  class="checkbox"></span>
                 {{store.texts[70][store.language]}}
             </label>
@@ -75,6 +77,9 @@
         store.launchModal()
         store.resetUpload()
         store.addEvent()
+
+        store.saveProgress = [true, store.rangeValue, store.songTime]
+        store.reset(true)
     }
   }
 </script>
@@ -138,6 +143,19 @@
         transition: all .3s ease;
     }
 
+    #songName:hover, #artistName:hover{
+        cursor: pointer;
+        text-decoration: underline solid white 2px;
+    }
+
+    #songName, #artistName{
+        max-width: 80%;
+    }
+
+    #songName p, #artistName p{
+        width: 100%;
+    }
+
     #upload:hover img{
         opacity: 0.5;
     }
@@ -160,6 +178,13 @@
         flex-direction: row-reverse;
         width: 80%;
         justify-content: start;
+    }
+
+    .all{
+        width: -webkit-fill-available;
+        margin: 0%;
+        display: contents;
+        place-items: center;
     }
 
     #upload{
@@ -348,9 +373,13 @@
         background: transparent;
     }
 
-    .icon-pencil{
+    /* .icon-pencil{
         position: relative;
         left: 5%;
+    } */
+
+    .icon-pencil:before {
+        content: " \e907";
     }
 
     @media screen and (min-width: 768px){

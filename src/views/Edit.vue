@@ -20,9 +20,9 @@
                     <span class="icon-camera"></span>
                 </div>
             </div>
-            <h1 v-if="store.loggedIn" contentEditable="true" @focusin="store.editName('In')" @focusout="store.editName" id="nickname">
-                {{ store.user.displayName }} 
-                <span class="icon-pencil" v-if="store.showPencil"></span>
+            <h1 v-if="store.loggedIn" id="nickname">
+                <p contentEditable="true" @focusin="store.editName('In')" @focusout="store.editName" style="display: initial;">{{ store.user.displayName }}</p>
+                <span class="icon-pencil" v-if="store.showPencil" onclick="document.getElementById('nickname').firstChild.focus()"></span>
             </h1>
             <div class="emailPart" v-if="store.loggedIn">
                 <input type="email" :placeholder="store.user.email" class="email" id="newEmail">
@@ -364,6 +364,10 @@
     .camera:hover{
         background: #D2B8D3;
         color: #201C29;
+    }
+
+    .icon-pencil:before {
+        content: " \e907";
     }
     
     @media screen and (min-width: 768px){
