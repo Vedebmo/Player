@@ -28,7 +28,11 @@ import wavesurfer from 'wavesurfer.js';
 
 const storage = getStorage();
 const storageRef = ref(storage,"Songs/")
-const song = document.getElementById("song")
+// const song = document.getElementById("song")
+let song = document.querySelectorAll('audio#song')
+if(song.length > 1){
+    song = song[0]
+}
 const img = document.getElementById("img")
 let songsNames = []
 let songsReferences = []
@@ -49,14 +53,14 @@ userLang = userLang[0] + userLang[1]
 export const Store = defineStore('Store', {
     state: () => ({
         saveProgress: [false, 0,0],
-        songsQuantity: 1,
+        songsQuantity: 3,
         showModal2: false,
         updated: false,
         uploadProgress: [],
-        imgToUpload: "",
-        audioToUpload: "",
-        imgUpload: "",
-        audioUpload: "",
+        imgToUpload: [],
+        audioToUpload: [],
+        // imgUpload: [],
+        // audioUpload: "",
         showPlaylists: false,
         playing: false,
         wavesurfer: "",
@@ -104,7 +108,8 @@ export const Store = defineStore('Store', {
         artists,
         icon: "triangle",
         songTime: 0,
-        rangeValue: 0,
+        // rangeValue: 0,
+        rangeValue: [],
         rangeUp: true,
         rangeSize: "0% 100%",
         songCurrent: "00:00",
@@ -183,7 +188,11 @@ export const Store = defineStore('Store', {
         },
 
         launchSettings(){
-            const song = document.getElementById("song")
+            // const song = document.getElementById("song")
+            let song = document.querySelectorAll('audio#song')
+            if(song.length > 1){
+                song = song[0]
+            }
             this.showSettings = !this.showSettings
             if(this.showSettings){
                 song.pause()
@@ -222,7 +231,11 @@ export const Store = defineStore('Store', {
         },
 
         play(){
-            const song = document.getElementById("song")
+            // const song = document.getElementById("song")
+            let song = document.querySelectorAll('audio#song')
+            if(song.length > 1){
+                song = song[0]
+            }
             if(!isNaN(song.duration) && song.duration+1 != song.currentTime){
                 let checkPlaying = setInterval(()=>{
                     if(this.showSettings == true || this.returned == true){
@@ -257,7 +270,11 @@ export const Store = defineStore('Store', {
         },
 
         movingSong(){
-            const song = document.getElementById("song")
+            // const song = document.getElementById("song")
+            let song = document.querySelectorAll('audio#song')
+            if(song.length > 1){
+                song = song[0]
+            }
             const range = document.getElementById("range")
             if(this.rangeUp){
                 if(!isNaN(song.duration)){
@@ -298,7 +315,11 @@ export const Store = defineStore('Store', {
                     this.download()
             }
             else{
-                const song = document.getElementById("song")
+                // const song = document.getElementById("song")
+                let song = document.querySelectorAll('audio#song')
+                if(song.length > 1){
+                    song = song[0]
+                }
                 const range = document.getElementById("range")
                 if(song == null || isNaN(song.duration) == true){
                     setTimeout(()=>{
@@ -396,7 +417,11 @@ export const Store = defineStore('Store', {
 
         checkEnd(){
             const range = document.getElementById("range")
-            const song = document.getElementById("song")
+            // const song = document.getElementById("song")
+            let song = document.querySelectorAll('audio#song')
+            if(song.length > 1){
+                song = song[0]
+            }
             if(range.value == 100 && this.icon == "icon-pause2"){
                 if(this.loop){
                     this.reset()
@@ -581,7 +606,11 @@ export const Store = defineStore('Store', {
         },
 
         changeVolume(input){
-            const song = document.getElementById("song")
+            // const song = document.getElementById("song")
+            let song = document.querySelectorAll('audio#song')
+            if(song.length > 1){
+                song = song[0]
+            }
             const volumeIcon = document.getElementById("volume")
             let volume = song.volume
 
@@ -1153,26 +1182,41 @@ export const Store = defineStore('Store', {
         },
 
         requestFile(type){
+            let element
+            if(router.currentRoute._value.path == "/upload"){
+                element = type[1]
+                type = type[0]
+            }
+            
             let file = document.createElement("input")
             file.type = "file"
+
             if(type == "img"){
                 file.accept = ".png, .webp, .jpg, .jpeg"
                 file.click()
-
+                
                 file.addEventListener("change", ()=>{
                     if(file.files.length != 0){
                         let img = file.files[0]
                         if(img.type == "image/png" || img.type == "image/webp" || img.type == "image/jpg" || img.type == "image/jpeg"){
                             if(img.size <= "104857600"){
-
+                                
                                 if(router.currentRoute._value.path == "/upload"){
-                                    document.getElementById("toUpload").style.display = "none"
-                                    document.getElementById("img").hidden = false
-                                    document.getElementById("change").hidden = false
-                                    document.getElementsByClassName("img-container")[0].style.width = "100%"
-                                    document.getElementsByClassName("img-container")[0].style.height = "100%"
-                                    this.imgToUpload = img
-                                    this.imgUpload = URL.createObjectURL(img)
+                                    document.querySelectorAll('div#toUpload')[element].style.display = "none"
+                                    // document.getElementById("toUpload").style.display = "none"
+                                    // document.getElementById("img").hidden = false
+                                    document.querySelectorAll('img#img')[element].hidden = false
+                                    // document.getElementById("change").hidden = false
+                                    document.querySelectorAll('p#change')[element].hidden = false
+                                    // document.getElementsByClassName("img-container")[0].style.width = "100%"
+                                    document.getElementsByClassName("img-container")[element].style.width = "100%"
+                                    // document.getElementsByClassName("img-container")[0].style.height = "100%"
+                                    document.getElementsByClassName("img-container")[element].style.height = "100%"
+                                    
+                                    document.querySelectorAll('img#img')[element].src = URL.createObjectURL(img)
+                                    this.imgToUpload[element] = 'img'
+                                    
+                                    // this.imgUpload[element] = URL.createObjectURL(img)
                                 }
                                 else{
                                     this.userImage = URL.createObjectURL(img)
@@ -1201,13 +1245,16 @@ export const Store = defineStore('Store', {
                             if(audio.size <= "104857600"){
                                 
                                 const saveAudio = new Promise((resolve) => {
-                                    this.audioToUpload = audio
+                                    this.audioToUpload[element] = audio
                                     audio = URL.createObjectURL(audio)
-                                    resolve()
+                                    resolve(audio)
                                 })
                                 
-                                saveAudio.then(()=>{
-                                    this.audioUpload = audio
+                                saveAudio.then((audio)=>{
+                                    // this.audioUpload = audio
+                                    document.querySelectorAll('audio#song')[element].src = audio
+                                    console.log(this.audioToUpload)
+                                    console.log(document.querySelectorAll('audio#song'))
                                 })
                             }
                             else{
@@ -1275,7 +1322,11 @@ export const Store = defineStore('Store', {
                 this.wavesurfer.setMute(true)
                 this.wavesurfer.seekTo(startPoint)
 
-                const song = document.getElementById("song")
+                // const song = document.getElementById("song")
+                let song = document.querySelectorAll('audio#song')
+                if(song.length > 1){
+                    song = song[0]
+                }
                 song.paused == false ? this.wavesurfer.play() : ""
             })
         },
@@ -1433,8 +1484,8 @@ export const Store = defineStore('Store', {
         resetUpload(){
             this.imgUpload = ""
             this.audioUpload = ""
-            this.imgToUpload = ""
-            this.audioToUpload = ""
+            this.imgToUpload = []
+            this.audioToUpload = []
             document.getElementById("toUpload").style.display = "grid"
             document.getElementById("song").src = ""
             document.getElementById("img").src = ""

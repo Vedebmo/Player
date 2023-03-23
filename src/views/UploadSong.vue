@@ -1,7 +1,7 @@
 <template>
     <div class="app">
 
-        <audio :src="store.audioUpload" id="song"></audio>
+        <!-- <audio :src="store.audioUpload" id="song"></audio> -->
         
         <div class="span">
             <h1 style="margin-right: 2%;">{{store.texts[63][store.language]}}</h1>
@@ -10,9 +10,12 @@
             </router-link>
         </div>
         <div class="all" v-for="n in store.songsQuantity">
-            <div id="upload" @click="store.requestFile('img')">
-                <div class="img-container">
-                    <img :src="store.imgUpload" alt="Img" id="img" hidden draggable="false">
+            <audio id="song"></audio>
+            <!-- <div id="upload" @click="store.requestFile('img')"> -->
+                <div id="upload">
+                    <div class="img-container">
+                        <!-- <img :src="store.imgUpload" alt="Img" id="img" hidden draggable="false"> -->
+                    <img alt="Img" id="img" hidden draggable="false">
                     <p id="change" hidden>{{store.texts[65][store.language]}}</p>
                 </div>
                 <div id="toUpload">
@@ -31,7 +34,8 @@
     
             <div class="parent">
                 <div style="width: 80vw; position: absolute; z-index: 1;">
-                    <button class="uploadSong" @click="store.requestFile">
+                    <!-- <button class="uploadSong" @click="store.requestFile"> -->
+                    <button class="uploadSong" id="audio">
                         {{store.texts[68][store.language]}}
                         <span class="icon-cloud-upload"></span>
                     </button>
@@ -46,6 +50,8 @@
             </div>
     
             <ProgressBar></ProgressBar>
+
+            <hr>
         </div>
 
         <button class="submit" @click="store.uploadSong">{{store.texts[69][store.language]}}</button>
@@ -70,6 +76,8 @@
     import Modal from '../components/Modal.vue';
     import {Store} from "../store.js"
     const store = Store()
+    let files = []
+    let files2 = []
 
     export default{
     name: "UploadSong",
@@ -80,6 +88,56 @@
 
         store.saveProgress = [true, store.rangeValue, store.songTime]
         store.reset(true)
+
+        let imgs = document.querySelectorAll('div#upload')
+        let index = 0
+        let data
+        imgs.forEach((img)=>{
+            index += 1
+            files.push([img, index])
+            // img.src = store.imgUpload[index]
+
+
+            img.addEventListener("click", (e) =>{
+
+                e.target.parentElement.id == "toUpload" ? data = e.target.parentElement.parentElement : data = e.target
+                if(data.id == "toUpload"){
+                    data = data.parentElement
+                }
+
+                if(e.target.parentElement.classList[0] == 'img-container'){
+                    data = e.target.parentElement.parentElement
+                }
+                
+                for (let i = 0; i < files.length; i++) {
+                    const subArray = files[i];
+                    if (subArray.includes(data)) {
+                        store.requestFile(['img', i])
+                    }
+                }
+            })
+        })
+
+
+        let audios = document.querySelectorAll('button#audio')
+        index = 0
+        let data2
+        audios.forEach((audio)=>{
+            index += 1
+            files2.push([audio, index])
+
+            audio.addEventListener("click", (e) =>{
+
+                data2 = e.target
+                
+                for (let i = 0; i < files2.length; i++) {
+                    const subArray = files2[i];
+                    if (subArray.includes(data2)) {
+                        store.requestFile(['audio', i])
+                    }
+                }
+            })
+        })
     }
   }
 </script>
@@ -373,10 +431,10 @@
         background: transparent;
     }
 
-    /* .icon-pencil{
-        position: relative;
-        left: 5%;
-    } */
+    hr{
+        width: 90%; 
+        margin: 5vh;
+    }
 
     .icon-pencil:before {
         content: " \e907";
