@@ -2,7 +2,7 @@ import texts from './assets/texts.json';
 
 import router from './router'
 
-import { defineStore } from "pinia"
+import { defineStore, storeToRefs } from "pinia"
 
 import { initializeApp } from "firebase/app";
 const firebaseConfig = {
@@ -52,8 +52,13 @@ userLang = userLang[0] + userLang[1]
 
 export const Store = defineStore('Store', {
     state: () => ({
+        router,
         saveProgress: [false, 0,0],
-        songsQuantity: 3,
+        songsQuantity: 1,
+        alreadyElementsImg: [],
+        alreadyElementsAudio: [],
+        imgQuantity: 0,
+        audioQuantity: 0,
         showModal2: false,
         updated: false,
         uploadProgress: [],
@@ -62,7 +67,7 @@ export const Store = defineStore('Store', {
         // imgUpload: [],
         // audioUpload: "",
         showPlaylists: false,
-        playing: false,
+        playing: [false],
         wavesurfer: "",
         loadWave: false,
         showingWave: false,
@@ -77,10 +82,11 @@ export const Store = defineStore('Store', {
         modalOpacity: 0,
         userImage: "",
         loggedIn: false,
-        volumePrevious: 1,
-        volumePosition: "100vw",
-        volumeOpacity: 0,
-        volumeSize: "100% 100%",
+        volumePrevious: [1],
+        volumePosition: ["100vw"],
+        volumeOpacity: [0],
+        volumeSize: ["100% 100%"],
+        volumeValue: [1],
         returned: false,
         userLang,
         language: null,
@@ -106,12 +112,12 @@ export const Store = defineStore('Store', {
         songsReferences,
         songsNames,
         artists,
-        icon: "triangle",
-        songTime: 0,
-        // rangeValue: 0,
-        rangeValue: [],
+        icon: ["triangle"],
+        songTime: [0],
+        // rangeValue[i]: 0,
+        rangeValue: [0],
         rangeUp: true,
-        rangeSize: "0% 100%",
+        rangeSize: ["0% 100%"],
         songCurrent: "00:00",
         songDuration: "00:00"
     }),
@@ -136,11 +142,11 @@ export const Store = defineStore('Store', {
                 }
                 if(this.saveProgress[0]){
                     const range = document.getElementById("range")
-                    this.rangeValue = this.saveProgress[1]
-                    range.value = this.rangeValue
-                    this.rangeSize = `${range.value}% 100%`
+                    this.rangeValue[i] = this.saveProgress[1]
+                    range.value = this.rangeValue[i]
+                    this.rangeSize[i] = `${range.value}% 100%`
 
-                    this.songTime = this.saveProgress[2]
+                    this.songTime[i] = this.saveProgress[2]
                     this.checkSong()
 
                     this.saveProgress = [false, 0, 0]
@@ -187,7 +193,8 @@ export const Store = defineStore('Store', {
             }
         },
 
-        launchSettings(){
+        launchSettings(i){
+            i = 0
             // const song = document.getElementById("song")
             let song = document.querySelectorAll('audio#song')
             if(song.length > 1){
@@ -196,7 +203,7 @@ export const Store = defineStore('Store', {
             this.showSettings = !this.showSettings
             if(this.showSettings){
                 song.pause()
-                this.icon = "triangle"
+                this.icon[i] = "triangle"
                 if(this.showingWave){
                     let findWaveIcon = setInterval(()=>{
                         const waveIcon = document.getElementById("waveIcon")
@@ -212,7 +219,7 @@ export const Store = defineStore('Store', {
                     const range = document.getElementById("range")
                     if(range != null){
                         range.value = (song.currentTime / song.duration) * 100
-                        this.rangeSize = `${range.value}% 100%`
+                        this.rangeSize[i] = `${range.value}% 100%`
 
                         //Detect and fix absolute and opacities
                         this.fixAbsolute()
@@ -223,75 +230,84 @@ export const Store = defineStore('Store', {
                         }
 
                         clearInterval(findRange)
-                        this.checkSong()
+                        this.checkSong(i)
                     }
                 },1)
                 this.checkStates()
             }
         },
 
-        play(){
+        play(i){
             // const song = document.getElementById("song")
+            // let song = document.querySelectorAll('audio#song')
             let song = document.querySelectorAll('audio#song')
-            if(song.length > 1){
-                song = song[0]
-            }
+            song = song[i]
+            // const range = document.getElementById("range")
+            let range = document.querySelectorAll('input#range')
+            range = range[i]
+            // if(song.length > 1){
+            //     song = song[0]
+            // }
             if(!isNaN(song.duration) && song.duration+1 != song.currentTime){
                 let checkPlaying = setInterval(()=>{
                     if(this.showSettings == true || this.returned == true){
                         clearInterval(checkPlaying)
-                        this.icon = "triangle"
+                        this.icon[i] = "triangle"
                         return 0
                     }
-                    const range = document.getElementById("range")
-                    this.rangeValue = (song.currentTime / song.duration) * 100
-                    this.rangeSize = `${range.value}% 100%`
-                    this.checkSong()
-                    this.icon == "triangle" ? clearInterval(checkPlaying) : ""
+                    // const range = document.getElementById("range")
+                    this.rangeValue[i] = (song.currentTime / song.duration) * 100
+                    this.rangeSize[i] = `${range.value}% 100%`
+                    this.checkSong(i)
+                    this.icon[i] == "triangle" ? clearInterval(checkPlaying) : ""
                 },1)
 
-                if(this.icon == "icon-pause2"){
-                    this.icon = "triangle"
+                if(this.icon[i] == "icon-pause2"){
+                    this.icon[i] = "triangle"
                     song.pause()
-                    this.playing = false
+                    this.playing[i] = false
                     try {
                         this.wavesurfer.pause()     
                     } catch{}
                 }
                 else{
-                    this.icon = "icon-pause2"
+                    this.icon[i] = "icon-pause2"
                     song.play()
-                    this.playing = true 
+                    this.playing[i] = true 
                     try {
                         this.wavesurfer.play()    
                     } catch{}
                 }
+
+                // let play = document.querySelectorAll('div#play')
+                // play[i].children[0].classList = (this.icon[i])
             }
         },
 
-        movingSong(){
+        movingSong(i){
             // const song = document.getElementById("song")
             let song = document.querySelectorAll('audio#song')
-            if(song.length > 1){
-                song = song[0]
-            }
-            const range = document.getElementById("range")
+            song = song[i]
+            // const range = document.getElementById("range")
+            let range = document.querySelectorAll('input#range')
+            range = range[i]
             if(this.rangeUp){
                 if(!isNaN(song.duration)){
-                    this.rangeValue = range.value
+                    this.rangeValue[i] = range.value
                     const porcentage = range.value / 100
-                    this.songTime = song.duration * porcentage
-                    song.currentTime = this.songTime
-                    this.checkSong()
-                    this.rangeSize = `${range.value}% 100%`
+                    this.songTime[i] = song.duration * porcentage
+                    song.currentTime = this.songTime[i]
+                    this.checkSong(i)
+                    this.rangeSize[i] = `${range.value}% 100%`
+                    // range.style.backgroundSize = `${range.value}% 100%`
 
                     // Move song in the waveform
                     try {
-                        let newPoint = this.rangeValue / 100
+                        let newPoint = this.rangeValue[i] / 100
                         this.wavesurfer.seekTo(newPoint)
                         this.wavesurfer.play()
                         setTimeout(()=>{
-                            if(!this.playing){
+                            if(!this.playing[i]){
                                 this.wavesurfer.pause()
                             }
                         },1)
@@ -306,7 +322,8 @@ export const Store = defineStore('Store', {
             }
         },
 
-        checkSong(){
+        checkSong(i){
+            isNaN(i) ? i = 0 : ""
             if(this.songsReferences[this.songIndex] == undefined || 
                 this.songsImages[this.songIndex] == undefined || 
                 this.songsReferences[this.songIndex][0] == "g" || 
@@ -317,19 +334,22 @@ export const Store = defineStore('Store', {
             else{
                 // const song = document.getElementById("song")
                 let song = document.querySelectorAll('audio#song')
-                if(song.length > 1){
-                    song = song[0]
-                }
-                const range = document.getElementById("range")
+                song = song[i]
+                // if(song.length > 1){
+                //     song = song[0]
+                // }
+                // const range = document.getElementById("range")
+                let range = document.querySelectorAll('input#range')
+                range = range[i]
                 if(song == null || isNaN(song.duration) == true){
                     setTimeout(()=>{
-                        this.checkSong()
+                        this.checkSong(i)
                     },1)
                 }
                 else{
                     if(this.changing){
                         this.rangeUp = false
-                        this.icon == "icon-pause2" ? song.play() : ""
+                        this.icon[i] == "icon-pause2" ? song.play() : ""
                         this.changing = false
                         range.addEventListener("mousedown", ()=>{
                             this.rangeUp = true
@@ -346,10 +366,10 @@ export const Store = defineStore('Store', {
                     }
                     if(!this.showSettings){
                         if(this.returned){
-                            const range = document.getElementById("range")
-                            song.currentTime = this.songTime
-                            range.value = this.rangeValue
-                            this.rangeSize = `${this.rangeValue}% 100%`
+                            // const range = document.getElementById("range")
+                            song.currentTime = this.songTime[i]
+                            range.value = this.rangeValue[i]
+                            this.rangeSize[i] = `${this.rangeValue[i]}% 100%`
                             this.returned = false
                             this.rangeUp = true
                         }
@@ -422,7 +442,7 @@ export const Store = defineStore('Store', {
             if(song.length > 1){
                 song = song[0]
             }
-            if(range.value == 100 && this.icon == "icon-pause2"){
+            if(range.value == 100 && this.icon[i] == "icon-pause2"){
                 if(this.loop){
                     this.reset()
                     return 0
@@ -432,7 +452,7 @@ export const Store = defineStore('Store', {
                     this.next()
                 }
                 else{
-                    this.songIndex < this.maxIndex ? this.next() : (this.icon = "triangle", song.pause())
+                    this.songIndex < this.maxIndex ? this.next() : (this.icon[i] = "triangle", song.pause())
                 }
             }
         },
@@ -462,14 +482,14 @@ export const Store = defineStore('Store', {
         },
 
         reset(upload){
-            const range = document.getElementById("range")
-            this.rangeValue = 0
-            range.value = 0
-            this.rangeSize = `${range.value}% 100%`
+            // const range = document.getElementById("range")
+            this.rangeValue = [0]
+            // range.value = 0
+            this.rangeSize = [`0% 100%`]
             if(!upload){
                 this.checkShuffleHistory()
                 setTimeout(() => {
-                    this.checkSong()
+                    this.checkSong(0)
                     this.changing = true
                 }, 1);
             }
@@ -605,39 +625,45 @@ export const Store = defineStore('Store', {
             this.loop ? iconLoop.style = `background: rgba(0, 0, 0, 0.4);` : iconLoop.style = ``
         },
 
-        changeVolume(input){
+        changeVolume(info){
+            const input = info[0]
+            const i = info[1]
             // const song = document.getElementById("song")
             let song = document.querySelectorAll('audio#song')
-            if(song.length > 1){
-                song = song[0]
-            }
-            const volumeIcon = document.getElementById("volume")
+            song = song[i]
+            // if(song.length > 1){
+            //     song = song[0]
+            // }
+            const volumeIcon = document.querySelectorAll("span#volume")[i]
+            // this.volumeValue[i] = volumeIcon.value
             let volume = song.volume
 
             if(this.tablet){
-                const volumeRange = document.getElementById("volumeRange")
+                const volumeRange = document.querySelectorAll("input#volumeRange")[i]
+                this.volumeValue[i] = volumeRange.value
                 volume = volumeRange.value
+                this.volumeSize[i] = `${volumeRange.value * 100}% 100%`
                 
-                volume != 0 ? this.volumePrevious = volume : ""
+                volume != 0 ? this.volumePrevious[i] = volume : ""
                 if(input == "In"){
                     volumeRange.disabled = false
-                    this.volumePosition = "0vw"
-                    this.volumeOpacity = 1
+                    this.volumePosition[i] = "0vw"
+                    this.volumeOpacity[i] = 1
                 }
                 else if(input == "Out"){
-                    this.volumeOpacity = 0
+                    this.volumeOpacity[i] = 0
                     volumeRange.disabled = true
                     setTimeout(()=>{
-                        this.volumePosition = "100vw"
+                        this.volumePosition[i] = "100vw"
                     },300)
                 }
                 else if(input == "Previous"){
-                    volumeRange.value != 0 ? (volume = 0, volumeRange.value = 0) : (volume = this.volumePrevious, volumeRange.value = this.volumePrevious)
+                    volumeRange.value != 0 ? (volume = 0, volumeRange.value = 0, this.volumeValue[i] = 0) : (volume = this.volumePrevious[i], volumeRange.value = this.volumePrevious[i], this.volumeValue[i] = this.volumePrevious[i])
                 }
-                this.volumeSize = `${volumeRange.value * 100}% 100%`
+                this.volumeSize[i] = `${volumeRange.value * 100}% 100%`
             }
             else if(input == "Previous"){
-                volume != 0 ? volume = 0 : volume = this.volumePrevious
+                volume != 0 ? volume = 0 : volume = this.volumePrevious[i]
             }
 
             song.volume = volume
@@ -1213,8 +1239,14 @@ export const Store = defineStore('Store', {
                                     // document.getElementsByClassName("img-container")[0].style.height = "100%"
                                     document.getElementsByClassName("img-container")[element].style.height = "100%"
                                     
+                                    let check = this.alreadyElementsImg.find(el => el == element)
+                                    if(check == undefined){
+                                        this.alreadyElementsImg.push(element)
+                                        this.imgQuantity += 1
+                                    }
+
                                     document.querySelectorAll('img#img')[element].src = URL.createObjectURL(img)
-                                    this.imgToUpload[element] = 'img'
+                                    this.imgToUpload[element] = URL.createObjectURL(img)
                                     
                                     // this.imgUpload[element] = URL.createObjectURL(img)
                                 }
@@ -1246,6 +1278,11 @@ export const Store = defineStore('Store', {
                                 
                                 const saveAudio = new Promise((resolve) => {
                                     this.audioToUpload[element] = audio
+                                    let check = this.alreadyElementsAudio.find(el => el == element)
+                                    if(check == undefined){
+                                        this.alreadyElementsAudio.push(element)
+                                        this.audioQuantity += 1
+                                    }
                                     audio = URL.createObjectURL(audio)
                                     resolve(audio)
                                 })
@@ -1253,8 +1290,6 @@ export const Store = defineStore('Store', {
                                 saveAudio.then((audio)=>{
                                     // this.audioUpload = audio
                                     document.querySelectorAll('audio#song')[element].src = audio
-                                    console.log(this.audioToUpload)
-                                    console.log(document.querySelectorAll('audio#song'))
                                 })
                             }
                             else{
@@ -1316,7 +1351,7 @@ export const Store = defineStore('Store', {
             })
             this.wavesurfer.load(`${this.songsReferences[this.songIndex]}`)
 
-            let startPoint = this.rangeValue / 100
+            let startPoint = this.rangeValue[i] / 100
 
             this.wavesurfer.on('ready', () => {
                 this.wavesurfer.setMute(true)
@@ -1389,26 +1424,34 @@ export const Store = defineStore('Store', {
         },
 
         uploadSong(){
-            const name = document.getElementById("songName").textContent
-            const artist = document.getElementById("artistName").textContent
+            let names = document.querySelectorAll("h1#songName")
+            names = Array.from(names).map(name => name.textContent)
+            names = names.filter(name => name != `${this.texts[66][this.language]}`)
+            names = names.filter(name => name.trim().length != 0)
+
+            let artists = document.querySelectorAll("h3#artistName")
+            artists = Array.from(artists).map(artist => artist.textContent)
+            artists = artists.filter(artist => artist != `${this.texts[67][this.language]}`)
+            artists = artists.filter(artist => artist.trim().length != 0)
+            
             let prevent = false
 
-            if(name == `${this.texts[66][this.language]} `){
+            if(names.length != this.songsQuantity){
                 alert(this.texts[71][this.language])
                 prevent = true
             }
 
-            if(artist == `${this.texts[67][this.language]} `){
+            if(artists.length != this.songsQuantity){
                 alert(this.texts[72][this.language])
                 prevent = true
             }
 
-            if(this.audioUpload == ""){
+            if(this.imgQuantity != this.songsQuantity){
                 alert(this.texts[73][this.language])
                 prevent = true
             }
 
-            if(this.imgUpload == ""){
+            if(this.imgQuantity != this.songsQuantity){
                 alert(this.texts[74][this.language])
                 prevent = true
             }
@@ -1482,8 +1525,6 @@ export const Store = defineStore('Store', {
             }
         },
         resetUpload(){
-            this.imgUpload = ""
-            this.audioUpload = ""
             this.imgToUpload = []
             this.audioToUpload = []
             document.getElementById("toUpload").style.display = "grid"
@@ -1495,7 +1536,7 @@ export const Store = defineStore('Store', {
             document.getElementsByClassName("img-container")[0].style.height = "0%"
             document.getElementById("songName").firstChild.textContent = this.texts[66][this.language]
             document.getElementById("artistName").firstChild.textContent = this.texts[67][this.language]
-            this.rangeSize = `0% 100%`
+            this.rangeSize = [`0% 100%`]
             setTimeout(()=>{
                 document.getElementById("range").value = 0
             },100)
@@ -1583,18 +1624,151 @@ export const Store = defineStore('Store', {
         },
 
         askHowManySongs(){
+            function reseting(store){
+                // let names = document.querySelectorAll("h1#songName")
+                // names.forEach((name)=>{
+                //     name.textContent = store.texts[66][store.language]
+                // })
+                // let artists = document.querySelectorAll("h3#artistName")
+                // artists.forEach((artist)=>{
+                //     artist.textContent = store.texts[67][store.language]
+                // })
+                document.getElementById("songName").firstChild.textContent = store.texts[66][store.language]
+                document.getElementById("artistName").firstChild.textContent = store.texts[67][store.language]
+
+                store.alreadyElementsImg = []
+                store.alreadyElementsAudio = []
+                store.imgToUpload = []
+                store.audioToUpload = []
+                document.querySelectorAll("span#volume")[0].classList = "icon-volume-high"
+    
+                document.querySelectorAll('div#toUpload').forEach((reset) =>{
+                    reset.style.display = "block"
+                })
+                document.querySelectorAll('img#img').forEach((reset) =>{
+                    reset.hidden = true
+                })
+                document.querySelectorAll('p#change').forEach((reset) =>{
+                    reset.hidden = true
+                })
+    
+                for (let index = 0; index < document.getElementsByClassName("img-container").length; index++) {
+                    document.getElementsByClassName("img-container")[index].style.width = "0%";
+                    document.getElementsByClassName("img-container")[index].style.height = "0%"
+                }
+    
+                document.querySelectorAll('img#img').forEach((reset) =>{
+                    reset.src = ''
+                })
+    
+                let songs = document.querySelectorAll('audio#song')
+                songs.forEach(song => {
+                    song.src = ""
+                });
+    
+                let ranges = document.querySelectorAll('input#range')
+                ranges.forEach(range => {
+                    range.value = 0
+                });
+        
+                store.rangeSize = ["0% 100%"]
+                store.volumeSize = ["100% 100%"]
+                store.icon = ["triangle"]
+                store.rangeValue = [0]
+                store.volumePosition = ["100vw"]
+                store.volumeOpacity = [0]
+                store.volumeSize = ["100% 100%"]
+                store.volumeValue = [1]
+                store.volumePrevious = [1]
+            }
+            
             if(document.getElementById("checkbox").checked){
                 let num = prompt(this.texts[79][this.language])
-                if(num != null && isNaN(num) == false && num >= 2){
+                if(num != null && isNaN(num) == false && num >= 2  && num <= 20){
                     num = parseInt(num)
+                    reseting(this)
                     this.songsQuantity = num
+                    for (let index = 0; index < num-1; index++) {
+                        this.rangeSize.push("0% 100%")
+                        this.icon.push("triangle")
+                        this.rangeValue.push(0)
+                        this.volumePosition.push("100vw"),
+                        this.volumeOpacity.push(0),
+                        this.volumeSize.push("100% 100%"),
+                        this.volumeValue.push(1)
+                        this.volumePrevious.push(1)                            
+                    }
+
+                    function check(store){
+                        if(document.querySelectorAll("div#upload").length == store.songsQuantity){
+                            let files = []
+                            let files2 = []
+                            let imgs = document.querySelectorAll('div#upload')
+                            let index = 1
+                            let data
+                            imgs.forEach((img)=>{
+                                index += 1
+                                files.push([img, index])
+                                // img.src = store.imgUpload[index]
+
+
+                                img.addEventListener("click", (e) =>{
+
+                                    e.target.parentElement.id == "toUpload" ? data = e.target.parentElement.parentElement : data = e.target
+                                    if(data.id == "toUpload"){
+                                        data = data.parentElement
+                                    }
+
+                                    if(e.target.parentElement.classList[0] == 'img-container'){
+                                        data = e.target.parentElement.parentElement
+                                    }
+                                    
+                                    for (let i = 1; i < files.length; i++) {
+                                        const subArray = files[i];
+                                        if (subArray.includes(data)) {
+                                            store.requestFile(['img', i])
+                                        }
+                                    }
+                                })
+                            })
+
+
+                            let audios = document.querySelectorAll('button#audio')
+                            index = 1
+                            let data2
+                            audios.forEach((audio)=>{
+                                index += 1
+                                files2.push([audio, index])
+
+                                audio.addEventListener("click", (e) =>{
+
+                                    data2 = e.target
+                                    
+                                    for (let i = 1; i < files2.length; i++) {
+                                        const subArray = files2[i];
+                                        if (subArray.includes(data2)) {
+                                            store.requestFile(['audio', i])
+                                        }
+                                    }
+                                })
+                            })
+                        }
+                        else{
+                            setTimeout(() => {
+                                check(store)
+                            }, 1);
+                        }
+                    }
+                    
+                    check(this)
                 }
                 else{
-                    num == 1 ? "" : alert(this.texts[11][this.language])
+                    num == 1 ? "" : (num > 20 ? alert(this.texts[80][this.language]) : alert(this.texts[11][this.language]))
                     document.getElementById("checkbox").checked = false
                 }
             }
             else{
+                reseting(this)
                 this.songsQuantity = 1
             }
         }

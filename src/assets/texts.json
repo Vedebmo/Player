@@ -355,24 +355,24 @@
      "2": "Aggiungi più canzoni"
     },
     {
-     "0": "You should change the song's name",
-     "1": "Debe cambiar el nombre de la canción",
-     "2": "Dovresti modificare il nome della canzone"
+     "0": "You should change all the song's names and not leave them blank",
+     "1": "Debe cambiar el nombre de todas las canciones y no dejarlas en blanco",
+     "2": "Dovresti modificare il nome di tutte le canzone e non lasciarli vuoti."
     },
     {
-     "0": "You should change the artist's name",
-     "1": "Debe cambiar el nombre del artista",
-     "2": "Dovresti modificare il nome dell'artista"
+     "0": "You should change all the artist's name and not leave them blank",
+     "1": "Debe cambiar el nombre de los artistas y no dejarlos en blanco",
+     "2": "Dovresti modificare il nome di tutti gli artisti e non lasciarli vuoti."
     },
     {
-     "0": "You must add a song",
-     "1": "Debe añadir una cancióñ",
-     "2": "Dovresti aggiungere una canzone"
+     "0": "You must add a song to every space available",
+     "1": "Debe añadir una canción a cada espacio disponible",
+     "2": "Dovresti aggiungere una canzone per ogni spazio disponibile"
     },
     {
-     "0": "You must add an image to the song",
-     "1": "Debe añadir una imagen a la canción",
-     "2": "Dovresti aggiungere un'immagine alla canzone"
+     "0": "You must add an image to each song",
+     "1": "Debe añadir una imagen a cada canción",
+     "2": "Dovresti aggiungere un'immagine a ciascun canzone"
     },
     {
      "0": "Uploading...",
@@ -398,5 +398,11 @@
      "0": "How Many song would you like to add?",
      "1": "¿Cuantas canciones desea añadir?",
      "2": "Quanti canzoni vui aggingere?"
+    }
+    ,
+    {
+     "0": "You can't add more than 20 song a time",
+     "1": "No puede añadir más de 20 canciones a la vez",
+     "2": "Non puoi aggiungere più di 20 canzoni alla volta"
     }
 ]

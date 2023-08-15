@@ -1,5 +1,6 @@
 <template>
-    <input type="range" id="range" @input="store.movingSong" :value="store.rangeValue" step="any" :style="{ backgroundSize: store.rangeSize}">
+    <input type="range" id="range" @input="store.movingSong(0)" :value="store.rangeValue" step="any" :style="{ backgroundSize: store.rangeSize[0]}">
+    <!-- <input type="range" id="range" @input="store.movingSong" :value="store.rangeValue" step="any" :style="{ backgroundSize: store.rangeSize}"> -->
     <!--Player-->
     <div class="player">
         <div class="left">
@@ -7,7 +8,7 @@
         </div>
 
         <div class="center" @click="store.play">
-            <div :class="store.icon"></div>
+            <div :class="store.icon[0]"></div>
         </div>
 
         <div class="right">
@@ -121,5 +122,6 @@
 
 <script setup>
     import {Store} from "../store.js"
+    import router from '@/router'
     const store = Store()
 </script>
