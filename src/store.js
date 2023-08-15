@@ -241,6 +241,11 @@ export const Store = defineStore('Store', {
             // const song = document.getElementById("song")
             // let song = document.querySelectorAll('audio#song')
             let song = document.querySelectorAll('audio#song')
+            for (let index = 0; index < song.length; index++) {
+                if(!song[index].paused && index != i){
+                    this.play(index)
+                }
+            }
             song = song[i]
             // const range = document.getElementById("range")
             let range = document.querySelectorAll('input#range')
@@ -1458,7 +1463,12 @@ export const Store = defineStore('Store', {
 
             if(!prevent){
                 // this.showModal2 = true
-                this.play()
+                let songs = document.querySelectorAll('audio#song')
+                for (let index = 0; index < songs.length; index++) {
+                    if(!songs[index].paused){
+                        this.play(index)
+                    }
+                }
                 this.launchModal()
 
                 const storage = getStorage();
@@ -1625,6 +1635,13 @@ export const Store = defineStore('Store', {
 
         askHowManySongs(){
             function reseting(store){
+                let songs = document.querySelectorAll('audio#song')
+                for (let index = 0; index < songs.length; index++) {
+                    if(!songs[index].paused){
+                        songs[index].pause()
+                        songs[index].currentTime = 0
+                    }
+                }
                 // let names = document.querySelectorAll("h1#songName")
                 // names.forEach((name)=>{
                 //     name.textContent = store.texts[66][store.language]
@@ -1660,17 +1677,6 @@ export const Store = defineStore('Store', {
                 document.querySelectorAll('img#img').forEach((reset) =>{
                     reset.src = ''
                 })
-    
-                let songs = document.querySelectorAll('audio#song')
-                songs.forEach(song => {
-                    song.src = ""
-                });
-    
-                let ranges = document.querySelectorAll('input#range')
-                ranges.forEach(range => {
-                    range.value = 0
-                });
-        
                 store.rangeSize = ["0% 100%"]
                 store.volumeSize = ["100% 100%"]
                 store.icon = ["triangle"]
@@ -1687,6 +1693,7 @@ export const Store = defineStore('Store', {
                 if(num != null && isNaN(num) == false && num >= 2  && num <= 20){
                     num = parseInt(num)
                     reseting(this)
+
                     this.songsQuantity = num
                     for (let index = 0; index < num-1; index++) {
                         this.rangeSize.push("0% 100%")
@@ -1696,7 +1703,7 @@ export const Store = defineStore('Store', {
                         this.volumeOpacity.push(0),
                         this.volumeSize.push("100% 100%"),
                         this.volumeValue.push(1)
-                        this.volumePrevious.push(1)                            
+                        this.volumePrevious.push(1)
                     }
 
                     function check(store){
@@ -1752,6 +1759,16 @@ export const Store = defineStore('Store', {
                                     }
                                 })
                             })
+
+                            let songs = document.querySelectorAll('audio#song')
+                            songs.forEach(song => {
+                                song.src = ""
+                            });
+                
+                            let ranges = document.querySelectorAll('input#range')
+                            ranges.forEach(range => {
+                                range.value = 0
+                            });
                         }
                         else{
                             setTimeout(() => {
@@ -1770,6 +1787,17 @@ export const Store = defineStore('Store', {
             else{
                 reseting(this)
                 this.songsQuantity = 1
+                setTimeout(() => {
+                    let songs = document.querySelectorAll('audio#song')
+                    songs.forEach(song => {
+                        song.src = ""
+                    });
+        
+                    let ranges = document.querySelectorAll('input#range')
+                    ranges.forEach(range => {
+                        range.value = 0
+                    });
+                },1)
             }
         }
     }

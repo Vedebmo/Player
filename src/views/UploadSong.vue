@@ -1,6 +1,5 @@
 <template>
     <div class="app">
-
         <!-- <audio :src="store.audioUpload" id="song"></audio> -->
         
         <div class="span">
