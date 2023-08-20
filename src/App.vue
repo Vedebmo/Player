@@ -17,9 +17,12 @@ import {RouterView } from 'vue-router'
     padding: 0;
     overflow: hidden;
   }
-
+  
   /* ScrollBar */
-
+  html{
+    scroll-behavior: smooth;
+  }
+  
   ::-webkit-scrollbar {
       width: 15px;
   }

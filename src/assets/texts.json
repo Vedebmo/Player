@@ -137,7 +137,7 @@
     {
      "0": "I already have an account",
      "1": "Ya tengo una cuenta",
-     "2": "Ho già  un account"
+     "2": "Ho già un account"
     },
     {
      "0": "The password can't be weak",
@@ -398,11 +398,20 @@
      "0": "How Many song would you like to add?",
      "1": "¿Cuantas canciones desea añadir?",
      "2": "Quanti canzoni vui aggingere?"
-    }
-    ,
+    },
     {
      "0": "You can't add more than 20 song a time",
      "1": "No puede añadir más de 20 canciones a la vez",
      "2": "Non puoi aggiungere più di 20 canzoni alla volta"
+    },
+    {
+     "0": "File",
+     "1": "Archivo",
+     "2": "File"
+    },
+    {
+     "0": "This Song already exist in the database. It's highly recommended to change the song's name or artist or upload other song",
+     "1": "Esta canción ya existe en la base de datos. Es ampliamente recomendado cambiar el nombre de la canción o artista o subir otra canción",
+     "2": "Questa canzone già esiste nel database. Si consiglia di cambiare il nome della canzone o dell'artista o caricare un'altra canzone"
     }
 ]

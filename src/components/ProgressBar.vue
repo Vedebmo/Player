@@ -7,7 +7,7 @@
             <span class="icon-previous2" @click="store.previous()"></span>
         </div>
 
-        <div class="center" @click="store.play">
+        <div class="center" @click="store.play(0)">
             <div :class="store.icon[0]"></div>
         </div>
 

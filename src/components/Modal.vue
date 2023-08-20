@@ -6,6 +6,7 @@
                     <span class="icon-loop2"></span>
                     <br><br>
                     <h1>{{store.texts[75][store.language]}}</h1>
+                    <h2 style="color: #8B8181;">{{store.texts[81][store.language]}}: {{store.final}} / {{ store.songsQuantity * 2 }}</h2>
                 </div>
                 <div>
                     <div class="text">
@@ -31,7 +32,6 @@
         height: 100vh;
         width: 100vw;
         place-items: center;
-
         transition: all .5s ease-in-out;
     }
 

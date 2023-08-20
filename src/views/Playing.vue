@@ -27,11 +27,11 @@
       <!--Options-->
 
       <div class="options">
-        <div class="left" @mouseleave="store.changeVolume('Out')" @touchend="store.changeVolume('Out')">
+        <div class="left" @mouseleave="store.changeVolume(['Out',0])" @touchend="store.changeVolume(['Out',0])">
           <span class="icon-download" @click="store.downloadSong"></span>
           <span class="icon-plus"></span>
-          <span class="icon-volume-high" id="volume" @mouseenter="store.changeVolume('In')"  @touchstart="store.changeVolume('In')" @click="store.changeVolume('Previous')"></span>
-          <input v-if="store.tablet" type="range" id="volumeRange" min="0" max="1" step="any" :style="{ backgroundSize: store.volumeSize, opacity: store.volumeOpacity, left: store.volumePosition, opacity: store.volumeOpacity}" @input="store.changeVolume" disabled>
+          <span class="icon-volume-high" id="volume" @mouseenter="store.changeVolume(['In',0])"  @touchstart="store.changeVolume(['In',0])" @click="store.changeVolume(['Previous',0])"></span>
+          <input v-if="store.tablet" type="range" id="volumeRange" min="0" max="1" step="any" :style="{ backgroundSize: store.volumeSize[0], opacity: store.volumeOpacity[0], left: store.volumePosition[0], opacity: store.volumeOpacity[0]}" @input="store.changeVolume([0,0])" disabled>
         </div>
         <div class="right">
           <h5>{{store.songCurrent}} / {{store.songDuration}}</h5>

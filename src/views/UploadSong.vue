@@ -1,7 +1,6 @@
 <template>
     <div class="app">
         <!-- <audio :src="store.audioUpload" id="song"></audio> -->
-        
         <div class="span">
             <h1 style="margin-right: 2%;">{{store.texts[63][store.language]}}</h1>
             <router-link :to="{name: 'songs'}" style="text-decoration: none;" @click="store.showSettings = true">

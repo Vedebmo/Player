@@ -119,7 +119,8 @@ export const Store = defineStore('Store', {
         rangeUp: true,
         rangeSize: ["0% 100%"],
         songCurrent: "00:00",
-        songDuration: "00:00"
+        songDuration: "00:00",
+        final: 0
     }),
 
     actions:{
@@ -142,11 +143,11 @@ export const Store = defineStore('Store', {
                 }
                 if(this.saveProgress[0]){
                     const range = document.getElementById("range")
-                    this.rangeValue[i] = this.saveProgress[1]
-                    range.value = this.rangeValue[i]
-                    this.rangeSize[i] = `${range.value}% 100%`
+                    this.rangeValue[0] = this.saveProgress[1]
+                    range.value = this.rangeValue[0]
+                    this.rangeSize[0] = `${range.value}% 100%`
 
-                    this.songTime[i] = this.saveProgress[2]
+                    this.songTime[0] = this.saveProgress[2]
                     this.checkSong()
 
                     this.saveProgress = [false, 0, 0]
@@ -196,10 +197,10 @@ export const Store = defineStore('Store', {
         launchSettings(i){
             i = 0
             // const song = document.getElementById("song")
-            let song = document.querySelectorAll('audio#song')
-            if(song.length > 1){
-                song = song[0]
-            }
+            let song = document.querySelectorAll('audio#song')[i]
+            // if(song.length > 1){
+            //     song = song[0]
+            // }
             this.showSettings = !this.showSettings
             if(this.showSettings){
                 song.pause()
@@ -1251,7 +1252,8 @@ export const Store = defineStore('Store', {
                                     }
 
                                     document.querySelectorAll('img#img')[element].src = URL.createObjectURL(img)
-                                    this.imgToUpload[element] = URL.createObjectURL(img)
+                                    // this.imgToUpload[element] = URL.createObjectURL(img)
+                                    this.imgToUpload[element] = img
                                     
                                     // this.imgUpload[element] = URL.createObjectURL(img)
                                 }
@@ -1356,7 +1358,7 @@ export const Store = defineStore('Store', {
             })
             this.wavesurfer.load(`${this.songsReferences[this.songIndex]}`)
 
-            let startPoint = this.rangeValue[i] / 100
+            let startPoint = this.rangeValue[0] / 100
 
             this.wavesurfer.on('ready', () => {
                 this.wavesurfer.setMute(true)
@@ -1433,25 +1435,24 @@ export const Store = defineStore('Store', {
             names = Array.from(names).map(name => name.textContent)
             names = names.filter(name => name != `${this.texts[66][this.language]}`)
             names = names.filter(name => name.trim().length != 0)
-
-            let artists = document.querySelectorAll("h3#artistName")
-            artists = Array.from(artists).map(artist => artist.textContent)
-            artists = artists.filter(artist => artist != `${this.texts[67][this.language]}`)
-            artists = artists.filter(artist => artist.trim().length != 0)
             
+            let artistsNames = document.querySelectorAll("h3#artistName")
+            artistsNames = Array.from(artistsNames).map(artist => artist.textContent)
+            artistsNames = artistsNames.filter(artist => artist != `${this.texts[67][this.language]}`)
+            artistsNames = artistsNames.filter(artist => artist.trim().length != 0)
             let prevent = false
-
+            
             if(names.length != this.songsQuantity){
                 alert(this.texts[71][this.language])
                 prevent = true
             }
 
-            if(artists.length != this.songsQuantity){
+            if(artistsNames.length != this.songsQuantity){
                 alert(this.texts[72][this.language])
                 prevent = true
             }
 
-            if(this.imgQuantity != this.songsQuantity){
+            if(this.audioQuantity != this.songsQuantity){
                 alert(this.texts[73][this.language])
                 prevent = true
             }
@@ -1461,80 +1462,118 @@ export const Store = defineStore('Store', {
                 prevent = true
             }
 
-            if(!prevent){
-                // this.showModal2 = true
-                let songs = document.querySelectorAll('audio#song')
-                for (let index = 0; index < songs.length; index++) {
-                    if(!songs[index].paused){
-                        this.play(index)
+            listAll(storageRef)
+            .then((res)=>{
+                res.prefixes.forEach((folderRef)=>{
+                    let songsName = folderRef._location.path.split("<!--|Space|--!>")[0].split("Songs/")[1].trim()
+                    let artistName = folderRef._location.path.split("<!--|Space|--!>")[1].trim()
+                    let check = names.findIndex(el => el == songsName)
+                    let check2 = artistsNames.findIndex(el => el == artistName)
+                    if(check == check2 && check != -1){
+                        alert(this.texts[82][this.language])
+                        prevent = true
                     }
+                })
+            })
+            .then(()=>{
+                if(!prevent){
+                    // this.showModal2 = true
+                    let songs = document.querySelectorAll('audio#song')
+                    for (let index = 0; index < songs.length; index++) {
+                        if(!songs[index].paused){
+                            this.play(index)
+                        }
+                    }
+                    this.launchModal()
+                    window.scroll(0,0)
+                    document.querySelector("body").style.overflowY = 'hidden'
+    
+                    const storage = getStorage();
+                    function updateAll(i){
+                        let store = i[0]
+                        let name = i[1]
+                        let artist = i[2]
+                        i = i[3]
+                        // for (let i = 0; i < this.imgQuantity.length; i++) {
+                        let extension = store.imgToUpload[i].type.split("/")[1]
+                        const fullName = `${name}.${extension}`
+                        
+                        let extension2 = store.audioToUpload[i].type.split("/")[1]
+                        const fullName2 = `${name}.${extension2}`
+        
+                        const storageRef = ref(storage,`Songs/${name} <!--|Space|--!> ${artist} <!--|Space|--!> ${extension} <!--|Space|--!> ${extension2}/${fullName}`)
+                        const storageRef2 = ref(storage,`Songs/${name} <!--|Space|--!> ${artist} <!--|Space|--!> ${extension} <!--|Space|--!> ${extension2}/${fullName2}`)
+        
+                        const UploadImage = new Promise((resolve) => {
+                            const upload = uploadBytesResumable (storageRef, store.imgToUpload[i])
+                            upload.on('state_changed', 
+                            (snapshot) => {
+                                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                                store.uploadProgress[0] = progress.toFixed() + '%'
+                                },
+                                (error) => {
+                                    alert(store.texts[11][store.language])
+                                    store.resetUpload()
+                                },
+                                ()=>{resolve()}
+                            )
+                        })
+        
+                        const UploadSong = new Promise((resolve) => {
+                            const upload2 = uploadBytesResumable (storageRef2, store.audioToUpload[i])
+                            upload2.on('state_changed', 
+                            (snapshot) => {
+                                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                                store.uploadProgress[1] = progress.toFixed() + '%'
+                                },
+                                (error) => {
+                                    alert(store.texts[11][store.language])
+                                    store.resetUpload()
+                                },
+                                ()=>{resolve()}
+                            ) 
+                        })
+                            
+                        UploadImage.then(()=>{
+                            store.final++
+                            if(store.final > 1 && store.final < store.songsQuantity * 2 && store.final % 2 == 0){
+                                i += 1
+                                updateAll([store,names[i],artistsNames[i],i])
+                            }
+                            if(store.final == store.songsQuantity * 2){
+                                store.updated = true
+                                alert(store.texts[78][store.language])
+                                document.getElementById("checkbox").click()
+                                // store.resetUpload()
+                            }
+                        })
+        
+                        UploadSong.then(()=>{
+                            store.final++
+                            if(store.final > 1 && store.final < store.songsQuantity * 2 && store.final % 2 == 0){
+                                i += 1
+                                updateAll([store,names[i],artistsNames[i],i])
+                            }
+                            if(store.final == store.songsQuantity * 2){
+                                store.updated = true
+                                alert(store.texts[78][store.language])
+                                document.getElementById("checkbox").click()
+                                // store.resetUpload()
+                            }
+                        })
+                    // }
+                    }
+                    updateAll([this,names[0],artistsNames[0],0])
                 }
-                this.launchModal()
+            })
 
-                const storage = getStorage();
-
-                let extension = this.imgToUpload.type.split("/")[1]
-                const fullName = `${name}.${extension}`
-                
-                let extension2 = this.audioToUpload.type.split("/")[1]
-                const fullName2 = `${name}.${extension2}`
-
-                const storageRef = ref(storage,`Songs/${name} <!--|Space|--!> ${artist} <!--|Space|--!> ${extension} <!--|Space|--!> ${extension2}/${fullName}`)
-                const storageRef2 = ref(storage,`Songs/${name} <!--|Space|--!> ${artist} <!--|Space|--!> ${extension} <!--|Space|--!> ${extension2}/${fullName2}`)
-
-                const UploadImage = new Promise((resolve) => {
-                    const upload = uploadBytesResumable (storageRef, this.imgToUpload)
-                    upload.on('state_changed', 
-                    (snapshot) => {
-                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                        this.uploadProgress[0] = progress.toFixed() + '%'
-                        },
-                        (error) => {
-                            alert(this.texts[11][this.language])
-                            this.resetUpload()
-                        },
-                        ()=>{resolve()}
-                    )
-                })
-
-                const UploadSong = new Promise((resolve) => {
-                    const upload2 = uploadBytesResumable (storageRef2, this.audioToUpload)
-                    upload2.on('state_changed', 
-                    (snapshot) => {
-                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                        this.uploadProgress[1] = progress.toFixed() + '%'
-                        },
-                        (error) => {
-                            alert(this.texts[11][this.language])
-                            this.resetUpload()
-                        },
-                        ()=>{resolve()}
-                    ) 
-                })
-
-                let final = 0
-                
-                UploadImage.then(()=>{
-                    final++
-                    if(final > 1){
-                        this.updated = true
-                        alert(this.texts[78][this.language])
-                        this.resetUpload()
-                    }
-                })
-
-                UploadSong.then(()=>{
-                    final++
-                    if(final > 1){
-                        this.updated = true
-                        alert(this.texts[78][this.language])
-                        this.resetUpload()
-                    }
-                })
-                
-            }
         },
         resetUpload(){
+            this.songsQuantity = 1
+            this.final = 0
+            this.updated = 0
+            this.imgQuantity = 0
+            this.audioQuantity = 0
             this.imgToUpload = []
             this.audioToUpload = []
             document.getElementById("toUpload").style.display = "grid"
@@ -1546,12 +1585,22 @@ export const Store = defineStore('Store', {
             document.getElementsByClassName("img-container")[0].style.height = "0%"
             document.getElementById("songName").firstChild.textContent = this.texts[66][this.language]
             document.getElementById("artistName").firstChild.textContent = this.texts[67][this.language]
+            // store.rangeSize = ["0% 100%"]
+            // store.volumeSize = ["100% 100%"]
+            // store.icon = ["triangle"]
+            // store.rangeValue = [0]
+            // store.volumePosition = ["100vw"]
+            // store.volumeOpacity = [0]
+            // store.volumeSize = ["100% 100%"]
+            // store.volumeValue = [1]
+            // store.volumePrevious = [1]
             this.rangeSize = [`0% 100%`]
             setTimeout(()=>{
                 document.getElementById("range").value = 0
             },100)
             
             this.launchModal()
+            document.querySelector("body").style.overflowY = 'auto'
         },
 
         addEvent(){
@@ -1633,7 +1682,7 @@ export const Store = defineStore('Store', {
             })
         },
 
-        askHowManySongs(){
+        askHowManySongs(){            
             function reseting(store){
                 let songs = document.querySelectorAll('audio#song')
                 for (let index = 0; index < songs.length; index++) {
@@ -1657,7 +1706,9 @@ export const Store = defineStore('Store', {
                 store.alreadyElementsAudio = []
                 store.imgToUpload = []
                 store.audioToUpload = []
-                document.querySelectorAll("span#volume")[0].classList = "icon-volume-high"
+                try {
+                    document.querySelectorAll("span#volume")[0].classList = "icon-volume-high"
+                } catch{}
     
                 document.querySelectorAll('div#toUpload').forEach((reset) =>{
                     reset.style.display = "block"
