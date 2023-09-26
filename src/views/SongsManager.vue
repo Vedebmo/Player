@@ -13,39 +13,16 @@
                     {{store.texts[60][store.language]}} <span class="icon-plus"></span>
                 </div>
             </button>
-            <button>{{ store.texts[1][store.language] }}</button>
         </div>
         
-        <h2 class="h2">{{store.texts[61][store.language]}}</h2>
-
-        <div class="container">
-            <div class="song">
+        <h2 class="h2" v-if="store.songsUploaded.length != 0">{{store.texts[61][store.language]}}</h2>
+ 
+        <div class="container" v-if="store.songsUploaded.length != 0">
+            <div class="song" v-for="n in store.songsUploaded.length"> 
                 <div class="img-container">
-                    <img src="https://www.sivola.it/media/cache/header/d3/66/b8ffeed5941a5701a69fc1c4a870.jpeg" alt="Img">
-                    <span class="icon-pencil"></span>
+                    <img :src="store.songsUploaded[n-1][0]" alt="Img">
                 </div>
-                <h2>Song</h2>
-            </div>
-            <div class="song">
-                <div class="img-container">
-                    <img src="https://www.sivola.it/media/cache/header/d3/66/b8ffeed5941a5701a69fc1c4a870.jpeg" alt="Img">
-                    <span class="icon-pencil"></span>
-                </div>
-                <h2>Song</h2>
-            </div>
-            <div class="song">
-                <div class="img-container">
-                    <img src="https://www.sivola.it/media/cache/header/d3/66/b8ffeed5941a5701a69fc1c4a870.jpeg" alt="Img">
-                    <span class="icon-pencil"></span>
-                </div>
-                <h2>Song</h2>
-            </div>
-            <div class="song">
-                <div class="img-container">
-                    <img src="https://www.sivola.it/media/cache/header/d3/66/b8ffeed5941a5701a69fc1c4a870.jpeg" alt="Img">
-                    <span class="icon-pencil"></span>
-                </div>
-                <h2>Song</h2>
+                <h2>{{ store.songsUploaded[n-1][1] }}🎸</h2>
             </div>
         </div>
     </div>
@@ -95,16 +72,22 @@
 
     .buttons{
         display: flex;
+        width: 90%;
+        min-height: 20vh;
+        flex-grow: 1;
+        align-items: center;
+        justify-content: center;
+        /* gap: 10vw; */
     }
 
     button{
         background-color: #000000;
         color: white;
         font-weight: bolder;
-        padding: 10% 0;
+        padding: 3% 10%;
         margin: 2%;
-        width: 25vw;
-        height: 5vh;
+        /* width: 25vw; */
+        height: 20vh;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -143,13 +126,6 @@
         border-radius: 15px;
         width:  -webkit-fill-available;
         height: 100%;
-    }
-
-    .icon-pencil{
-        color: #D2B8D3;
-        font-size: 50px;
-        position: absolute;
-        cursor: pointer;
     }
 
     @media screen and (min-width: 768px){

@@ -36,6 +36,7 @@ if(song.length > 1){
 const img = document.getElementById("img")
 let songsNames = []
 let songsReferences = []
+let songsUploaded = []
 let audioExtensions = []
 let songsImages = []
 let imgExtensions = []
@@ -120,7 +121,8 @@ export const Store = defineStore('Store', {
         rangeSize: ["0% 100%"],
         songCurrent: "00:00",
         songDuration: "00:00",
-        final: 0
+        final: 0,
+        songsUploaded: []
     }),
 
     actions:{
@@ -144,8 +146,10 @@ export const Store = defineStore('Store', {
                 if(this.saveProgress[0]){
                     const range = document.getElementById("range")
                     this.rangeValue[0] = this.saveProgress[1]
-                    range.value = this.rangeValue[0]
-                    this.rangeSize[0] = `${range.value}% 100%`
+                    try {
+                        range.value = this.rangeValue[0]
+                        this.rangeSize[0] = `${range.value}% 100%`
+                    } catch{}
 
                     this.songTime[0] = this.saveProgress[2]
                     this.checkSong()
@@ -194,17 +198,17 @@ export const Store = defineStore('Store', {
             }
         },
 
-        launchSettings(i){
-            i = 0
+        launchSettings(){
+            
             // const song = document.getElementById("song")
-            let song = document.querySelectorAll('audio#song')[i]
+            let song = document.querySelector('audio#song')
             // if(song.length > 1){
             //     song = song[0]
             // }
             this.showSettings = !this.showSettings
             if(this.showSettings){
                 song.pause()
-                this.icon[i] = "triangle"
+                this.icon[0] = "triangle"
                 if(this.showingWave){
                     let findWaveIcon = setInterval(()=>{
                         const waveIcon = document.getElementById("waveIcon")
@@ -220,7 +224,8 @@ export const Store = defineStore('Store', {
                     const range = document.getElementById("range")
                     if(range != null){
                         range.value = (song.currentTime / song.duration) * 100
-                        this.rangeSize[i] = `${range.value}% 100%`
+                        this.rangeSize[0] = `${range.value}% 100%`
+                        this.rangeValue[0] = range.value
 
                         //Detect and fix absolute and opacities
                         this.fixAbsolute()
@@ -231,7 +236,7 @@ export const Store = defineStore('Store', {
                         }
 
                         clearInterval(findRange)
-                        this.checkSong(i)
+                        this.checkSong(0)
                     }
                 },1)
                 this.checkStates()
@@ -443,12 +448,12 @@ export const Store = defineStore('Store', {
 
         checkEnd(){
             const range = document.getElementById("range")
-            // const song = document.getElementById("song")
-            let song = document.querySelectorAll('audio#song')
-            if(song.length > 1){
-                song = song[0]
-            }
-            if(range.value == 100 && this.icon[i] == "icon-pause2"){
+            const song = document.getElementById("song")
+            // let song = document.querySelectorAll('audio#song')
+            // if(song.length > 1){
+            //     song = song[0]
+            // }
+            if(range.value == 100 && this.icon[0] == "icon-pause2"){
                 if(this.loop){
                     this.reset()
                     return 0
@@ -458,7 +463,7 @@ export const Store = defineStore('Store', {
                     this.next()
                 }
                 else{
-                    this.songIndex < this.maxIndex ? this.next() : (this.icon[i] = "triangle", song.pause())
+                    this.songIndex < this.maxIndex ? this.next() : (this.icon[0] = "triangle", song.pause())
                 }
             }
         },
@@ -673,22 +678,23 @@ export const Store = defineStore('Store', {
             }
 
             song.volume = volume
-            
-            if(volume == 0){
-                volumeIcon.classList = "icon-volume-mute2"
-            }
-            else if(volume > 0 && volume <= 0.25){
-                volumeIcon.classList = "icon-volume-mute"
-            }
-            else if(volume > 0.25 && volume <= 0.4){
-                volumeIcon.classList = "icon-volume-low"
-            }
-            else if(volume > 0.4 && volume < 1){
-                volumeIcon.classList = "icon-volume-medium"
-            }
-            else if(volume == 1){
-                volumeIcon.classList = "icon-volume-high"
-            }
+            try{
+                if(volume == 0){
+                    volumeIcon.classList = "icon-volume-mute2"
+                }
+                else if(volume > 0 && volume <= 0.25){
+                    volumeIcon.classList = "icon-volume-mute"
+                }
+                else if(volume > 0.25 && volume <= 0.4){
+                    volumeIcon.classList = "icon-volume-low"
+                }
+                else if(volume > 0.4 && volume < 1){
+                    volumeIcon.classList = "icon-volume-medium"
+                }
+                else if(volume == 1){
+                    volumeIcon.classList = "icon-volume-high"
+                }
+            }catch{}
         },
         
         checkLanguage(checking){
@@ -912,6 +918,9 @@ export const Store = defineStore('Store', {
                     this.user = user
                     this.loggedIn = true
                     this.userImage = user.photoURL
+                    if(router.currentRoute._value.path == "/songs"){
+                        this.checkSongsUploaded()
+                    }
                 }
                 else{
                     (router.currentRoute._value.path == "/account" || router.currentRoute._value.path == "/edit" || router.currentRoute._value.path == "/forgot" 
@@ -1340,6 +1349,7 @@ export const Store = defineStore('Store', {
         },
 
         createWave(){
+            // console.log("wave")
             this.wavesurfer = WaveSurfer.create({
                 container: '#waveform',
                 waveColor: '#D2B8D3',
@@ -1365,10 +1375,11 @@ export const Store = defineStore('Store', {
                 this.wavesurfer.seekTo(startPoint)
 
                 // const song = document.getElementById("song")
-                let song = document.querySelectorAll('audio#song')
-                if(song.length > 1){
-                    song = song[0]
-                }
+                // let song = document.querySelectorAll('audio#song')
+                let song = document.querySelector('audio#song')
+                // if(song.length > 1){
+                //     song = song[0]
+                // }
                 song.paused == false ? this.wavesurfer.play() : ""
             })
         },
@@ -1431,6 +1442,8 @@ export const Store = defineStore('Store', {
         },
 
         uploadSong(){
+            const fakeID = this.user.metadata.createdAt
+            
             let names = document.querySelectorAll("h1#songName")
             names = Array.from(names).map(name => name.textContent)
             names = names.filter(name => name != `${this.texts[66][this.language]}`)
@@ -1446,12 +1459,12 @@ export const Store = defineStore('Store', {
                 alert(this.texts[71][this.language])
                 prevent = true
             }
-
+            
             if(artistsNames.length != this.songsQuantity){
                 alert(this.texts[72][this.language])
                 prevent = true
             }
-
+            
             if(this.audioQuantity != this.songsQuantity){
                 alert(this.texts[73][this.language])
                 prevent = true
@@ -1503,7 +1516,10 @@ export const Store = defineStore('Store', {
         
                         const storageRef = ref(storage,`Songs/${name} <!--|Space|--!> ${artist} <!--|Space|--!> ${extension} <!--|Space|--!> ${extension2}/${fullName}`)
                         const storageRef2 = ref(storage,`Songs/${name} <!--|Space|--!> ${artist} <!--|Space|--!> ${extension} <!--|Space|--!> ${extension2}/${fullName2}`)
-        
+
+                        const storageRefCopy = ref(storage,`${fakeID}/${name} <!--|Space|--!> ${artist} <!--|Space|--!> ${extension} <!--|Space|--!> ${extension2}/`)
+                        uploadBytesResumable (storageRefCopy, store.imgToUpload[i])
+
                         const UploadImage = new Promise((resolve) => {
                             const upload = uploadBytesResumable (storageRef, store.imgToUpload[i])
                             upload.on('state_changed', 
@@ -1543,8 +1559,10 @@ export const Store = defineStore('Store', {
                             if(store.final == store.songsQuantity * 2){
                                 store.updated = true
                                 alert(store.texts[78][store.language])
-                                document.getElementById("checkbox").click()
-                                // store.resetUpload()
+                                if(document.getElementById("checkbox").checked){
+                                    document.getElementById("checkbox").click()
+                                }
+                                store.resetUpload()
                             }
                         })
         
@@ -1557,8 +1575,10 @@ export const Store = defineStore('Store', {
                             if(store.final == store.songsQuantity * 2){
                                 store.updated = true
                                 alert(store.texts[78][store.language])
-                                document.getElementById("checkbox").click()
-                                // store.resetUpload()
+                                if(document.getElementById("checkbox").checked){
+                                    document.getElementById("checkbox").click()
+                                }
+                                store.resetUpload()
                             }
                         })
                     // }
@@ -1576,6 +1596,8 @@ export const Store = defineStore('Store', {
             this.audioQuantity = 0
             this.imgToUpload = []
             this.audioToUpload = []
+            this.alreadyElementsAudio = []
+            this.alreadyElementsImg = []
             document.getElementById("toUpload").style.display = "grid"
             document.getElementById("song").src = ""
             document.getElementById("img").src = ""
@@ -1850,6 +1872,31 @@ export const Store = defineStore('Store', {
                     });
                 },1)
             }
+        },
+
+        checkSongsUploaded(){
+            const fakeID = this.user.metadata.createdAt
+            let i = 0
+            if(songsUploaded.length != 0){
+                return 0
+            }
+            
+            const storage = getStorage();
+            let storageRef = ref(storage, `${fakeID}/`);
+            listAll(storageRef)
+            .then((res)=>{
+                res.items.forEach((image)=>{
+                    songsUploaded.push(image)
+                })
+            })
+            .then(()=>{
+                songsUploaded.forEach((song)=>{
+                    getDownloadURL(song)
+                    .then((url)=>{
+                        this.songsUploaded.push([url,song.name.split("<!--|Space|--!>")[0]])
+                    })
+                })
+            })
         }
     }
 })

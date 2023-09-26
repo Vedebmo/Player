@@ -30,7 +30,7 @@
         <div class="left" @mouseleave="store.changeVolume(['Out',0])" @touchend="store.changeVolume(['Out',0])">
           <span class="icon-download" @click="store.downloadSong"></span>
           <span class="icon-plus"></span>
-          <span class="icon-volume-high" id="volume" @mouseenter="store.changeVolume(['In',0])"  @touchstart="store.changeVolume(['In',0])" @click="store.changeVolume(['Previous',0])"></span>
+          <span class="icon-volume-high" id="volume" @mouseenter="store.changeVolume(['In',0])"  @touchstart="store.changeVolume(['In',0])" @click="store.changeVolume(['Previous',0])" v-if="store.tablet"></span>
           <input v-if="store.tablet" type="range" id="volumeRange" min="0" max="1" step="any" :style="{ backgroundSize: store.volumeSize[0], opacity: store.volumeOpacity[0], left: store.volumePosition[0], opacity: store.volumeOpacity[0]}" @input="store.changeVolume([0,0])" disabled>
         </div>
         <div class="right">
