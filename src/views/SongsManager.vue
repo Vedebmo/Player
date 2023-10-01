@@ -7,15 +7,15 @@
             </router-link>
         </div>
         <div class="buttons">
-            <button>Playlists</button>
-            <button @click="store.add">
+            <button @click="store.add('playlist')">Playlists</button>
+            <button @click="store.add()">
                 <div>
                     {{store.texts[60][store.language]}} <span class="icon-plus"></span>
                 </div>
             </button>
         </div>
         
-        <h2 class="h2" v-if="store.songsUploaded.length != 0">{{store.texts[61][store.language]}}</h2>
+        <h2 class="h2" v-if="store.songsUploaded.length != 0">{{store.texts[62][store.language]}}:</h2>
  
         <div class="container" v-if="store.songsUploaded.length != 0">
             <div class="song" v-for="n in store.songsUploaded.length"> 

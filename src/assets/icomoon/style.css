@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?50hwux');
-  src:  url('fonts/icomoon.eot?50hwux#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?50hwux') format('truetype'),
-    url('fonts/icomoon.woff?50hwux') format('woff'),
-    url('fonts/icomoon.svg?50hwux#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?i09b9u');
+  src:  url('fonts/icomoon.eot?i09b9u#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?i09b9u') format('truetype'),
+    url('fonts/icomoon.woff?i09b9u') format('woff'),
+    url('fonts/icomoon.svg?i09b9u#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,19 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-googlepodcasts:before {
+  content: "\e900";
+  color: #4285f4;
+}
+.icon-playlist_play:before {
+  content: "\e905";
+}
+.icon-language2:before {
+  content: "\e903";
+}
+.icon-game-controller:before {
+  content: "\e904";
+}
 .icon-pencil:before {
   content: "\e907";
 }
@@ -127,22 +140,15 @@
 .icon-google:before {
   content: "\ea88";
 }
-.icon-googlepodcasts:before {
-  content: "\e900";
-  color: #4285f4;
+.icon-menu:before {
+  content: "\e9bd";
+}
+.icon-menu2:before {
+  content: "\e9be";
 }
 .icon-language:before {
   content: "\e901";
 }
 .icon-language1:before {
   content: "\e902";
-}
-.icon-language2:before {
-  content: "\e903";
-}
-.icon-game-controller:before {
-  content: "\e904";
-}
-.icon-playlist_play:before {
-  content: "\e905";
 }

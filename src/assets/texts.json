@@ -305,9 +305,9 @@
      "2": "Aggiungi"
     },
     {
-     "0": "Songs Added",
-     "1": "Canciones Añádidas",
-     "2": "Canzoni Aggiunte"
+     "0": "Songs",
+     "1": "Canciones",
+     "2": "Canzoni"
     },
     {
      "0": "Songs Added",
@@ -413,5 +413,25 @@
      "0": "This Song already exist in the database. It's highly recommended to change the song's name or artist or upload other song",
      "1": "Esta canción ya existe en la base de datos. Es ampliamente recomendado cambiar el nombre de la canción o artista o subir otra canción",
      "2": "Questa canzone già esiste nel database. Si consiglia di cambiare il nome della canzone o dell'artista o caricare un'altra canzone"
+    },
+    {
+     "0": "Create",
+     "1": "Crear",
+     "2": "Creare"
+    },
+    {
+     "0": "By",
+     "1": "Por",
+     "2": "Da"
+    },
+    {
+     "0": "Added",
+     "1": "Añadida",
+     "2": "Aggiunta"
+    },
+    {
+     "0": "Remove",
+     "1": "Quitar",
+     "2": "Rimuovere"
     }
 ]

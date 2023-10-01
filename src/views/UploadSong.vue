@@ -10,9 +10,9 @@
         <div class="all" v-for="n in store.songsQuantity">
             <audio id="song"></audio>
             <!-- <div id="upload" @click="store.requestFile('img')"> -->
-                <div id="upload">
-                    <div class="img-container">
-                        <!-- <img :src="store.imgUpload" alt="Img" id="img" hidden draggable="false"> -->
+            <div id="upload">
+                <div class="img-container">
+                    <!-- <img :src="store.imgUpload" alt="Img" id="img" hidden draggable="false"> -->
                     <img alt="Img" id="img" hidden draggable="false">
                     <p id="change" hidden>{{store.texts[65][store.language]}}</p>
                 </div>

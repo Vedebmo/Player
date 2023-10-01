@@ -52,6 +52,11 @@ const router = createRouter({
       path: '/upload',
       name: 'upload',
       component: () => import('@/views/UploadSong.vue')
+    },
+    {
+      path: '/playlist',
+      name: 'playlist',
+      component: () => import('@/views/Playlist.vue')
     }
   ]
 })

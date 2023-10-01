@@ -67,7 +67,9 @@ export const Store = defineStore('Store', {
         audioToUpload: [],
         // imgUpload: [],
         // audioUpload: "",
-        showPlaylists: false,
+        // showPlaylists: false,
+        editPlaylists: false,
+        addPlaylists: false,
         playing: [false],
         wavesurfer: "",
         loadWave: false,
@@ -966,6 +968,14 @@ export const Store = defineStore('Store', {
                 }
             }
             else{
+                try{
+                    if(utility[0] = 'playlist'){
+                        // this.editPlaylists = !this.editPlaylists
+                        this.editPlaylists = false
+                        this.addPlaylists = false
+                    }
+                }
+                catch{}
                 this.showModal = !this.showModal
                 if(this.modalPosition == "100vw"){
                     this.modalPosition = "auto"
@@ -1437,8 +1447,8 @@ export const Store = defineStore('Store', {
             document.querySelector("body").style.overflowY = "auto"
         },
 
-        add(){
-            this.showPlaylists == false ? router.push({ path: "/upload"}) : ""
+        add(direction){
+            direction == "playlist" ? router.push({ path: "/playlist"}) : router.push({ path: "/upload"})
         },
 
         uploadSong(){
@@ -1897,6 +1907,44 @@ export const Store = defineStore('Store', {
                     })
                 })
             })
+        },
+
+        playlistManager(utility){
+            let data
+            if(typeof(utility) == "object"){
+                data = utility[1]
+                utility = utility[0]
+            }
+                
+            switch (utility) {
+                case 'add':
+                    this.editPlaylists = false
+                    this.addPlaylists = true
+                    break;
+
+                case 'preRemove':
+                    if(document.querySelectorAll('button.btn')[data].innerText == this.texts[85][this.language]){
+                        const element = document.querySelectorAll('button.btn')[data]
+                        element.innerText = this.texts[86][this.language]
+                        element.style.background = '#A62929'
+                    }
+                    break;
+
+                case 'preLeave':
+                    if(document.querySelectorAll('button.btn')[data].innerText == this.texts[86][this.language]){
+                        const element = document.querySelectorAll('button.btn')[data]
+                        element.innerText = this.texts[85][this.language]
+                        element.style.background = 'rgba(0,0,0,.5)'
+                    }
+                    break;
+
+                default:
+                    window.scroll(0,0)
+                    // this.launchModal(['playlist'])
+                    this.editPlaylists = true
+                    this.launchModal()
+                    break;
+            }
         }
     }
 })
